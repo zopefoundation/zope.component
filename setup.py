@@ -42,9 +42,8 @@ setup(name='zope.XXX',
 ##                    ],
 
       namespace_packages=['zope',],
-      tests_require = ['zope_testing'],
-      install_requires=['zope_deprecation'],
-      devel_requires=[],
+      tests_require = ['zope.testing'],
+      install_requires=['zope.deprecation'],
       include_package_data = True,
 
       zip_safe = False,
