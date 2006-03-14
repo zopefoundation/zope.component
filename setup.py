@@ -23,27 +23,24 @@ try:
 except ImportError, e:
     from distutils.core import setup, Extension
 
-setup(name='zope.XXX',
-      version='1.0',
-      url='http://svn.zope.org/zope.XXX',
+setup(name='zope.component',
+      version='3.0',
+      url='http://svn.zope.org/zope.component',
       license='ZPL 2.1',
-      description='XXX',
+      description='component',
       author='Zope Corporation and Contributors',
       author_email='zope3-dev@zope.org',
       long_description='',
       
-      packages=['zope', 'zope.XXX'],
+      packages=['zope', 'zope.component'],
       package_dir = {'': os.path.join(os.path.dirname(__file__), 'src')},
-
-##       ext_modules=[Extension("zope.XXX._zope_XXX",
-##                              [os.path.join('src', 'zope', 'XXX',
-##                                            "_zope_XXX.c")
-##                               ]),
-##                    ],
 
       namespace_packages=['zope',],
       tests_require = ['zope.testing'],
-      install_requires=['zope.deprecation'],
+      install_requires=['zope.deprecation',
+                        'zope.exceptions',
+                        'zope.interface',
+                       ],
       include_package_data = True,
 
       zip_safe = False,
