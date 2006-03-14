@@ -32,7 +32,11 @@ setup(name='zope.component',
       author_email='zope3-dev@zope.org',
       long_description='',
       
-      packages=['zope', 'zope.component'],
+      packages=['zope',
+                'zope.component',
+                'zope.component.bbb',
+                'zope.component.bbb.tests',
+               ],
       package_dir = {'': os.path.join(os.path.dirname(__file__), 'src')},
 
       namespace_packages=['zope',],
