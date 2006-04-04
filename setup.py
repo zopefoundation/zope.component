@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2004 Zope Corporation and Contributors.
+# Copyright (c) 2006 Zope Corporation and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -11,7 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Setup for zope.i18nmessageid package
+"""Setup for zope.component package
 
 $Id$
 """
@@ -24,7 +24,7 @@ except ImportError, e:
     from distutils.core import setup, Extension
 
 setup(name='zope.component',
-      version='3.0.0',
+      version='3.0.0.1',
       url='http://svn.zope.org/zope.component/tags/3.0.0',
       license='ZPL 2.1',
       description='Zope Component Architecture',
@@ -37,13 +37,13 @@ setup(name='zope.component',
       
       packages=['zope',
                 'zope.component',
+                'zope.component.tests',
                ],
       package_dir = {'': os.path.join(os.path.dirname(__file__), 'src')},
 
       namespace_packages=['zope',],
       tests_require = ['zope.testing'],
-      install_requires=['zope.deprecation',
-                        'zope.exceptions',
+      install_requires=['zope.exceptions',
                         'zope.interface',
                        ],
       include_package_data = True,
