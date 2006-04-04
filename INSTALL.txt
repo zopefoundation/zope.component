@@ -52,7 +52,7 @@ type:
 and have it install the "testing dependencies."  Today, the workaround
 is to install it manually:
 
-  $ /path/to/easy_install --find-links="...." zope-testing
+  $ /path/to/easy_install --find-links="...." zope.testing
 
 You can then run the tests (finally) from the checkout directory:
 
@@ -67,7 +67,7 @@ Installing a Source Distribution
 
 You can also install it from a source distribution:
 
-  $ /path/to/easy_install --find-links="...." -eb src zope-component
+  $ /path/to/easy_install --find-links="...." -eb src zope.component
   $ cd src/zope.component
   $ /path/to/your/python setup.py devel
 
@@ -78,6 +78,6 @@ Installing a Binary Egg
 Install the package as a "binary egg" (which also installs its "hard"
 dependencies):
 
-  $ /path/to/easy_install --find-links="...." zope-component
+  $ /path/to/easy_install --find-links="...." zope.component
 
 

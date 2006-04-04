@@ -24,13 +24,16 @@ except ImportError, e:
     from distutils.core import setup, Extension
 
 setup(name='zope.component',
-      version='3.0',
-      url='http://svn.zope.org/zope.component',
+      version='3.2.0',
+      url='http://svn.zope.org/zope.component/tags/3.2.0',
       license='ZPL 2.1',
-      description='component',
+      description='Zope Component Architecture',
       author='Zope Corporation and Contributors',
       author_email='zope3-dev@zope.org',
-      long_description='',
+      long_description="This package represents the core of the "
+                  "Zope Component Architecture.  Together with the "
+                  "'zope.interface' package, it provides facilities for "
+                  "defining, registering and looking up components.",
       
       packages=['zope',
                 'zope.component',
