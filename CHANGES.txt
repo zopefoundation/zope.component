@@ -1,6 +1,16 @@
 zope.component Package Changelog
 ================================
 
+zope.component version 3.0.0.2 (2006/04/14)
+------------------------------------------
+
+- Packaging change:  suppress inclusion of 'setup.cfg' in 'sdist' builds.
+
+zope.component version 3.0.0.1 (2006/04/04)
+------------------------------------------
+
+- Fix packaging errror:  neglected to include 'tests' subpackage.
+
 zope.component version 3.0.0 (2004/11/07)
 -----------------------------------------
 
