@@ -1,6 +1,11 @@
 zope.component Package Changelog
 ================================
 
+zope.component version 3.0.0.3 (2006/04/15)
+------------------------------------------
+
+- Fix packaging bug:  'package_dir' must be a *relative* path.
+
 zope.component version 3.0.0.2 (2006/04/14)
 ------------------------------------------
 
