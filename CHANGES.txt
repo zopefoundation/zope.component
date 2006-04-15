@@ -1,6 +1,16 @@
 zope.component Package Changelog
 ================================
 
+zope.component version 3.2.0.2 (2006/04/15)
+---------------------------------------------
+
+- Fix packaging bug:  'package_dir' must be a *relative* path.
+
+zope.component version 3.2.0.1 (2006/04/14)
+---------------------------------------------
+
+- Packaging change:  suppress inclusion of 'setup.cfg' in 'sdist' builds.
+
 zope.component version 3.2.0 (2006/01/05)
 -----------------------------------------
 
