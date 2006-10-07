@@ -35,7 +35,6 @@ setup(name='zope.component',
       packages=['zope',
                 'zope.component',
                 'zope.component.bbb',
-                'zope.component.bbb.tests',
                ],
       package_dir = {'': 'src'},
 
