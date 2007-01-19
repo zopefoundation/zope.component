@@ -1,0 +1,1 @@
+ - Remove zope.testing dependency
