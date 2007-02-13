@@ -18,13 +18,10 @@ $Id$
 
 import os
 
-try:
-    from setuptools import setup, Extension
-except ImportError, e:
-    from distutils.core import setup, Extension
+from setuptools import setup, find_packages
 
 setup(name='zope.component',
-      version='3.4-dev',
+      version='3.4dev',
       url='http://svn.zope.org/zope.component',
       license='ZPL 2.1',
       description='Core of the Zope Component Architecture',
@@ -35,11 +32,7 @@ setup(name='zope.component',
                        "and looking up components.  There are two basic"
                        "kinds of components: adapters and utilities.",
       
-      packages=['zope',
-                'zope.component',
-                'zope.component.bbb',
-                'zope.component.testfiles',
-               ],
+	  packages = find_packages('src'),
       package_dir = {'': 'src'},
 
       namespace_packages=['zope',],
