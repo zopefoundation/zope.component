@@ -17,12 +17,17 @@ $Id$
 """
 
 import os
-
 from setuptools import setup, find_packages
 
-setup(name='zope.component',
+
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
+
+name = 'zope.component'
+setup(name=name,
       version='3.4dev',
-      url='http://svn.zope.org/zope.component',
+      url='http://www.python.org/pypi/'+name,
       license='ZPL 2.1',
       description='Core of the Zope Component Architecture',
       author='Zope Corporation and Contributors',
@@ -32,24 +37,32 @@ setup(name='zope.component',
                        "and looking up components.  There are two basic"
                        "kinds of components: adapters and utilities.",
       
-	  packages = find_packages('src'),
+      packages = find_packages('src'),
       package_dir = {'': 'src'},
 
       namespace_packages=['zope',],
       tests_require = ['zope.testing'],
       install_requires=['zope.deprecation',
-                        'zope.exceptions',
                         'zope.interface',
                         'zope.deferredimport',
-                        'zope.hookable',
                         'zope.event',
-                        'zope.configuration',
-                        'zope.security',
-                        'zope.proxy',
-                        'zope.i18nmessageid',
-                        'zope.testing',
+                        'setuptools',
                        ],
       include_package_data = True,
-
       zip_safe = False,
+      extras_require = dict(
+          service = ['zope.exceptions'],
+          zcml = ['zope.configuration', 'zope.security', 'zope.proxy',
+                  'zope.i18nmessageid',
+                  #'zope.location', # should be depenency of zope.security
+                  ],
+          test = ['zope.testing',
+                  'ZODB3',
+                  #'zope.configuration', 'zope.security', 'zope.proxy',
+                  #'zope.i18nmessageid',
+                  #'zope.location', # should be depenency of zope.security
+                  ],
+          hook = ['zope.hookable'],
+          persistentregistry = ['ZODB3'],
+          ),
       )
