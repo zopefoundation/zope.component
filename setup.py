@@ -23,22 +23,6 @@ from setuptools import setup, find_packages
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-open('t', 'w').write(
-        read('README.txt')
-        + '\n' +
-        'Detailed Documentation\n'
-        '**********************\n'
-        + '\n' +
-        read('src', 'zope', 'component', 'README.txt')
-        + '\n' +
-        read('src', 'zope', 'component', 'event.txt')
-        + '\n' +
-        read('src', 'zope', 'component', 'registry.txt')
-        + '\n' +
-        'Download\n'
-        '**********************\n'
-        )
-
 name = 'zope.component'
 setup(
     name=name,
@@ -59,8 +43,6 @@ setup(
         read('src', 'zope', 'component', 'event.txt')
         + '\n' +
         read('src', 'zope', 'component', 'registry.txt')
-        + '\n' +
-        read('src', 'zope', 'component', 'socketexample.txt')
         + '\n' +
         'Download\n'
         '**********************\n'
