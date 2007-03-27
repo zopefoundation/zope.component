@@ -62,15 +62,15 @@ setup(
     zip_safe = False,
     extras_require = dict(
         service = ['zope.exceptions'],
-        zcml = ['zope.configuration', 'zope.security', 'zope.proxy',
+        zcml = ['zope.configuration',
+                'zope.security',
+                'zope.proxy',
                 'zope.i18nmessageid',
-                #'zope.location', # should be depenency of zope.security
                 ],
         test = ['zope.testing',
                 'ZODB3',
-                #'zope.configuration', 'zope.security', 'zope.proxy',
-                #'zope.i18nmessageid',
-                #'zope.location', # should be depenency of zope.security
+                'zope.hookable',
+                'zope.location',
                 ],
         hook = ['zope.hookable'],
         persistentregistry = ['ZODB3'],
