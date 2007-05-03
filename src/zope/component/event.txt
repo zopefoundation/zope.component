@@ -1,0 +1,142 @@
+Events
+======
+
+The Component Architecture provides a way to dispatch events to event
+handlers.  Event handlers are registered as *subscribers*
+a.k.a. *handlers*.
+
+Before we can start we need to import ``zope.component.event`` to make
+the dispatching effective:
+
+  >>> import zope.component.event
+
+Consider two event classes:
+
+  >>> class Event1(object):
+  ...     pass
+
+  >>> class Event2(Event1):
+  ...     pass
+
+Now consider two handlers for these event classes:
+
+  >>> called = []
+
+  >>> import zope.component
+  >>> @zope.component.adapter(Event1)
+  ... def handler1(event):
+  ...     called.append(1)
+
+  >>> @zope.component.adapter(Event2)
+  ... def handler2(event):
+  ...     called.append(2)
+
+We can register them with the Component Architecture:
+
+  >>> zope.component.provideHandler(handler1)
+  >>> zope.component.provideHandler(handler2)
+
+Now let's go through the events.  We'll see that the handlers have been
+called accordingly:
+
+  >>> from zope.event import notify
+  >>> notify(Event1())
+  >>> called
+  [1]
+
+  >>> del called[:]
+  >>> notify(Event2())
+  >>> called.sort()
+  >>> called
+  [1, 2]
+
+
+
+Object events
+-------------
+
+
+The ``objectEventNotify`` function is a subscriber to dispatch
+ObjectEvents to interested adapters.
+
+First create an object class:
+
+  >>> class IUseless(zope.interface.Interface):
+  ...     """Useless object"""
+
+  >>> class UselessObject(object):
+  ...     """Useless object"""
+  ...     zope.interface.implements(IUseless)
+
+Then create an event class:
+
+  >>> class IObjectThrownEvent(zope.component.interfaces.IObjectEvent):
+  ...     """An object has been thrown away"""
+
+  >>> class ObjectThrownEvent(zope.component.interfaces.ObjectEvent):
+  ...     """An object has been thrown away"""
+  ...     zope.interface.implements(IObjectThrownEvent)
+
+Create an object and an event:
+
+  >>> hammer = UselessObject()
+  >>> event = ObjectThrownEvent(hammer)
+
+Then notify the event to the subscribers.
+Since the subscribers list is empty, nothing happens.
+
+  >>> zope.component.event.objectEventNotify(event)
+
+Now create an handler for the event:
+
+  >>> events = []
+  >>> def record(*args):
+  ...     events.append(args)
+
+  >>> zope.component.provideHandler(record, [IUseless, IObjectThrownEvent])
+
+The event is notified to the subscriber:
+
+  >>> zope.component.event.objectEventNotify(event)
+  >>> events == [(hammer, event)]
+  True
+
+Following test demonstrates how a subscriber can raise an exception
+to prevent an action.
+
+  >>> zope.component.provideHandler(zope.component.event.objectEventNotify)
+
+Let's create a container:
+
+  >>> class ToolBox(dict):
+  ...     def __delitem__(self, key):
+  ...         notify(ObjectThrownEvent(self[key]))
+  ...         return super(ToolBox,self).__delitem__(key)
+
+  >>> container = ToolBox()
+
+And put the object into the container:
+
+  >>> container['Red Hammer'] = hammer
+
+Create an handler function that will raise an error when called:
+
+  >>> class Veto(Exception):
+  ...     pass
+
+  >>> def callback(item, event):
+  ...     assert(item == event.object)
+  ...     raise Veto
+
+Register the handler:
+
+  >>> zope.component.provideHandler(callback, [IUseless, IObjectThrownEvent])
+
+Then if we try to remove the object, an ObjectThrownEvent is fired:
+
+  >>> del container['Red Hammer']
+  ... # doctest: +NORMALIZE_WHITESPACE
+  Traceback (most recent call last):
+  ...
+      raise Veto
+  Veto
