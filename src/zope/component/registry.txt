@@ -651,6 +651,12 @@ We can also unregister subscriptions in much the same way we can for adapters:
     SubscriptionRegistration(<Components comps>, [I1], IA2, u'', A1_2, '')
     True
 
+    >>> for s in components.subscribers((tests.U1(1), ), tests.IA2):
+    ...    print s
+    A1_12(U1(1))
+    A(U1(1),)
+    A(U1(1),)
+
     >>> for registration in sorted(
     ...     components.registeredSubscriptionAdapters()):
     ...     print registration.required
@@ -674,6 +680,10 @@ We can also unregister subscriptions in much the same way we can for adapters:
     Unregistered event:
     SubscriptionRegistration(<Components comps>, [I1], IA2, u'', A, '')
     True
+
+    >>> for s in components.subscribers((tests.U1(1), ), tests.IA2):
+    ...    print s
+    A1_12(U1(1))
 
     >>> for registration in sorted(
     ...     components.registeredSubscriptionAdapters()):
@@ -706,6 +716,9 @@ If we omit the factory, we must specify the required and provided interfaces:
     Unregistered event:
     SubscriptionRegistration(<Components comps>, [I1], IA2, u'', None, '')
     True
+
+    >>> for s in components.subscribers((tests.U1(1), ), tests.IA2):
+    ...    print s
 
     >>> for registration in sorted(
     ...     components.registeredSubscriptionAdapters()):

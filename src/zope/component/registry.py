@@ -277,7 +277,7 @@ class Components(object):
 
 
         self._subscription_registrations[:] = new
-        self.adapters.unsubscribe(required, provided)
+        self.adapters.unsubscribe(required, provided, factory)
 
         zope.event.notify(interfaces.Unregistered(
             SubscriptionRegistration(self, required, provided, name,
