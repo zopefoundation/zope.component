@@ -966,7 +966,6 @@ class StandaloneTests(unittest.TestCase):
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.STDOUT,
                                    stdin=subprocess.PIPE)
-
         pickle.dump(sys.path, process.stdin)
         process.stdin.close()
 
@@ -977,13 +976,22 @@ class StandaloneTests(unittest.TestCase):
                 raise # TODO verify sanity of a pass on EINTR :-/
         lines = process.stdout.readlines()
         process.stdout.close()
+        success = True
+        # Interpret the result: We scan the output from the end backwards
+        # until we find either a line that says 'OK' (which means the tests
+        # ran successfully) or a line that starts with quite a few dashes
+        # (which means we didn't find a line that says 'OK' within the summary
+        # of the test runner and the tests did not run successfully.)
         for l in reversed(lines):
             l = l.strip()
-            if l:
-                if not l.endswith('OK'):
-                    self.fail(''.join(lines))
-                else:
-                    break
+            if not l:
+                continue
+            if l.startswith('-----'):
+                break
+            if l.endswith('OK'):
+                sucess = True
+        if not success:
+            self.fail(''.join(lines))
 
 def setUpRegistryTests(tests):
     setUp()
