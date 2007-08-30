@@ -571,11 +571,11 @@ class Registered(RegistrationEvent):
     interface.implements(IRegistered)
 
 class IUnregistered(IRegistrationEvent):
-    """A component or factory was registered
+    """A component or factory was unregistered
     """
 
 class Unregistered(RegistrationEvent):
-    """A component or factory was registered
+    """A component or factory was unregistered
     """
     interface.implements(IUnregistered)
 
