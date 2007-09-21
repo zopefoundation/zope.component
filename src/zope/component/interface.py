@@ -96,7 +96,7 @@ def provideInterface(id, interface, iface_type=None, info=''):
         alsoProvides(interface, iface_type)
     else:
         iface_type = IInterface
-        
+
     gsm = zope.component.getGlobalSiteManager()
     gsm.registerUtility(interface, iface_type, id, info)
 
