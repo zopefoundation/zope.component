@@ -11,7 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Setup for zope.i18nmessageid package
+"""Setup for zope.component package
 
 $Id$
 """
