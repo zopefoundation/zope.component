@@ -26,10 +26,10 @@ def read(*rnames):
 name = 'zope.component'
 setup(
     name=name,
-    version = '3.4.0b1',
-    url='http://www.python.org/pypi/'+name,
+    version = '3.4.0',
+    url='http://pypi.python.org/pypi/'+name,
     license='ZPL 2.1',
-    description='Core of the Zope Component Architecture',
+    description='Zope Component Architecture',
     author='Zope Corporation and Contributors',
     author_email='zope3-dev@zope.org',
     long_description=(

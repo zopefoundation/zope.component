@@ -11,6 +11,20 @@ defining, registering and looking up components.
 Releases
 ********
 
+3.4.0 (2007-09-29)
+==================
+
+No further changes since 3.4.0a1.
+
+3.4.0a1 (2007-04-22)
+====================
+
+Corresponds to zope.component from Zope 3.4.0a1.
+
+In the Zope 3.3.x series, ``zope.component`` was simplified yet once
+more.  See http://wiki.zope.org/zope3/LocalComponentManagementSimplification
+for the proposal describing the changes.
+
 3.2.0.2 (2006/04/15)
 ====================
 
@@ -27,12 +41,12 @@ Packaging change:  suppress inclusion of 'setup.cfg' in 'sdist' builds.
 Corresponds to the verison of the zope.component package shipped as part of
 the Zope 3.2.0 release.
 
-Deprecated services and related APIS. The adapter and utility registries
+Deprecated services and related APIs. The adapter and utility registries
 are now available directly via the site manager's 'adapters' and 'utilities'
 attributes, respectively.  Services are accessible, but deprecated, and
 will be removed in Zope 3.3.
 
-Deprectaed all presentation-related APIS, including all view-related
+Deprectaed all presentation-related APIs, including all view-related
 API functions. Use the adapter API functions instead.
 See http://dev.zope.org/Zope3/ImplementViewsAsAdapters`
 
