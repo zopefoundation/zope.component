@@ -75,11 +75,11 @@ class Components(object):
             # already registered
             return
 
-        subscribed = [
-            1
-            for ((p, _), (c,_)) in self._utility_registrations.iteritems()
-            if p == provided and c == component
-            ]
+        subscribed = False
+        for ((p, _), (c,_)) in self._utility_registrations.iteritems():
+            if p == provided and c == component:
+                subscribed = True
+                break
 
         self._utility_registrations[(provided, name)] = component, info
         self.utilities.register((), provided, name, component)
@@ -108,11 +108,11 @@ class Components(object):
         del self._utility_registrations[(provided, name)]
         self.utilities.unregister((), provided, name)
 
-        subscribed = [
-            1
-            for ((p, _), (c,_)) in self._utility_registrations.iteritems()
-            if p == provided and c == component
-            ]
+        subscribed = False
+        for ((p, _), (c,_)) in self._utility_registrations.iteritems():
+            if p == provided and c == component:
+                subscribed = True
+                break
 
         if not subscribed:
             self.utilities.unsubscribe((), provided, component)
