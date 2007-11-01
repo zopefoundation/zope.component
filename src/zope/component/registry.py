@@ -44,6 +44,7 @@ class Components(object):
 
     def _init_registrations(self):
         self._utility_registrations = {}
+        self._utility_subscribers = {}
         self._adapter_registrations = {}
         self._subscription_registrations = []
         self._handler_registrations = []
@@ -75,13 +76,9 @@ class Components(object):
             # already registered
             return
 
-        subscribed = False
-        for ((p, _), (c,_)) in self._utility_registrations.iteritems():
-            if p == provided and c == component:
-                subscribed = True
-                break
-
+        subscribed = self._utility_subscribers.get((provided, component), False)
         self._utility_registrations[(provided, name)] = component, info
+        self._utility_subscribers[(provided, component)] = True
         self.utilities.register((), provided, name, component)
 
         if not subscribed:
@@ -108,12 +105,8 @@ class Components(object):
         del self._utility_registrations[(provided, name)]
         self.utilities.unregister((), provided, name)
 
-        subscribed = False
-        for ((p, _), (c,_)) in self._utility_registrations.iteritems():
-            if p == provided and c == component:
-                subscribed = True
-                break
-
+        subscribed = self._utility_subscribers.get((provided, component), False)
+        del self._utility_subscribers[(provided, component)]
         if not subscribed:
             self.utilities.unsubscribe((), provided, component)
 

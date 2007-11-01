@@ -14,7 +14,9 @@ Releases
 3.4.1 (unreleased)
 ==================
 
-...
+Optimized un/registerUtility via storing an optimized data structure for
+efficient retrieval of already registered utilities. This avoids looping over
+all utilities when registering a new one.
 
 3.4.0 (2007-09-29)
 ==================
