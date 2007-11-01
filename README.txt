@@ -11,7 +11,7 @@ defining, registering and looking up components.
 Releases
 ********
 
-3.4.1 (unreleased)
+3.5.0 (unreleased)
 ==================
 
 Optimized un/registerUtility via storing an optimized data structure for
