@@ -51,7 +51,6 @@ class PersistentComponents(zope.component.registry.Components):
 
     def _init_registrations(self):
         self._utility_registrations = persistent.mapping.PersistentMapping()
-        self._utility_subscribers = persistent.mapping.PersistentMapping()
         self._adapter_registrations = persistent.mapping.PersistentMapping()
         self._subscription_registrations = persistent.list.PersistentList()
         self._handler_registrations = persistent.list.PersistentList()

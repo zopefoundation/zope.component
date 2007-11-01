@@ -76,9 +76,19 @@ class Components(object):
             # already registered
             return
 
-        subscribed = self._utility_subscribers.get((provided, component), False)
+        subscribed = False
+        if hasattr(self, '_utility_subscribers'):
+            subscribed = self._utility_subscribers.get((provided, component),
+                                                       False)
+        else:
+            for ((p, _), (c,_)) in self._utility_registrations.iteritems():
+                if p == provided and c == component:
+                    subscribed = True
+                    break
+
         self._utility_registrations[(provided, name)] = component, info
-        self._utility_subscribers[(provided, component)] = True
+        if hasattr(self, '_utility_subscribers'):
+            self._utility_subscribers[(provided, component)] = True
         self.utilities.register((), provided, name, component)
 
         if not subscribed:
@@ -105,8 +115,17 @@ class Components(object):
         del self._utility_registrations[(provided, name)]
         self.utilities.unregister((), provided, name)
 
-        subscribed = self._utility_subscribers.get((provided, component), False)
-        del self._utility_subscribers[(provided, component)]
+        subscribed = False
+        if hasattr(self, '_utility_subscribers'):
+            subscribed = self._utility_subscribers.get((provided, component),
+                                                       False)
+            del self._utility_subscribers[(provided, component)]
+        else:
+            for ((p, _), (c,_)) in self._utility_registrations.iteritems():
+                if p == provided and c == component:
+                    subscribed = True
+                    break
+
         if not subscribed:
             self.utilities.unsubscribe((), provided, component)
 
