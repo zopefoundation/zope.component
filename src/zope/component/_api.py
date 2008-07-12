@@ -34,8 +34,11 @@ except ImportError:
     def hookable(ob):
         return ob
 
-# SiteManager API. This needs to get deprecated eventually.
+# getSiteManager() returns a component registry.  Although the term
+# "site manager" is deprecated in favor of "component registry",
+# the old term is kept around to maintain a stable API.
 
+@hookable
 def getSiteManager(context=None):
     if context is None:
         return base
@@ -46,8 +49,6 @@ def getSiteManager(context=None):
             return IComponentLookup(context)
         except TypeError, error:
             raise ComponentLookupError(*error.args)
-
-getSiteManager = hookable(getSiteManager)
 
 # Adapter API
 
@@ -182,6 +183,7 @@ def adaptedBy(ob):
 # registry of the `zope.inteface` package. This way we will be able to call
 # interfaces to create adapters for objects. For example, `I1(ob)` is
 # equvalent to `getAdapterInContext(I1, ob, '')`.
+@hookable
 def adapter_hook(interface, object, name='', default=None):
     try:
         sitemanager = getSiteManager()
@@ -189,9 +191,6 @@ def adapter_hook(interface, object, name='', default=None):
         # Oh blast, no site manager. This should *never* happen!
         return None
     return sitemanager.queryAdapter(object, interface, name, default)
-
-# Make the component architecture's adapter hook hookable
-adapter_hook = hookable(adapter_hook)
 
 import zope.interface.interface
 zope.interface.interface.adapter_hooks.append(adapter_hook)
