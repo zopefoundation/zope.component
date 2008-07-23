@@ -633,7 +633,7 @@ class IComponentRegistry(interface.Interface):
         """
 
     def registeredUtilities():
-        """Return an iterable of IUtilityRegistrations.
+        """Return an iterable of IUtilityRegistration instances.
 
         These registrations describe the current utility registrations
         in the object.
@@ -720,7 +720,7 @@ class IComponentRegistry(interface.Interface):
         """
 
     def registeredAdapters():
-        """Return an iterable of IAdapterRegistrations.
+        """Return an iterable of IAdapterRegistration instances.
 
         These registrations describe the current adapter registrations
         in the object.
@@ -816,7 +816,7 @@ class IComponentRegistry(interface.Interface):
         """
 
     def registeredSubscriptionAdapters():
-        """Return an iterable of ISubscriptionAdapterRegistrations.
+        """Return an iterable of ISubscriptionAdapterRegistration instances.
 
         These registrations describe the current subscription adapter
         registrations in the object.
@@ -900,7 +900,7 @@ class IComponentRegistry(interface.Interface):
         """
 
     def registeredHandlers():
-        """Return an iterable of IHandlerRegistrations.
+        """Return an iterable of IHandlerRegistration instances.
 
         These registrations describe the current handler registrations
         in the object.
