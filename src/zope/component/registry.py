@@ -44,7 +44,6 @@ class Components(object):
 
     def _init_registrations(self):
         self._utility_registrations = {}
-        self._utility_subscribers = {}
         self._adapter_registrations = {}
         self._subscription_registrations = []
         self._handler_registrations = []
@@ -77,21 +76,15 @@ class Components(object):
             return
 
         subscribed = False
-        if hasattr(self, '_utility_subscribers'):
-            subscribed = self._utility_subscribers.get((provided, component),
-                                                       False)
-        else:
-            for ((p, _), (c,_)) in self._utility_registrations.iteritems():
-                if p == provided and c == component:
-                    subscribed = True
-                    break
+        for ((p, _), data) in self._utility_registrations.iteritems():
+            if p == provided and data[0] == component:
+                subscribed = True
+                break
 
         self._utility_registrations[(provided, name)] = component, info
         self.utilities.register((), provided, name, component)
 
         if not subscribed:
-            if hasattr(self, '_utility_subscribers'):
-                self._utility_subscribers[(provided, component)] = True
             self.utilities.subscribe((), provided, component)
 
         if event:
@@ -116,15 +109,10 @@ class Components(object):
         self.utilities.unregister((), provided, name)
 
         subscribed = False
-        if hasattr(self, '_utility_subscribers'):
-            subscribed = self._utility_subscribers.get((provided, component),
-                                                       False)
-            del self._utility_subscribers[(provided, component)]
-        else:
-            for ((p, _), (c,_)) in self._utility_registrations.iteritems():
-                if p == provided and c == component:
-                    subscribed = True
-                    break
+        for ((p, _), data) in self._utility_registrations.iteritems():
+            if p == provided and data[0] == component:
+                subscribed = True
+                break
 
         if not subscribed:
             self.utilities.unsubscribe((), provided, component)

@@ -176,7 +176,8 @@ getAllUtilitiesRegisteredFor is similar to getUtilitiesFor except that
 it includes utilities that are overridden.  For example, we'll
 register a utility that for an extending interface of I2:
 
-    >>> components.registerUtility(tests.U('ext'), tests.I2e)
+    >>> util = tests.U('ext')
+    >>> components.registerUtility(util, tests.I2e)
     Registered event:
     UtilityRegistration(<Components comps>, I2e, u'', ext, u'')
 
@@ -189,6 +190,15 @@ but we do get it from getAllUtilitiesRegisteredFor:
 
     >>> sorted(map(str, components.getAllUtilitiesRegisteredFor(tests.I2)))
     ['U(ext)', 'U12(2)', 'U12(3)']
+
+Removing a utility also makes it disappear from getUtilitiesFor:
+
+    >>> components.unregisterUtility(util, tests.I2e)
+    Unregistered event:
+    UtilityRegistration(<Components comps>, I2e, u'', ext, None, u'')
+    True
+    >>> list(components.getAllUtilitiesRegisteredFor(tests.I2e))
+    []
 
 Adapters
 --------
