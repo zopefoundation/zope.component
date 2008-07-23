@@ -14,10 +14,6 @@ Releases
 3.5.0 (unreleased)
 ==================
 
-Support registration of utilities via factories through the component registry
-and return factory information in the registration information. This fixes
-https://bugs.launchpad.net/zope3/+bug/240631
-
 Optimized un/registerUtility via storing an optimized data structure for
 efficient retrieval of already registered utilities. This avoids looping over
 all utilities when registering a new one.

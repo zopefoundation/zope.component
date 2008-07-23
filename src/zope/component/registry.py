@@ -66,17 +66,12 @@ class Components(object):
         lambda self, bases: self._setBases(bases),
         )
 
-    def registerUtility(self, component=None, provided=None, name=u'', info=u'',
-                        event=True, factory=None):
-        if factory:
-            if component:
-                raise TypeError("Can't specify factory and component.")
-            component = factory()
-
+    def registerUtility(self, component, provided=None, name=u'', info=u'',
+                        event=True):
         if provided is None:
             provided = _getUtilityProvided(component)
 
-        if (self._utility_registrations.get((provided, name)[:2])
+        if (self._utility_registrations.get((provided, name))
             == (component, info)):
             # already registered
             return
@@ -86,12 +81,12 @@ class Components(object):
             subscribed = self._utility_subscribers.get((provided, component),
                                                        False)
         else:
-            for ((p, _), data) in self._utility_registrations.iteritems():
-                if p == provided and data[0] == component:
+            for ((p, _), (c,_)) in self._utility_registrations.iteritems():
+                if p == provided and c == component:
                     subscribed = True
                     break
 
-        self._utility_registrations[(provided, name)] = component, info, factory
+        self._utility_registrations[(provided, name)] = component, info
         if hasattr(self, '_utility_subscribers'):
             self._utility_subscribers[(provided, component)] = True
         self.utilities.register((), provided, name, component)
@@ -101,18 +96,13 @@ class Components(object):
 
         if event:
             zope.event.notify(interfaces.Registered(
-                UtilityRegistration(self, provided, name, component, info, factory)
+                UtilityRegistration(self, provided, name, component, info)
                 ))
 
-    def unregisterUtility(self, component=None, provided=None, name=u'', factory=None):
-        if factory:
-            if component:
-                raise TypeError("Can't specify factory and component.")
-            component = factory()
-
+    def unregisterUtility(self, component=None, provided=None, name=u''):
         if provided is None:
             if component is None:
-                raise TypeError("Must specify one of component, factory and provided")
+                raise TypeError("Must specify one of component and provided")
             provided = _getUtilityProvided(component)
 
         old = self._utility_registrations.get((provided, name))
@@ -131,8 +121,8 @@ class Components(object):
                                                        False)
             del self._utility_subscribers[(provided, component)]
         else:
-            for ((p, _), data) in self._utility_registrations.iteritems():
-                if p == provided and data[0] == component:
+            for ((p, _), (c,_)) in self._utility_registrations.iteritems():
+                if p == provided and c == component:
                     subscribed = True
                     break
 
@@ -146,9 +136,9 @@ class Components(object):
         return True
 
     def registeredUtilities(self):
-        for ((provided, name), data
+        for ((provided, name), (component, info)
              ) in self._utility_registrations.iteritems():
-            yield UtilityRegistration(self, provided, name, *data)
+            yield UtilityRegistration(self, provided, name, component, info)
 
     def queryUtility(self, provided, name=u'', default=None):
         return self.utilities.lookup((), provided, name, default)
@@ -420,20 +410,18 @@ class UtilityRegistration(object):
 
     interface.implements(interfaces.IUtilityRegistration)
 
-    def __init__(self, registry, provided, name, component, doc, factory=None):
-        (self.registry, self.provided, self.name, self.component, self.info,
-         self.factory
-         ) = registry, provided, name, component, doc, factory
+    def __init__(self, registry, provided, name, component, doc):
+        (self.registry, self.provided, self.name, self.component, self.info
+         ) = registry, provided, name, component, doc
 
     def __repr__(self):
-        return '%s(%r, %s, %r, %s, %r, %r)' % (
-                self.__class__.__name__,
-                self.registry,
-                getattr(self.provided, '__name__', None), self.name,
-                getattr(self.component, '__name__', `self.component`),
-                self.factory, self.info,
-                )
-        
+        return '%s(%r, %s, %r, %s, %r)' % (
+            self.__class__.__name__,
+            self.registry,
+            getattr(self.provided, '__name__', None), self.name,
+            getattr(self.component, '__name__', `self.component`), self.info,
+            )
+
     def __cmp__(self, other):
         return cmp(self.__repr__(), other.__repr__())
 

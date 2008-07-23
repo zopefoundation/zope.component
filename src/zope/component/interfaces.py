@@ -512,7 +512,6 @@ class IUtilityRegistration(IRegistration):
     """Information about the registration of a utility
     """
 
-    factory = interface.Attribute("The factory used to create the utility. Optional.")
     component = interface.Attribute("The object registered")
     provided = interface.Attribute("The interface provided by the component")
 
@@ -584,11 +583,8 @@ class IComponentRegistry(interface.Interface):
     """Register components
     """
 
-    def registerUtility(component=None, provided=None, name=u'', info=u'', factory=None):
+    def registerUtility(component, provided=None, name=u'', info=u''):
         """Register a utility
-
-        factory
-           Factory for the component to be registerd.
 
         component
            The registered component
@@ -606,11 +602,10 @@ class IComponentRegistry(interface.Interface):
            An object that can be converted to a string to provide
            information about the registration.
 
-        Only one of component and factory can be used.
         A Registered event is generated with an IUtilityRegistration.
         """
 
-    def unregisterUtility(component=None, provided=None, name=u'', factory=None):
+    def unregisterUtility(component=None, provided=None, name=u''):
         """Unregister a utility
 
         A boolean is returned indicating whether the registry was
@@ -618,9 +613,6 @@ class IComponentRegistry(interface.Interface):
         component registered, or if the given component is not
         None and is not registered, then the function returns
         False, otherwise it returns True.
-
-        factory
-           Factory for the component to be unregisterd.
 
         component
            The registered component The given component can be
@@ -637,7 +629,6 @@ class IComponentRegistry(interface.Interface):
         name
            The utility name.
 
-        Only one of component and factory can be used.
         An UnRegistered event is generated with an IUtilityRegistration.
         """
 

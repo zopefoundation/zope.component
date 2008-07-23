@@ -423,7 +423,6 @@ def utility(_context, provides=None, component=None, factory=None,
         discriminator = ('utility', provides, name),
         callable = handler,
         args = ('registerUtility', component, provides, name),
-        kwargs = dict(factory=factory), # XXX WTA: Does this work ??
         )
     _context.action(
         discriminator = None,
