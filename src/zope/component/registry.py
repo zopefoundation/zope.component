@@ -75,7 +75,7 @@ class Components(object):
         if provided is None:
             provided = _getUtilityProvided(component)
 
-        if (self._utility_registrations.get((provided, name)[:2])
+        if (self._utility_registrations.get((provided, name))[:2]
             == (component, info)):
             # already registered
             return
