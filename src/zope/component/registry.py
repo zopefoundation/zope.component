@@ -65,12 +65,17 @@ class Components(object):
         lambda self, bases: self._setBases(bases),
         )
 
-    def registerUtility(self, component, provided=None, name=u'', info=u'',
-                        event=True):
+    def registerUtility(self, component=None, provided=None, name=u'', info=u'',
+                        event=True, factory=None):
+        if factory:
+            if component:
+                raise TypeError("Can't specify factory and component.")
+            component = factory()
+
         if provided is None:
             provided = _getUtilityProvided(component)
 
-        if (self._utility_registrations.get((provided, name))
+        if (self._utility_registrations.get((provided, name)[:2])
             == (component, info)):
             # already registered
             return
@@ -81,7 +86,7 @@ class Components(object):
                 subscribed = True
                 break
 
-        self._utility_registrations[(provided, name)] = component, info
+        self._utility_registrations[(provided, name)] = component, info, factory
         self.utilities.register((), provided, name, component)
 
         if not subscribed:
@@ -89,13 +94,18 @@ class Components(object):
 
         if event:
             zope.event.notify(interfaces.Registered(
-                UtilityRegistration(self, provided, name, component, info)
+                UtilityRegistration(self, provided, name, component, info, factory)
                 ))
 
-    def unregisterUtility(self, component=None, provided=None, name=u''):
+    def unregisterUtility(self, component=None, provided=None, name=u'', factory=None):
+        if factory:
+            if component:
+                raise TypeError("Can't specify factory and component.")
+            component = factory()
+
         if provided is None:
             if component is None:
-                raise TypeError("Must specify one of component and provided")
+                raise TypeError("Must specify one of component, factory and provided")
             provided = _getUtilityProvided(component)
 
         old = self._utility_registrations.get((provided, name))
@@ -118,15 +128,15 @@ class Components(object):
             self.utilities.unsubscribe((), provided, component)
 
         zope.event.notify(interfaces.Unregistered(
-            UtilityRegistration(self, provided, name, component, old[1])
+            UtilityRegistration(self, provided, name, component, *old[1:])
             ))
 
         return True
 
     def registeredUtilities(self):
-        for ((provided, name), (component, info)
+        for ((provided, name), data
              ) in self._utility_registrations.iteritems():
-            yield UtilityRegistration(self, provided, name, component, info)
+            yield UtilityRegistration(self, provided, name, *data)
 
     def queryUtility(self, provided, name=u'', default=None):
         return self.utilities.lookup((), provided, name, default)
@@ -398,18 +408,20 @@ class UtilityRegistration(object):
 
     interface.implements(interfaces.IUtilityRegistration)
 
-    def __init__(self, registry, provided, name, component, doc):
-        (self.registry, self.provided, self.name, self.component, self.info
-         ) = registry, provided, name, component, doc
+    def __init__(self, registry, provided, name, component, doc, factory=None):
+        (self.registry, self.provided, self.name, self.component, self.info,
+         self.factory
+         ) = registry, provided, name, component, doc, factory
 
     def __repr__(self):
-        return '%s(%r, %s, %r, %s, %r)' % (
-            self.__class__.__name__,
-            self.registry,
-            getattr(self.provided, '__name__', None), self.name,
-            getattr(self.component, '__name__', `self.component`), self.info,
-            )
-
+        return '%s(%r, %s, %r, %s, %r, %r)' % (
+                self.__class__.__name__,
+                self.registry,
+                getattr(self.provided, '__name__', None), self.name,
+                getattr(self.component, '__name__', `self.component`),
+                self.factory, self.info,
+                )
+        
     def __cmp__(self, other):
         return cmp(self.__repr__(), other.__repr__())
 

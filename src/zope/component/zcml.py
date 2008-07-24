@@ -400,10 +400,8 @@ def proxify(ob, checker):
 
 def utility(_context, provides=None, component=None, factory=None,
             permission=None, name=''):
-    if factory:
-        if component:
-            raise TypeError("Can't specify factory and component.")
-        component = factory()
+    if factory and component:
+        raise TypeError("Can't specify factory and component.")
 
     if provides is None:
         provides = list(zope.interface.providedBy(component))
@@ -423,6 +421,7 @@ def utility(_context, provides=None, component=None, factory=None,
         discriminator = ('utility', provides, name),
         callable = handler,
         args = ('registerUtility', component, provides, name),
+        kw = dict(factory=factory),
         )
     _context.action(
         discriminator = None,
