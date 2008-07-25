@@ -895,18 +895,18 @@ We can repeat the same drill for utility factories:
 
   >>> clearZCML()
   >>> runSnippet('''
-  ...   <utility component="zope.component.testfiles.adapter.A4" />''')
+  ...   <utility factory="zope.component.testfiles.adapter.A4" />''')
   Traceback (most recent call last):
     ...
-  ZopeXMLConfigurationError: File "<string>", line 4.2-4.61
+  ZopeXMLConfigurationError: File "<string>", line 4.2-4.59
       TypeError: Missing 'provides' attribute
 
   >>> clearZCML()
   >>> runSnippet('''
-  ...   <utility component="zope.component.testfiles.adapter.A5" />''')
+  ...   <utility factory="zope.component.testfiles.adapter.A5" />''')
   Traceback (most recent call last):
     ...
-  ZopeXMLConfigurationError: File "<string>", line 4.2-4.61
+  ZopeXMLConfigurationError: File "<string>", line 4.2-4.59
       TypeError: Missing 'provides' attribute
 
 Protected utilities
