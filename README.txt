@@ -16,6 +16,13 @@ Releases
 
 ...
 
+3.5.1 (2008-07-25)
+==================
+
+Fix bug introduced in 3.5.0: <utility factory="..."> no longer supported
+interfaces declared in Python and always wanted an explicit provides="..."
+attribute. https://bugs.launchpad.net/zope3/+bug/251865
+
 3.5.0 (2008-07-25)
 ==================
 

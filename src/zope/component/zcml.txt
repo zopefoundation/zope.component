@@ -895,6 +895,11 @@ We can repeat the same drill for utility factories:
 
   >>> clearZCML()
   >>> runSnippet('''
+  ...   <utility factory="zope.component.testfiles.components.Comp" />''')
+  >>> zope.component.getUtility(IApp).__class__ is Comp
+  True
+
+  >>> runSnippet('''
   ...   <utility factory="zope.component.testfiles.adapter.A4" />''')
   Traceback (most recent call last):
     ...

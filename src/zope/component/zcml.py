@@ -404,7 +404,10 @@ def utility(_context, provides=None, component=None, factory=None,
         raise TypeError("Can't specify factory and component.")
 
     if provides is None:
-        provides = list(zope.interface.providedBy(component))
+        if factory:
+            provides = list(zope.interface.implementedBy(factory))
+        else:
+            provides = list(zope.interface.providedBy(component))
         if len(provides) == 1:
             provides = provides[0]
         else:
