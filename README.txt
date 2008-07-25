@@ -11,11 +11,6 @@ defining, registering and looking up components.
 Releases
 ********
 
-3.6.0 (unreleased)
-==================
-
-...
-
 3.5.1 (2008-07-25)
 ==================
 
