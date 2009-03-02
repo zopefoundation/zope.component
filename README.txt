@@ -14,7 +14,8 @@ Releases
 3.6.0 (unreleased)
 ==================
 
-...
+Change package's mailing list address to zope-dev at zope.org, because
+zope3-dev at zope.org is now retired.
 
 3.5.1 (2008-07-25)
 ==================

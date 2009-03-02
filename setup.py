@@ -23,15 +23,14 @@ from setuptools import setup, find_packages
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-name = 'zope.component'
 setup(
-    name=name,
+    name='zope.component',
     version = '3.6.0dev',
-    url='http://pypi.python.org/pypi/'+name,
+    url='http://pypi.python.org/pypi/zope.component',
     license='ZPL 2.1',
     description='Zope Component Architecture',
     author='Zope Corporation and Contributors',
-    author_email='zope3-dev@zope.org',
+    author_email='zope-dev@zope.org',
     long_description=(
         read('README.txt')
         + '\n' +
