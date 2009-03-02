@@ -236,7 +236,7 @@ one:
     True
 
 Subscription Adapters
-*********************
+---------------------
 
 Unlike regular adapters, subscription adapters are used when we want
 all of the adapters that adapt an object to a particular adapter.
@@ -323,7 +323,7 @@ We can then use the subscribers to validate objects:
     ['too short']
 
 Handlers
-********
+--------
 
 Handlers are subscription adapter factories that don't produce
 anything.  They do all of their work when called.  Handlers

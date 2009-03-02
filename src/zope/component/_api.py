@@ -26,6 +26,7 @@ from zope.component.interfaces import IFactory
 from zope.component.interfaces import ComponentLookupError
 from zope.component.interfaces import IComponentLookup
 from zope.component.globalregistry import base
+from zope.component._declaration import adapter, adapts, adaptedBy
 
 # Try to be hookable. Do so in a try/except to avoid a hard dependency.
 try:
@@ -135,48 +136,6 @@ def handle(*objects):
     # iterating over subscribers assures they get executed
     for ignored in sitemanager.subscribers(objects, None):
         pass
-
-class _adapts_descr(object):
-    def __init__(self, interfaces):
-        self.interfaces = interfaces
-
-    def __get__(self, inst, cls):
-        if inst is None:
-            return self.interfaces
-        raise AttributeError('__component_adapts__')
-
-_class_types = type, types.ClassType
-class adapter:
-
-    def __init__(self, *interfaces):
-        self.interfaces = interfaces
-
-    def __call__(self, ob):
-        if isinstance(ob, _class_types):
-            ob.__component_adapts__ = _adapts_descr(self.interfaces)
-        else:
-            ob.__component_adapts__ = self.interfaces
-
-        return ob
-
-def adapts(*interfaces):
-    frame = sys._getframe(1)
-    locals = frame.f_locals
-
-    # Try to make sure we were called from a class def. In 2.2.0 we can't
-    # check for __module__ since it doesn't seem to be added to the locals
-    # until later on.
-    if (locals is frame.f_globals) or (
-        ('__module__' not in locals) and sys.version_info[:3] > (2, 2, 0)):
-        raise TypeError("adapts can be used only from a class definition.")
-
-    if '__component_adapts__' in locals:
-        raise TypeError("adapts can be used only once in a class definition.")
-
-    locals['__component_adapts__'] = _adapts_descr(interfaces)
-
-def adaptedBy(ob):
-    return getattr(ob, '__component_adapts__', None)
 
 #############################################################################
 # Register the component architectures adapter hook, with the adapter hook

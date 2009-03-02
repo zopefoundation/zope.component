@@ -45,10 +45,6 @@ class IObjectEvent(interface.Interface):
 class ObjectEvent(object):
     interface.implements(IObjectEvent)
 
-    # for repr backward compatibility. In the next release cycle, we'll
-    # provide a testing framework that addresses repr migration.
-    __module__ = 'zope.app.event.objectevent'
-
     def __init__(self, object):
         self.object = object
 
@@ -378,11 +374,6 @@ class IComponentLookup(interface.Interface):
         An iterable of utility instances is returned.  No names are
         returned.
         """
-
-zope.deferredimport.deprecated(
-    "Use IComponentLookup instead.  ISiteManager will be removed in 2007.",
-    ISiteManager = "zope.component.interfaces:IComponentLookup",
-    )
 
 class IComponentRegistrationConvenience(interface.Interface):
     """API for registering components.

@@ -1,4 +1,3 @@
-==================================================
 The Zope 3 Component Architecture (Socket Example)
 ==================================================
 
@@ -75,7 +74,7 @@ Note that I could have called the passed in socket any way I like, but
 
 
 Single Adapters
-+++++++++++++++
+~~~~~~~~~~~~~~~
 
 Before we can use the adapter, we have to buy it and make it part of our
 inventory. In the component architecture we do this by registering the adapter
@@ -142,7 +141,7 @@ always return a `default` value after a failure.
 
 
 Named Adapters
-++++++++++++++
+~~~~~~~~~~~~~~
 
 You are finally back in Germany. You also brought your DVD player and a couple
 DVDs with you, which you would like to watch. Your shaver was able to convert
@@ -204,7 +203,7 @@ adapter itself.
 
 
 Multi-Adapters
-++++++++++++++
+~~~~~~~~~~~~~~
 
 After watching all the DVDs you brought at least twice, you get tired of them
 and you want to listen to some music using your MP3 player. But darn, the MP3
@@ -408,7 +407,7 @@ will never cause a `ComponentLookupError`.
 
 
 Named Utilities
-+++++++++++++++
+~~~~~~~~~~~~~~~
 
 It is often desirable to have several utilities providing the same interface
 per site. This way you can implement any sort of registry using utilities. For
@@ -475,7 +474,7 @@ need this method.
 
 
 Factories
-+++++++++
+~~~~~~~~~
 
 A *factory* is a special kind of utility that exists to create other
 components. A factory is always identified by a name. It also provides a title
@@ -596,5 +595,3 @@ We can now ask for the site manager of this context:
 
 The site manager instance `lsm` is formally known as a *local site manager* of
 `context`.
-
-

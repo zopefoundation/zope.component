@@ -41,33 +41,39 @@ setup(
         + '\n' +
         read('src', 'zope', 'component', 'event.txt')
         + '\n' +
+        read('src', 'zope', 'component', 'factory.txt')
+        + '\n' +
         read('src', 'zope', 'component', 'registry.txt')
         + '\n' +
+        read('src', 'zope', 'component', 'persistentregistry.txt')
+        + '\n' +
+        read('src', 'zope', 'component', 'socketexample.txt')
+        + '\n' +
+        read('CHANGES.txt')
+        + '\n' +
         'Download\n'
-        '**********************\n'
+        '********\n'
         ),
     packages = find_packages('src'),
     package_dir = {'': 'src'},
 
     namespace_packages=['zope',],
     tests_require = ['zope.testing'],
-    install_requires=['zope.deprecation',
+    install_requires=['setuptools',
                       'zope.interface',
-                      'zope.deferredimport',
                       'zope.event',
-                      'setuptools',
+                      'zope.deferredimport',
                       ],
     include_package_data = True,
     zip_safe = False,
     extras_require = dict(
-        service = ['zope.exceptions'],
         zcml = ['zope.configuration',
                 'zope.security',
                 'zope.proxy',
                 'zope.i18nmessageid',
                 ],
-        test = ['zope.testing',
-                'ZODB3',
+        test = ['ZODB3',
+                'zope.testing',
                 'zope.hookable',
                 'zope.location',
                 ],

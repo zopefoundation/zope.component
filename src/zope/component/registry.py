@@ -17,7 +17,6 @@ $Id$
 """
 
 import types
-import zope.deprecation
 import zope.interface.adapter
 from zope import component, interface
 from zope.component import interfaces
@@ -446,29 +445,6 @@ class AdapterRegistration(object):
     def __cmp__(self, other):
         return cmp(self.__repr__(), other.__repr__())
 
-    # this may actually not be needed as component did not exist as
-    # an attribute in Zope 3.2, but we'll leave it in to be sure.
-    @property
-    @zope.deprecation.deprecate(
-        "The component attribute on adapter registrations will be unsupported "
-        "in Zope 3.5. Use the factory attribute instead.")
-    def component(self):
-        return self.factory
-
-    @property
-    @zope.deprecation.deprecate(
-        "The value attribute on adapter registrations will be unsupported "
-        "in Zope 3.5. Use the factory attribute instead.")
-    def value(self):
-        return self.factory
-
-    @property
-    @zope.deprecation.deprecate(
-        "The doc attribute on adapter registrations will be unsupported "
-        "in Zope 3.5. Use the info attribute instead.")
-    def doc(self):
-        return self.info
-    
 class SubscriptionRegistration(AdapterRegistration):
 
     interface.implementsOnly(interfaces.ISubscriptionAdapterRegistration)
@@ -516,5 +492,3 @@ def dispatchSubscriptionAdapterRegistrationEvent(registration, event):
                    interfaces.IRegistrationEvent)
 def dispatchHandlerRegistrationEvent(registration, event):
     component.handle(registration.handler, event)
-
-

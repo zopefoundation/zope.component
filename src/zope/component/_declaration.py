@@ -11,31 +11,13 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Zope 3 Component Architecture
+"""Adapter declarations
 
 $Id$
 """
 import types
 import sys
-from zope.interface import Interface
-from zope.interface import providedBy, implementedBy
-from zope.component.interfaces import IComponentArchitecture
-from zope.component.interfaces import IComponentRegistrationConvenience
-from zope.component.interfaces import IDefaultViewName
-from zope.component.interfaces import IFactory
-from zope.component.interfaces import ComponentLookupError
-from zope.component.interfaces import IComponentLookup
 
-class _adapts_descr(object):
-    def __init__(self, interfaces):
-        self.interfaces = interfaces
-
-    def __get__(self, inst, cls):
-        if inst is None:
-            return self.interfaces
-        raise AttributeError('__component_adapts__')
-
-_class_types = type, types.ClassType
 class adapter:
 
     def __init__(self, *interfaces):
@@ -67,3 +49,14 @@ def adapts(*interfaces):
 
 def adaptedBy(ob):
     return getattr(ob, '__component_adapts__', None)
+
+_class_types = type, types.ClassType
+
+class _adapts_descr(object):
+    def __init__(self, interfaces):
+        self.interfaces = interfaces
+
+    def __get__(self, inst, cls):
+        if inst is None:
+            return self.interfaces
+        raise AttributeError('__component_adapts__')

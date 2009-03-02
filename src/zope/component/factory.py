@@ -44,4 +44,4 @@ class Factory(object):
         return implementedBy(self._callable)
 
     def __repr__(self):
-        return '<%s for %s>' %(self.__class__.__name__, `self._callable`)
+        return '<%s for %s>' % (self.__class__.__name__, repr(self._callable))

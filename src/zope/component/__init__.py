@@ -15,9 +15,7 @@
 
 $Id$
 """
-import sys
 import zope.deferredimport
-import zope.interface
 from zope.interface import moduleProvides, Interface
 from zope.interface import providedBy, implementedBy
 from zope.component.interfaces import IComponentArchitecture
@@ -49,29 +47,5 @@ zope.deferredimport.defineFrom(
     'adapter', 'adapts', 'adaptedBy',
     )
 
-zope.deferredimport.deprecated(
-    "Use IComponentLookup instead.  ISiteManager will be removed in Zope 3.5.",
-    ISiteManager = "zope.component.interfaces:IComponentLookup",
-    )
-
 moduleProvides(IComponentArchitecture, IComponentRegistrationConvenience)
 __all__ = tuple(IComponentArchitecture)
-
-zope.deferredimport.deprecated(
-    "This object was deprecated long ago.  Only import is allowed now "
-    "and will be disallows in Zope 3.5.",
-    getGlobalServices = "zope.component.back35:deprecated",
-    getGlobalService = "zope.component.back35:deprecated",
-    getService = "zope.component.back35:deprecated",
-    getServiceDefinitions = "zope.component.back35:deprecated",
-    getView = "zope.component.back35:deprecated",
-    queryView = "zope.component.back35:deprecated",
-    getMultiView = "zope.component.back35:deprecated",
-    queryMultiView = "zope.component.back35:deprecated",
-    getViewProviding = "zope.component.back35:deprecated",
-    queryViewProviding = "zope.component.back35:deprecated",
-    getDefaultViewName = "zope.component.back35:deprecated",
-    queryDefaultViewName = "zope.component.back35:deprecated",
-    getResource = "zope.component.back35:deprecated",
-    queryResource = "zope.component.back35:deprecated",
-    )
