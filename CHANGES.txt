@@ -4,7 +4,8 @@ CHANGES
 3.6.0 (unreleased)
 ==================
 
-- Cleanup package documentation and changelog a bit.
+- Cleanup package documentation and changelog a bit. Add sphinx-based
+  documentation building command to the buildout.
 
 - Remove deprecated code.
 

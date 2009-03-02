@@ -67,6 +67,8 @@ setup(
     include_package_data = True,
     zip_safe = False,
     extras_require = dict(
+        hook = ['zope.hookable'],
+        persistentregistry = ['ZODB3'],
         zcml = ['zope.configuration',
                 'zope.security',
                 'zope.proxy',
@@ -77,7 +79,6 @@ setup(
                 'zope.hookable',
                 'zope.location',
                 ],
-        hook = ['zope.hookable'],
-        persistentregistry = ['ZODB3'],
+        docs = ['z3c.recipe.sphinxdoc'],
         ),
     )

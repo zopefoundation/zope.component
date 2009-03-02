@@ -1,0 +1,22 @@
+Welcome to zope.component's documentation!
+==========================================
+
+Contents:
+
+.. toctree::
+   :maxdepth: 2
+
+   README
+   socketexample
+   event
+   factory
+   registry
+   persistentregistry
+   zcml
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
