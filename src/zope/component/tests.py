@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2001, 2002 Zope Corporation and Contributors.
+# Copyright (c) 2001, 2002, 2009 Zope Corporation and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -992,6 +992,116 @@ class StandaloneTests(unittest.TestCase):
                 sucess = True
         if not success:
             self.fail(''.join(lines))
+
+class HookableTests(unittest.TestCase):
+
+    def test_ctor_no_func(self):
+        from zope.component.hookable import hookable
+        self.assertRaises(TypeError, hookable)
+
+    def test_ctor_simple(self):
+        from zope.component.hookable import hookable
+        def foo():
+            pass
+        hooked = hookable(foo)
+        self.failUnless(hooked.original is foo)
+        self.failUnless(hooked.implementation is foo)
+
+    def test_ctor_extra_arg(self):
+        from zope.component.hookable import hookable
+        def foo():
+            pass
+        self.assertRaises(TypeError, hookable, foo, foo)
+
+    def test_ctor_extra_arg(self):
+        from zope.component.hookable import hookable
+        def foo():
+            pass
+        self.assertRaises(TypeError, hookable, foo, nonesuch=foo)
+
+    def test_sethook(self):
+        from zope.component.hookable import hookable
+        def foo():
+            pass
+        def bar():
+            pass
+        hooked = hookable(foo)
+        hooked.sethook(bar)
+        self.failUnless(hooked.original is foo)
+        self.failUnless(hooked.implementation is bar)
+
+    def test_reset(self):
+        from zope.component.hookable import hookable
+        def foo():
+            pass
+        def bar():
+            pass
+        hooked = hookable(foo)
+        hooked.sethook(bar)
+        hooked.reset()
+        self.failUnless(hooked.original is foo)
+        self.failUnless(hooked.implementation is foo)
+
+    def test_cant_assign_original(self):
+        from zope.component.hookable import hookable
+        def foo():
+            pass
+        def bar():
+            pass
+        hooked = hookable(foo)
+        try:
+            hooked.original = bar
+        except TypeError:
+            pass
+        except AttributeError:
+            pass
+        else:
+            self.fail('Assigned original')
+
+    def test_cant_delete_original(self):
+        from zope.component.hookable import hookable
+        def foo():
+            pass
+        hooked = hookable(foo)
+        try:
+            del hooked.original
+        except TypeError:
+            pass
+        except AttributeError:
+            pass
+        else:
+            self.fail('Deleted original')
+
+    def test_cant_assign_original(self):
+        from zope.component.hookable import hookable
+        def foo():
+            pass
+        def bar():
+            pass
+        hooked = hookable(foo)
+        try:
+            hooked.implementation = bar
+        except TypeError:
+            pass
+        except AttributeError:
+            pass
+        else:
+            self.fail('Assigned implementation')
+
+    def test_readonly_original(self):
+        from zope.component.hookable import hookable
+        def foo():
+            pass
+        hooked = hookable(foo)
+        try:
+            del hooked.implementation
+        except TypeError:
+            pass
+        except AttributeError:
+            pass
+        else:
+            self.fail('Deleted implementation')
+
 
 def setUpRegistryTests(tests):
     setUp()

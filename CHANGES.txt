@@ -4,6 +4,16 @@ CHANGES
 3.6.0 (unreleased)
 ==================
 
+- Added a pure-Python 'hookable' implementation, for use when
+  'zope.hookable' is not present.
+
+- Undeprecated the interfaces in the 'bbb' package:  the promised
+  removal hasn't happened, and other core pacakges are still using
+  them.  Moved them into ``zope.component.interfaces``, their original
+  location, and the one from which consumers have been importing them.
+
+- Removed use of 'zope.deferredimport' by breaking import cycles.
+
 - Cleanup package documentation and changelog a bit. Add sphinx-based
   documentation building command to the buildout.
 

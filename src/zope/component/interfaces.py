@@ -15,6 +15,7 @@
 
 $Id$
 """
+__docformat__ = "reStructuredText"
 
 import zope.deferredimport
 from zope import interface
@@ -909,4 +910,76 @@ class IComponentRegistry(interface.Interface):
 
 class IComponents(IComponentLookup, IComponentRegistry):
     """Component registration and access
+    """
+
+
+class IContextDependent(Interface):
+    """Components implementing this interface must have a context component.
+
+    Usually the context must be one of the arguments of the
+    constructor. Adapters and views are a primary example of context-dependent
+    components.
+    """
+
+    context = Attribute(
+        """The context of the object
+
+        This is the object being adapted, viewed, extended, etc.
+        """)
+
+
+class IPresentation(Interface):
+    """Presentation components provide interfaces to external actors
+
+    The are created for requests, which encapsulate external actors,
+    connections, etc.
+    """
+
+    request = Attribute(
+        """The request
+
+        The request is a surrogate for the user. It also provides the
+        presentation type and skin. It is of type
+        IPresentationRequest.
+        """)
+
+
+class IPresentationRequest(Interface):
+    """An IPresentationRequest provides methods for getting view meta data."""
+
+
+class IResource(IPresentation):
+    """Resources provide data to be used for presentation."""
+
+
+class IResourceFactory(Interface):
+    """A factory to create factories using the request."""
+
+    def __call__(request):
+        """Create a resource for a request
+
+        The request must be an IPresentationRequest.
+        """
+
+
+class IView(IPresentation, IContextDependent):
+    """Views provide a connection between an external actor and an object"""
+
+
+class IViewFactory(Interface):
+    """Objects for creating views"""
+
+    def __call__(context, request):
+        """Create an view (IView) object
+
+        The context aregument is the object displayed by the view. The
+        request argument is an object, such as a web request, that
+        "stands in" for the user.
+        """
+
+class IDefaultViewName(Interface):
+    """A string that contains the default view name
+
+    A default view name is used to select a view when a user hasn't
+    specified one.
     """
