@@ -36,12 +36,6 @@ import zope.component.globalregistry
 # we should obviously make this more explicit
 import zope.component.event
 
-import zope.deferredimport
-zope.deferredimport.deprecated(
-    "Use zope.component.testing instead",
-    placelesssetup = "zope.component.testing",
-    )
-
 class I1(interface.Interface):
     pass
 class I2(interface.Interface):

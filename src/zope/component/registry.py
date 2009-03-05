@@ -17,15 +17,31 @@ $Id$
 """
 
 import types
-import zope.interface.adapter
-from zope import component, interface
-from zope.component import interfaces
-import zope.interface.interfaces
-import zope.event
+
+from zope.interface import Interface
+from zope.interface import implementedBy
+from zope.interface import implements
+from zope.interface import implementsOnly
+from zope.interface import providedBy
+from zope.interface.adapter import AdapterRegistry
+from zope.interface.interfaces import ISpecification
+
+from zope.component.interfaces import ComponentLookupError
+from zope.component.interfaces import IAdapterRegistration
+from zope.component.interfaces import IComponents
+from zope.component.interfaces import IHandlerRegistration
+from zope.component.interfaces import IRegistrationEvent
+from zope.component.interfaces import ISubscriptionAdapterRegistration
+from zope.component.interfaces import IUtilityRegistration
+from zope.component.interfaces import Registered
+from zope.component.interfaces import Unregistered
+from zope.component._api import handle
+from zope.component._declaration import adapter
+from zope.event import notify
 
 class Components(object):
 
-    interface.implements(interfaces.IComponents)
+    implements(IComponents)
 
     def __init__(self, name='', bases=()):
         assert isinstance(name, basestring)
@@ -38,8 +54,8 @@ class Components(object):
         return "<%s %s>" % (self.__class__.__name__, self.__name__)
 
     def _init_registries(self):
-        self.adapters = zope.interface.adapter.AdapterRegistry()
-        self.utilities = zope.interface.adapter.AdapterRegistry()
+        self.adapters = AdapterRegistry()
+        self.utilities = AdapterRegistry()
 
     def _init_registrations(self):
         self._utility_registrations = {}
@@ -92,7 +108,7 @@ class Components(object):
             self.utilities.subscribe((), provided, component)
 
         if event:
-            zope.event.notify(interfaces.Registered(
+            notify(Registered(
                 UtilityRegistration(self, provided, name, component, info, factory)
                 ))
 
@@ -126,7 +142,7 @@ class Components(object):
         if not subscribed:
             self.utilities.unsubscribe((), provided, component)
 
-        zope.event.notify(interfaces.Unregistered(
+        notify(Unregistered(
             UtilityRegistration(self, provided, name, component, *old[1:])
             ))
 
@@ -143,7 +159,7 @@ class Components(object):
     def getUtility(self, provided, name=u''):
         utility = self.utilities.lookup((), provided, name)
         if utility is None:
-            raise interfaces.ComponentLookupError(provided, name)
+            raise ComponentLookupError(provided, name)
         return utility
 
     def getUtilitiesFor(self, interface):
@@ -163,7 +179,7 @@ class Components(object):
         self.adapters.register(required, provided, name, factory)
 
         if event:
-            zope.event.notify(interfaces.Registered(
+            notify(Registered(
                 AdapterRegistration(self, required, provided, name,
                                     factory, info)
                 ))
@@ -189,7 +205,7 @@ class Components(object):
         del self._adapter_registrations[(required, provided, name)]
         self.adapters.unregister(required, provided, name)
 
-        zope.event.notify(interfaces.Unregistered(
+        notify(Unregistered(
             AdapterRegistration(self, required, provided, name,
                                 *old)
             ))
@@ -208,7 +224,7 @@ class Components(object):
     def getAdapter(self, object, interface, name=u''):
         adapter = self.adapters.queryAdapter(object, interface, name)
         if adapter is None:
-            raise interfaces.ComponentLookupError(object, interface, name)
+            raise ComponentLookupError(object, interface, name)
         return adapter
 
     def queryMultiAdapter(self, objects, interface, name=u'', default=None):
@@ -218,12 +234,12 @@ class Components(object):
     def getMultiAdapter(self, objects, interface, name=u''):
         adapter = self.adapters.queryMultiAdapter(objects, interface, name)
         if adapter is None:
-            raise interfaces.ComponentLookupError(objects, interface, name)
+            raise ComponentLookupError(objects, interface, name)
         return adapter
 
     def getAdapters(self, objects, provided):
         for name, factory in self.adapters.lookupAll(
-            map(interface.providedBy, objects),
+            map(providedBy, objects),
             provided):
             adapter = factory(*objects)
             if adapter is not None:
@@ -244,7 +260,7 @@ class Components(object):
         self.adapters.subscribe(required, provided, factory)
 
         if event:
-            zope.event.notify(interfaces.Registered(
+            notify(Registered(
                 SubscriptionRegistration(self, required, provided, name,
                                          factory, info)
                 ))
@@ -288,7 +304,7 @@ class Components(object):
         self._subscription_registrations[:] = new
         self.adapters.unsubscribe(required, provided, factory)
 
-        zope.event.notify(interfaces.Unregistered(
+        notify(Unregistered(
             SubscriptionRegistration(self, required, provided, name,
                                      factory, '')
             ))
@@ -311,7 +327,7 @@ class Components(object):
         self.adapters.subscribe(required, None, factory)
 
         if event:
-            zope.event.notify(interfaces.Registered(
+            notify(Registered(
                 HandlerRegistration(self, required, name, factory, info)
                 ))
 
@@ -347,7 +363,7 @@ class Components(object):
         self._handler_registrations[:] = new
         self.adapters.unsubscribe(required, None, factory)
 
-        zope.event.notify(interfaces.Unregistered(
+        notify(Unregistered(
             HandlerRegistration(self, required, name, factory, '')
             ))
 
@@ -358,7 +374,7 @@ class Components(object):
 
 
 def _getUtilityProvided(component):
-    provided = list(interface.providedBy(component))
+    provided = list(providedBy(component))
     if len(provided) == 1:
         return provided[0]
     raise TypeError(
@@ -366,7 +382,7 @@ def _getUtilityProvided(component):
         "and no provided interface was specified.")
 
 def _getAdapterProvided(factory):
-    provided = list(interface.implementedBy(factory))
+    provided = list(implementedBy(factory))
     if len(provided) == 1:
         return provided[0]
     raise TypeError(
@@ -384,17 +400,17 @@ def _getAdapterRequired(factory, required):
                 "The adapter factory doesn't have a __component_adapts__ "
                 "attribute and no required specifications were specified"
                 )
-    elif zope.interface.interfaces.ISpecification.providedBy(required):
+    elif ISpecification.providedBy(required):
         raise TypeError("the required argument should be a list of "
                         "interfaces, not a single interface")
 
     result = []
     for r in required:
         if r is None:
-            r = interface.Interface
-        elif not zope.interface.interfaces.ISpecification.providedBy(r):
+            r = Interface
+        elif not ISpecification.providedBy(r):
             if isinstance(r, classTypes):
-                r = interface.implementedBy(r)
+                r = implementedBy(r)
             else:
                 raise TypeError("Required specification must be a "
                                 "specification or class."
@@ -405,7 +421,7 @@ def _getAdapterRequired(factory, required):
 
 class UtilityRegistration(object):
 
-    interface.implements(interfaces.IUtilityRegistration)
+    implements(IUtilityRegistration)
 
     def __init__(self, registry, provided, name, component, doc, factory=None):
         (self.registry, self.provided, self.name, self.component, self.info,
@@ -426,7 +442,7 @@ class UtilityRegistration(object):
 
 class AdapterRegistration(object):
 
-    interface.implements(interfaces.IAdapterRegistration)
+    implements(IAdapterRegistration)
 
     def __init__(self, registry, required, provided, name, component, doc):
         (self.registry, self.required, self.provided, self.name,
@@ -447,11 +463,11 @@ class AdapterRegistration(object):
 
 class SubscriptionRegistration(AdapterRegistration):
 
-    interface.implementsOnly(interfaces.ISubscriptionAdapterRegistration)
+    implementsOnly(ISubscriptionAdapterRegistration)
 
 class HandlerRegistration(AdapterRegistration):
 
-    interface.implementsOnly(interfaces.IHandlerRegistration)
+    implementsOnly(IHandlerRegistration)
 
     def __init__(self, registry, required, name, handler, doc):
         (self.registry, self.required, self.name, self.handler, self.info
@@ -473,22 +489,18 @@ class HandlerRegistration(AdapterRegistration):
             )
 
 
-@component.adapter(interfaces.IUtilityRegistration,
-                   interfaces.IRegistrationEvent)
+@adapter(IUtilityRegistration, IRegistrationEvent)
 def dispatchUtilityRegistrationEvent(registration, event):
-    component.handle(registration.component, event)
+    handle(registration.component, event)
 
-@component.adapter(interfaces.IAdapterRegistration,
-                   interfaces.IRegistrationEvent)
+@adapter(IAdapterRegistration, IRegistrationEvent)
 def dispatchAdapterRegistrationEvent(registration, event):
-    component.handle(registration.factory, event)
+    handle(registration.factory, event)
 
-@component.adapter(interfaces.ISubscriptionAdapterRegistration,
-                   interfaces.IRegistrationEvent)
+@adapter(ISubscriptionAdapterRegistration, IRegistrationEvent)
 def dispatchSubscriptionAdapterRegistrationEvent(registration, event):
-    component.handle(registration.factory, event)
+    handle(registration.factory, event)
 
-@component.adapter(interfaces.IHandlerRegistration,
-                   interfaces.IRegistrationEvent)
+@adapter(IHandlerRegistration, IRegistrationEvent)
 def dispatchHandlerRegistrationEvent(registration, event):
-    component.handle(registration.handler, event)
+    handle(registration.handler, event)

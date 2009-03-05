@@ -15,18 +15,21 @@
 
 $Id$
 """
-import types
 import sys
+import types
+
 from zope.interface import Interface
-from zope.interface import providedBy, implementedBy
+from zope.interface import implementedBy
+from zope.interface import providedBy
+
 from zope.component.interfaces import IComponentArchitecture
 from zope.component.interfaces import IComponentRegistrationConvenience
-from zope.component.interfaces import IDefaultViewName
 from zope.component.interfaces import IFactory
 from zope.component.interfaces import ComponentLookupError
 from zope.component.interfaces import IComponentLookup
-from zope.component.globalregistry import base
-from zope.component._declaration import adapter, adapts, adaptedBy
+from zope.component._declaration import adaptedBy
+from zope.component._declaration import adapter
+from zope.component._declaration import adapts
 
 # Use the C implementation in zope.hookable, if available;  fall back
 # to our Python version if not.
@@ -38,10 +41,13 @@ except ImportError:
 # getSiteManager() returns a component registry.  Although the term
 # "site manager" is deprecated in favor of "component registry",
 # the old term is kept around to maintain a stable API.
-
+base = None
 @hookable
 def getSiteManager(context=None):
+    global base
     if context is None:
+        if base is None:
+            from zope.component.globalregistry import base
         return base
     else:
         # Use the global site manager to adapt context to `IComponentLookup`

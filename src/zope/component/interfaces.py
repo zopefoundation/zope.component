@@ -17,11 +17,9 @@ $Id$
 """
 __docformat__ = "reStructuredText"
 
-import zope.deferredimport
-from zope import interface
-
-# BBB: Backward-compatibility; 12/05/2004
-from bbb.interfaces import *
+from zope.interface import Attribute
+from zope.interface import Interface
+from zope.interface import implements
 
 class ComponentLookupError(LookupError):
     """A component could not be found."""
@@ -33,23 +31,23 @@ class Misused(Exception):
     """A component is being used (registered) for the wrong interface."""
 
 
-class IObjectEvent(interface.Interface):
+class IObjectEvent(Interface):
     """An event related to an object.
 
     The object that generated this event is not necessarily the object
     refered to by location.
     """
 
-    object = interface.Attribute("The subject of the event.")
+    object = Attribute("The subject of the event.")
 
 
 class ObjectEvent(object):
-    interface.implements(IObjectEvent)
+    implements(IObjectEvent)
 
     def __init__(self, object):
         self.object = object
 
-class IComponentArchitecture(interface.Interface):
+class IComponentArchitecture(Interface):
     """The Component Architecture is defined by two key components: Adapters
     and Utiltities. Both are managed by site managers. All other components
     build on top of them.
@@ -109,7 +107,7 @@ class IComponentArchitecture(interface.Interface):
     # Adapter API
 
     def getAdapter(object,
-                   interface=interface.Interface, name=u'',
+                   interface=Interface, name=u'',
                    context=None):
         """Get a named adapter to an interface for an object
 
@@ -146,7 +144,7 @@ class IComponentArchitecture(interface.Interface):
         """
 
     def getMultiAdapter(objects,
-                        interface=interface.Interface, name='',
+                        interface=Interface, name='',
                         context=None):
         """Look for a multi-adapter to an interface for an objects
 
@@ -164,7 +162,7 @@ class IComponentArchitecture(interface.Interface):
         named adapter methods with an empty string for a name.
         """
 
-    def queryAdapter(object, interface=interface.Interface, name=u'',
+    def queryAdapter(object, interface=Interface, name=u'',
                      default=None, context=None):
         """Look for a named adapter to an interface for an object
 
@@ -201,7 +199,7 @@ class IComponentArchitecture(interface.Interface):
         """
 
     def queryMultiAdapter(objects,
-                          interface=interface.Interface, name=u'',
+                          interface=Interface, name=u'',
                           default=None,
                           context=None):
         """Look for a multi-adapter to an interface for objects
@@ -295,17 +293,17 @@ class IComponentArchitecture(interface.Interface):
         create objects which implement the given interface.
         """
 
-class IComponentLookup(interface.Interface):
+class IComponentLookup(Interface):
     """Component Manager for a Site
 
     This object manages the components registered at a particular site. The
     definition of a site is intentionally vague.
     """
 
-    adapters = interface.Attribute(
+    adapters = Attribute(
         "Adapter Registry to manage all registered adapters.")
 
-    utilities = interface.Attribute(
+    utilities = Attribute(
         "Adapter Registry to manage all registered utilities.")
 
     def queryAdapter(object, interface, name=u'', default=None):
@@ -376,7 +374,7 @@ class IComponentLookup(interface.Interface):
         returned.
         """
 
-class IComponentRegistrationConvenience(interface.Interface):
+class IComponentRegistrationConvenience(Interface):
     """API for registering components.
 
     CAUTION: This API should only be used from test or
@@ -458,7 +456,7 @@ class IComponentRegistrationConvenience(interface.Interface):
         activity.
         """
 
-class IRegistry(interface.Interface):
+class IRegistry(Interface):
     """Object that supports component registry
     """
 
@@ -466,12 +464,12 @@ class IRegistry(interface.Interface):
         """Return an iterable of component registrations
         """
 
-class IFactory(interface.Interface):
+class IFactory(Interface):
     """A factory is responsible for creating other components."""
 
-    title = interface.Attribute("The factory title.")
+    title = Attribute("The factory title.")
 
-    description = interface.Attribute("A brief description of the factory.")
+    description = Attribute("A brief description of the factory.")
 
     def __call__(*args, **kw):
         """Return an instance of the objects we're a factory for."""
@@ -485,15 +483,15 @@ class IFactory(interface.Interface):
         instance cannot be created, an empty Implements instance is returned.
         """
 
-class IRegistration(interface.Interface):
+class IRegistration(Interface):
     """A registration-information object
     """
 
-    registry = interface.Attribute("The registry having the registration")
+    registry = Attribute("The registry having the registration")
 
-    name = interface.Attribute("The registration name")
+    name = Attribute("The registration name")
 
-    info = interface.Attribute("""Information about the registration
+    info = Attribute("""Information about the registration
 
     This is information deemed useful to people browsing the
     configuration of a system. It could, for example, include
@@ -504,24 +502,24 @@ class IUtilityRegistration(IRegistration):
     """Information about the registration of a utility
     """
 
-    factory = interface.Attribute("The factory used to create the utility. Optional.")
-    component = interface.Attribute("The object registered")
-    provided = interface.Attribute("The interface provided by the component")
+    factory = Attribute("The factory used to create the utility. Optional.")
+    component = Attribute("The object registered")
+    provided = Attribute("The interface provided by the component")
 
 class _IBaseAdapterRegistration(IRegistration):
     """Information about the registration of an adapter
     """
 
-    factory = interface.Attribute("The factory used to create adapters")
+    factory = Attribute("The factory used to create adapters")
 
-    required = interface.Attribute("""The adapted interfaces
+    required = Attribute("""The adapted interfaces
 
     This is a sequence of interfaces adapters by the registered
     factory.  The factory will be caled with a sequence of objects, as
     positional arguments, that provide these interfaces.
     """)
 
-    provided = interface.Attribute("""The interface provided by the adapters.
+    provided = Attribute("""The interface provided by the adapters.
 
     This interface is implemented by the factory
     """)
@@ -536,9 +534,9 @@ class ISubscriptionAdapterRegistration(_IBaseAdapterRegistration):
 
 class IHandlerRegistration(IRegistration):
 
-    handler = interface.Attribute("An object called used to handle an event")
+    handler = Attribute("An object called used to handle an event")
 
-    required = interface.Attribute("""The handled interfaces
+    required = Attribute("""The handled interfaces
 
     This is a sequence of interfaces handled by the registered
     handler.  The handler will be caled with a sequence of objects, as
@@ -551,7 +549,7 @@ class IRegistrationEvent(IObjectEvent):
 class RegistrationEvent(ObjectEvent):
     """There has been a change in a registration
     """
-    interface.implements(IRegistrationEvent)
+    implements(IRegistrationEvent)
 
     def __repr__(self):
         return "%s event:\n%r" % (self.__class__.__name__, self.object)
@@ -561,7 +559,7 @@ class IRegistered(IRegistrationEvent):
     """
 
 class Registered(RegistrationEvent):
-    interface.implements(IRegistered)
+    implements(IRegistered)
 
 class IUnregistered(IRegistrationEvent):
     """A component or factory was unregistered
@@ -570,9 +568,9 @@ class IUnregistered(IRegistrationEvent):
 class Unregistered(RegistrationEvent):
     """A component or factory was unregistered
     """
-    interface.implements(IUnregistered)
+    implements(IUnregistered)
 
-class IComponentRegistry(interface.Interface):
+class IComponentRegistry(Interface):
     """Register components
     """
 
@@ -977,6 +975,81 @@ class IViewFactory(Interface):
         "stands in" for the user.
         """
 
+class IDefaultViewName(Interface):
+    """A string that contains the default view name
+
+    A default view name is used to select a view when a user hasn't
+    specified one.
+    """
+
+class IContextDependent(Interface):
+    """Components implementing this interface must have a context component.
+
+    Usually the context must be one of the arguments of the
+    constructor. Adapters and views are a primary example of context-dependent
+    components.
+    """
+
+    context = Attribute(
+        """The context of the object
+
+        This is the object being adapted, viewed, extended, etc.
+        """)
+
+
+class IPresentation(Interface):
+    """Presentation components provide interfaces to external actors
+
+    The are created for requests, which encapsulate external actors,
+    connections, etc.
+    """
+
+    request = Attribute(
+        """The request
+
+        The request is a surrogate for the user. It also provides the
+        presentation type and skin. It is of type
+        IPresentationRequest.
+        """)
+
+
+class IPresentationRequest(Interface):
+    """An IPresentationRequest provides methods for getting view meta data."""
+
+
+class IResource(IPresentation):
+    """Resources provide data to be used for presentation."""
+
+
+class IResourceFactory(Interface):
+    """A factory to create factories using the request."""
+
+    def __call__(request):
+        """Create a resource for a request
+
+        The request must be an IPresentationRequest.
+        """
+
+
+class IView(IPresentation, IContextDependent):
+    """Views provide a connection between an external actor and an object"""
+
+
+class IViewFactory(Interface):
+    """Objects for creating views"""
+
+    def __call__(context, request):
+        """Create an view (IView) object
+
+        The context aregument is the object displayed by the view. The
+        request argument is an object, such as a web request, that
+        "stands in" for the user.
+        """
+
+# When this code is removed, this needs to be undeprecated and moved
+# towards a private interface somewhere in zope.app.publisher. In
+# effect the Zope 3 core is still using IDefaultViewName at present,
+# even though it's in bbb.
 class IDefaultViewName(Interface):
     """A string that contains the default view name
 

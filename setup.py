@@ -62,7 +62,6 @@ setup(
     install_requires=['setuptools',
                       'zope.interface',
                       'zope.event',
-                      'zope.deferredimport',
                       ],
     include_package_data = True,
     zip_safe = False,

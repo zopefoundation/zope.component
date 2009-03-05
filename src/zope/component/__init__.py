@@ -15,37 +15,45 @@
 
 $Id$
 """
-import zope.deferredimport
-from zope.interface import moduleProvides, Interface
-from zope.interface import providedBy, implementedBy
+from zope.interface import Interface
+from zope.interface import implementedBy
+from zope.interface import moduleProvides
+from zope.interface import providedBy
+
 from zope.component.interfaces import IComponentArchitecture
-from zope.component.interfaces import IComponentRegistrationConvenience
-from zope.component.interfaces import IDefaultViewName
-from zope.component.interfaces import IFactory
-from zope.component.interfaces import ComponentLookupError
 from zope.component.interfaces import IComponentLookup
+from zope.component.interfaces import IComponentRegistrationConvenience
+from zope.component.interfaces import IFactory
 
-zope.deferredimport.defineFrom(
-    'zope.component.globalregistry',
-    'globalSiteManager', 'getGlobalSiteManager',
-    'provideUtility', 'provideAdapter',
-    'provideSubscriptionAdapter', 'provideHandler',
-    )
+from zope.component.globalregistry import getGlobalSiteManager
+from zope.component.globalregistry import globalSiteManager
+from zope.component.globalregistry import provideAdapter
+from zope.component.globalregistry import provideHandler
+from zope.component.globalregistry import provideSubscriptionAdapter
+from zope.component.globalregistry import provideUtility
 
-zope.deferredimport.defineFrom(
-    'zope.component._api',
-    'getSiteManager', 'queryAdapterInContext', 'getAdapterInContext',
-    'getAdapter', 'queryAdapter', 'getMultiAdapter', 'queryMultiAdapter',
-    'getAdapters', 'subscribers', 'handle', 'adapter_hook',
-    'getUtility', 'queryUtility', 'getUtilitiesFor',
-    'getAllUtilitiesRegisteredFor',
-    'createObject', 'getFactoryInterfaces', 'getFactoriesFor',
-    )
+from zope.component._api import adapter_hook
+from zope.component._api import createObject
+from zope.component._api import getAdapter
+from zope.component._api import getAdapterInContext
+from zope.component._api import getAdapters
+from zope.component._api import getAllUtilitiesRegisteredFor
+from zope.component._api import getFactoriesFor
+from zope.component._api import getFactoryInterfaces
+from zope.component._api import getMultiAdapter
+from zope.component._api import getSiteManager
+from zope.component._api import getUtilitiesFor
+from zope.component._api import getUtility
+from zope.component._api import handle
+from zope.component._api import queryAdapter
+from zope.component._api import queryAdapterInContext
+from zope.component._api import queryMultiAdapter
+from zope.component._api import queryUtility
+from zope.component._api import subscribers
 
-zope.deferredimport.defineFrom(
-    'zope.component._declaration',
-    'adapter', 'adapts', 'adaptedBy',
-    )
+from zope.component._declaration import adaptedBy
+from zope.component._declaration import adapter
+from zope.component._declaration import adapts
 
 moduleProvides(IComponentArchitecture, IComponentRegistrationConvenience)
 __all__ = tuple(IComponentArchitecture)
