@@ -7,17 +7,16 @@ CHANGES
 - Added a pure-Python 'hookable' implementation, for use when
   'zope.hookable' is not present.
 
-- Undeprecated the interfaces in the 'bbb' package:  the promised
-  removal hasn't happened, and other core pacakges are still using
-  them.  Moved them into ``zope.component.interfaces``, their original
-  location, and the one from which consumers have been importing them.
-
 - Removed use of 'zope.deferredimport' by breaking import cycles.
 
 - Cleanup package documentation and changelog a bit. Add sphinx-based
   documentation building command to the buildout.
 
 - Remove deprecated code.
+
+- Remove interfaces that were defined in the bbb package and deprecated
+  for years now. Other packages that still rely on them will be adapted
+  to this change.
 
 - Change package's mailing list address to zope-dev at zope.org, because
   zope3-dev at zope.org is now retired.
