@@ -911,11 +911,8 @@ class IComponents(IComponentLookup, IComponentRegistry):
     """
 
 ########################################################################
-# This interfaces are deprecated and meant to be (re)moved soon
+# This interface are deprecated and meant to be (re)moved soon
 #
-
-class IResource(IPresentation):
-    """Resources provide data to be used for presentation."""
 
 # When this code is removed, this needs to be undeprecated and moved
 # towards a private interface somewhere in zope.app.publisher. In
