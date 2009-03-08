@@ -4,6 +4,23 @@ CHANGES
 3.6.0 (unreleased)
 ==================
 
+- IMPORTANT: the interfaces that were defined in the
+  zope.component.bbb.interfaces and deprecated for years are
+  now (re)moved. However, some packages, including part of zope
+  framework were still using those interfaces. They will be adapted
+  for this change. If you were using some of those interfaces, you
+  need to adapt your code as well:
+  
+   - The IView and IDefaultViewName were moved to zope.publisher.interfaces.
+
+   - The IResource was moved to zope.app.publisher.interfaces.
+
+   - IContextDependent, IPresentation, IPresentationRequest,
+     IResourceFactory, IViewFactory were removed completely.
+
+     If you used IViewFactory in context of zope.app.form, there's now
+     IWidgetFactory in the zope.app.form.interfaces instead.
+
 - Added a pure-Python 'hookable' implementation, for use when
   'zope.hookable' is not present.
 
@@ -13,10 +30,6 @@ CHANGES
   documentation building command to the buildout.
 
 - Remove deprecated code.
-
-- Remove interfaces that were defined in the bbb package and deprecated
-  for years now. Other packages that still rely on them will be adapted
-  to this change.
 
 - Change package's mailing list address to zope-dev at zope.org, because
   zope3-dev at zope.org is now retired.
