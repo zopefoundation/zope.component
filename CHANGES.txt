@@ -21,6 +21,9 @@ CHANGES
      If you used IViewFactory in context of zope.app.form, there's now
      IWidgetFactory in the zope.app.form.interfaces instead.
 
+- Add getNextUtility/queryNextUtility functions that used to be in zope.site
+  earlier (and in zope.app.component even more earlier).
+
 - Added a pure-Python 'hookable' implementation, for use when
   'zope.hookable' is not present.
 

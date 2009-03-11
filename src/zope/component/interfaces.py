@@ -89,6 +89,20 @@ class IComponentArchitecture(Interface):
         the specified interface.  If one is not found, returns default.
         """
 
+    def queryNextUtility(context, interface, name='', default=None):
+        """Query for the next available utility.
+    
+        Find the next available utility providing `interface` and having the
+        specified name. If no utility was found, return the specified `default`
+        value.
+        """
+    
+    def getNextUtility(context, interface, name=''):
+        """Get the next available utility.
+    
+        If no utility was found, a `ComponentLookupError` is raised.
+        """
+
     def getUtilitiesFor(interface, context=None):
         """Return the utilities that provide an interface
 

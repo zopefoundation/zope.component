@@ -45,11 +45,13 @@ from zope.component._api import getMultiAdapter
 from zope.component._api import getSiteManager
 from zope.component._api import getUtilitiesFor
 from zope.component._api import getUtility
+from zope.component._api import getNextUtility
 from zope.component._api import handle
 from zope.component._api import queryAdapter
 from zope.component._api import queryAdapterInContext
 from zope.component._api import queryMultiAdapter
 from zope.component._api import queryUtility
+from zope.component._api import queryNextUtility
 from zope.component._api import subscribers
 
 from zope.component._declaration import adaptedBy

@@ -945,6 +945,98 @@ def test_multi_handler_unregistration():
     | Factory 2 is here
     """
 
+def test_next_utilities():
+    """
+    It is common for a utility to delegate its answer to a utility
+    providing the same interface in one of the component registry's
+    bases. Let's first create a global utility::
+    
+      >>> import zope.interface
+      >>> class IMyUtility(zope.interface.Interface):
+      ...     pass
+    
+      >>> class MyUtility(ConformsToIComponentLookup):
+      ...     zope.interface.implements(IMyUtility)
+      ...     def __init__(self, id, sm):
+      ...         self.id = id
+      ...         self.sitemanager = sm
+      ...     def __repr__(self):
+      ...         return "%s('%s')" % (self.__class__.__name__, self.id)
+
+      >>> from zope.component import getGlobalSiteManager
+      >>> gsm = getGlobalSiteManager()
+    
+      >>> gutil = MyUtility('global', gsm)
+      >>> gsm.registerUtility(gutil, IMyUtility, 'myutil')
+    
+    Now, let's create two registries and set up the bases hierarchy::
+    
+      >>> from zope.component.registry import Components
+      >>> sm1 = Components('sm1', bases=(gsm, ))
+      >>> sm1_1 = Components('sm1_1', bases=(sm1, ))
+    
+    Now we create two utilities and insert them in our folder hierarchy:
+    
+      >>> util1 = MyUtility('one', sm1)
+      >>> sm1.registerUtility(util1, IMyUtility, 'myutil')
+      >>> IComponentLookup(util1) is sm1
+      True
+
+      >>> util1_1 = MyUtility('one-one', sm1_1)
+      >>> sm1_1.registerUtility(util1_1, IMyUtility, 'myutil')
+      >>> IComponentLookup(util1_1) is sm1_1
+      True
+    
+    Now, if we ask `util1_1` for its next available utility we get the
+    ``one`` utility::
+    
+      >>> from zope.component import getNextUtility
+      >>> getNextUtility(util1_1, IMyUtility, 'myutil')
+      MyUtility('one')
+    
+    Next we ask `util1` for its next utility and we should get the global version:
+    
+      >>> getNextUtility(util1, IMyUtility, 'myutil')
+      MyUtility('global')
+    
+    However, if we ask the global utility for the next one, an error is raised
+    
+      >>> getNextUtility(gutil, IMyUtility,
+      ...                     'myutil') #doctest: +NORMALIZE_WHITESPACE
+      Traceback (most recent call last):
+      ...
+      ComponentLookupError:
+      No more utilities for <InterfaceClass zope.component.tests.IMyUtility>,
+      'myutil' have been found.
+    
+    You can also use `queryNextUtility` and specify a default:
+    
+      >>> from zope.component import queryNextUtility
+      >>> queryNextUtility(gutil, IMyUtility, 'myutil', 'default')
+      'default'
+    
+    Let's now ensure that the function also works with multiple registries. First
+    we create another base registry:
+    
+      >>> myregistry = Components()
+    
+    We now set up another utility into that registry:
+    
+      >>> custom_util = MyUtility('my_custom_util', myregistry)
+      >>> myregistry.registerUtility(custom_util, IMyUtility, 'my_custom_util')
+    
+    We add it as a base to the local site manager:
+    
+      >>> sm1.__bases__ = (myregistry,) + sm1.__bases__
+    
+    Both the ``myregistry`` and global utilities should be available:
+    
+      >>> queryNextUtility(sm1, IMyUtility, 'my_custom_util')
+      MyUtility('my_custom_util')
+      >>> queryNextUtility(sm1, IMyUtility, 'myutil')
+      MyUtility('global')
+    """
+
 class StandaloneTests(unittest.TestCase):
     def testStandalone(self):
         import subprocess
