@@ -1215,6 +1215,7 @@ def test_suite():
         doctest.DocTestSuite(setUp=setUp, tearDown=tearDown),
         doctest.DocTestSuite('zope.component.interface',
                              setUp=setUp, tearDown=tearDown),
+        doctest.DocTestSuite('zope.component.nexttesting'),
         doctest.DocFileSuite('README.txt',
                              setUp=setUp, tearDown=tearDown),
         doctest.DocFileSuite('socketexample.txt',
