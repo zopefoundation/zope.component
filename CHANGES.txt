@@ -1,7 +1,12 @@
 CHANGES
 *******
 
-3.6.0 (unreleased)
+3.6.1 (unreleased)
+==================
+
+- ...
+
+3.6.0 (2009-03-12)
 ==================
 
 - IMPORTANT: the interfaces that were defined in the
