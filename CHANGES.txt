@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-3.7.0 (unreleased)
+3.7.0 (2009-05-21)
 ==================
 
 - The HookableTests were not run by the testrunner.
