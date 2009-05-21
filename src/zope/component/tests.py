@@ -1212,6 +1212,7 @@ def test_suite():
         ])
 
     return unittest.TestSuite((
+        unittest.makeSuite(HookableTests),
         doctest.DocTestSuite(setUp=setUp, tearDown=tearDown),
         doctest.DocTestSuite('zope.component.interface',
                              setUp=setUp, tearDown=tearDown),
