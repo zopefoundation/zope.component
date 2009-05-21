@@ -1,10 +1,10 @@
 CHANGES
 *******
 
-3.6.1 (unreleased)
+3.7.0 (unreleased)
 ==================
 
-- ...
+- The HookableTests were not run by the testrunner.
 
 3.6.0 (2009-03-12)
 ==================
