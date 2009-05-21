@@ -17,14 +17,17 @@ $Id$
 """
 __docformat__ = "reStructuredText"
 
+import warnings
 import zope.component
 import zope.interface
+import zope.schema
 import zope.configuration.fields
+from zope.configuration.exceptions import ConfigurationError
 import zope.security.zcml
 from zope.component.interface import provideInterface
 from zope.proxy import ProxyBase, getProxiedObject
 from zope.security.proxy import Proxy
-from zope.security.checker import InterfaceChecker, CheckerPublic
+from zope.security.checker import InterfaceChecker, CheckerPublic, Checker
 from zope.security.adapter import LocatingTrustedAdapterFactory
 from zope.security.adapter import LocatingUntrustedAdapterFactory
 from zope.security.adapter import TrustedAdapterFactory
@@ -458,3 +461,277 @@ def interface(_context, interface, type=None, name=''):
         callable = provideInterface,
         args = (name, interface, type)
         )
+
+class IBasicViewInformation(zope.interface.Interface):
+    """This is the basic information for all views."""
+
+    for_ = zope.configuration.fields.Tokens(
+        title=_("Specifications of the objects to be viewed"),
+        description=_("""This should be a list of interfaces or classes
+        """),
+        required=True,
+        value_type=zope.configuration.fields.GlobalObject(
+          missing_value=object(),
+          ),
+        )
+
+    permission = zope.security.zcml.Permission(
+        title=_("Permission"),
+        description=_("The permission needed to use the view."),
+        required=False,
+        )
+
+    class_ = zope.configuration.fields.GlobalObject(
+        title=_("Class"),
+        description=_("A class that provides attributes used by the view."),
+        required=False,
+        )
+
+    layer = zope.configuration.fields.GlobalInterface(
+        title=_("The layer the view is in."),
+        description=_("""
+        A skin is composed of layers. It is common to put skin
+        specific views in a layer named after the skin. If the 'layer'
+        attribute is not supplied, it defaults to 'default'."""),
+        required=False,
+        )
+
+    allowed_interface = zope.configuration.fields.Tokens(
+        title=_("Interface that is also allowed if user has permission."),
+        description=_("""
+        By default, 'permission' only applies to viewing the view and
+        any possible sub views. By specifying this attribute, you can
+        make the permission also apply to everything described in the
+        supplied interface.
+
+        Multiple interfaces can be provided, separated by
+        whitespace."""),
+        required=False,
+        value_type=zope.configuration.fields.GlobalInterface(),
+        )
+
+    allowed_attributes = zope.configuration.fields.Tokens(
+        title=_("View attributes that are also allowed if the user"
+                " has permission."),
+        description=_("""
+        By default, 'permission' only applies to viewing the view and
+        any possible sub views. By specifying 'allowed_attributes',
+        you can make the permission also apply to the extra attributes
+        on the view object."""),
+        required=False,
+        value_type=zope.configuration.fields.PythonIdentifier(),
+        )
+
+class IBasicResourceInformation(zope.interface.Interface):
+    """
+    Basic information for resources
+    """
+
+    name = zope.schema.TextLine(
+        title=_("The name of the resource."),
+        description=_("The name shows up in URLs/paths. For example 'foo'."),
+        required=True,
+        default=u'',
+        )
+
+    provides = zope.configuration.fields.GlobalInterface(
+        title=_("The interface this component provides."),
+        description=_("""
+        A view can provide an interface.  This would be used for
+        views that support other views."""),
+        required=False,
+        default=zope.interface.Interface,
+        )
+
+    type = zope.configuration.fields.GlobalInterface(
+        title=_("Request type"),
+        required=True
+        )
+
+
+class IViewDirective(IBasicViewInformation, IBasicResourceInformation):
+    """Register a view for a component"""
+
+    factory = zope.configuration.fields.Tokens(
+        title=_("Factory"),
+        required=False,
+        value_type=zope.configuration.fields.GlobalObject(),
+        )
+
+def view(_context, factory, type, name, for_, layer=None,
+         permission=None, allowed_interface=None, allowed_attributes=None,
+         provides=zope.interface.Interface):
+
+    if ((allowed_attributes or allowed_interface)
+        and (not permission)):
+        raise ConfigurationError(
+            "Must use name attribute with allowed_interface or "
+            "allowed_attributes"
+            )
+
+    if not factory:
+        raise ConfigurationError("No view factory specified.")
+
+    if permission:
+
+        checker = _checker(_context, permission,
+                           allowed_interface, allowed_attributes)
+
+        class ProxyView(object):
+            """Class to create simple proxy views."""
+
+            def __init__(self, factory, checker):
+                self.factory = factory
+                self.checker = checker
+
+            def __call__(self, *objects):
+                return proxify(self.factory(*objects), self.checker)
+
+        factory[-1] = ProxyView(factory[-1], checker)
+
+
+    if not for_:
+        raise ValueError("No for interfaces specified");
+    for_ = tuple(for_)
+
+    # Generate a single factory from multiple factories:
+    factories = factory
+    if len(factories) == 1:
+        factory = factories[0]
+    elif len(factories) < 1:
+        raise ValueError("No factory specified")
+    elif len(factories) > 1 and len(for_) > 1:
+        raise ValueError("Can't use multiple factories and multiple for")
+    else:
+        def factory(ob, request):
+            for f in factories[:-1]:
+                ob = f(ob)
+            return factories[-1](ob, request)
+
+    # BBB 2006/02/18, to be removed after 12 months
+    if layer is not None:
+        for_ = for_ + (layer,)
+        warnings.warn_explicit(
+            "The 'layer' argument of the 'view' directive has been "
+            "deprecated.  Use the 'type' argument instead. If you have "
+            "an existing 'type' argument IBrowserRequest, replace it with the "
+            "'layer' argument (the layer subclasses IBrowserRequest). "
+            "which subclasses BrowserRequest.",
+            DeprecationWarning, _context.info.file, _context.info.line)
+    else:
+        for_ = for_ + (type,)
+
+    _context.action(
+        discriminator = ('view', for_, name, provides),
+        callable = handler,
+        args = ('registerAdapter',
+                factory, for_, provides, name, _context.info),
+        )
+    if type is not None:
+        _context.action(
+            discriminator = None,
+            callable = provideInterface,
+            args = ('', type)
+            )
+
+    _context.action(
+        discriminator = None,
+        callable = provideInterface,
+        args = ('', provides)
+        )
+
+    if for_ is not None:
+        for iface in for_:
+            if iface is not None:
+                _context.action(
+                    discriminator = None,
+                    callable = provideInterface,
+                    args = ('', iface)
+                    )
+
+    
+class IResourceDirective(IBasicComponentInformation,
+                         IBasicResourceInformation):
+    """Register a resource"""
+
+    layer = zope.configuration.fields.GlobalInterface(
+        title=_("The layer the resource is in."),
+        required=False,
+        )
+
+    allowed_interface = zope.configuration.fields.Tokens(
+        title=_("Interface that is also allowed if user has permission."),
+        required=False,
+        value_type=zope.configuration.fields.GlobalInterface(),
+        )
+
+    allowed_attributes = zope.configuration.fields.Tokens(
+        title=_("View attributes that are also allowed if user"
+                " has permission."),
+        required=False,
+        value_type=zope.configuration.fields.PythonIdentifier(),
+        )
+
+def resource(_context, factory, type, name, layer=None,
+             permission=None,
+             allowed_interface=None, allowed_attributes=None,
+             provides=zope.interface.Interface):
+
+    if ((allowed_attributes or allowed_interface)
+        and (not permission)):
+        raise ConfigurationError(
+            "Must use name attribute with allowed_interface or "
+            "allowed_attributes"
+            )
+
+    if permission:
+        checker = _checker(_context, permission,
+                           allowed_interface, allowed_attributes)
+
+        def proxyResource(request, factory=factory, checker=checker):
+            return proxify(factory(request), checker)
+
+        factory = proxyResource
+
+    if layer is not None:
+        warnings.warn_explicit(
+            "The 'layer' argument of the 'resource' directive has been "
+            "deprecated.  Use the 'type' argument instead.",
+            DeprecationWarning, _context.info.file, _context.info.line)
+        type = layer
+
+    _context.action(
+        discriminator = ('resource', name, type, provides),
+        callable = handler,
+        args = ('registerAdapter',
+                factory, (type,), provides, name, _context.info),
+        )
+    _context.action(
+        discriminator = None,
+        callable = provideInterface,
+        args = (type.__module__ + '.' + type.__name__, type)
+               )
+    _context.action(
+        discriminator = None,
+        callable = provideInterface,
+        args = (provides.__module__ + '.' + provides.__name__, type)
+               )
+
+def _checker(_context, permission, allowed_interface, allowed_attributes):
+    if (not allowed_attributes) and (not allowed_interface):
+        allowed_attributes = ["__call__"]
+
+    if permission == PublicPermission:
+        permission = CheckerPublic
+
+    require={}
+    if allowed_attributes:
+        for name in allowed_attributes:
+            require[name] = permission
+    if allowed_interface:
+        for i in allowed_interface:
+            for name in i.names(all=True):
+                require[name] = permission
+
+    checker = Checker(require)
+    return checker

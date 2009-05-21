@@ -28,6 +28,18 @@
         handler="zope.component.zcml.utility"
         />
 
+    <meta:directive
+        name="view"
+        schema="zope.component.zcml.IViewDirective"
+        handler="zope.component.zcml.view"
+        />
+
+    <meta:directive
+        name="resource"
+        schema="zope.component.zcml.IResourceDirective"
+        handler="zope.component.zcml.resource"
+        />
+
   </meta:directives>
 
 </configure>

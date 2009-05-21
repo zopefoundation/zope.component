@@ -6,6 +6,9 @@ CHANGES
 
 - The HookableTests were not run by the testrunner.
 
+- Add in zope:view and zope:resource implementations into
+  zope.component.zcml (dependency loaded with zope.component [zcml]).
+ 
 3.6.0 (2009-03-12)
 ==================
 
