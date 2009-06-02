@@ -49,6 +49,8 @@ You can also register a utility using a factory instead of a utility instance:
     >>> def factory():
     ...    return tests.U1(1)
     >>> components.registerUtility(factory=factory)
+    Unregistered event:
+    UtilityRegistration(<Components comps>, I1, u'', 1, None, u'')
     Registered event:
     UtilityRegistration(<Components comps>, I1, u'', 1, <function factory at <SOME ADDRESS>>, u'')
 
@@ -121,6 +123,8 @@ registeredUtilities method:
 Duplicate registrations replace existing ones:
 
     >>> components.registerUtility(tests.U1(4), info=u'use 4 now')
+    Unregistered event:
+    UtilityRegistration(<Components comps>, I1, u'', 1, <function factory at <SOME ADDRESS>>, u'')
     Registered event:
     UtilityRegistration(<Components comps>, I1, u'', 4, None, u'use 4 now')
     >>> components.getUtility(tests.I1)
@@ -926,6 +930,8 @@ objects.
     >>> c2.queryUtility(tests.I1)
     U1(1)
     >>> c1.registerUtility(tests.U1(2))
+    Unregistered event:
+    UtilityRegistration(<Components 1>, I1, u'', 1, None, u'')
     Registered event:
     UtilityRegistration(<Components 1>, I1, u'', 2, None, u'')
 

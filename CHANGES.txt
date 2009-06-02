@@ -4,8 +4,20 @@ CHANGES
 3.7.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Fixed 2 related bugs:
 
+  When a utility is registered and there was previously a utility
+  registered for the same interface and name, then the old utility is
+  unregistered.  The 2 bugs related to this:
+
+  - There was no ``Unregistered`` for the implicit unregistration. Now
+    there is.
+
+  - The old utility was still held and returned by
+    getAllUtilitiesRegisteredFor.  In other words, it was still
+    considered registered, eeven though it wasn't.  A particularly
+    negative consequence of this is that the utility is held in memory
+    or in the database even though it isn't used.
 
 3.7.0 (2009-05-21)
 ==================
@@ -14,7 +26,7 @@ CHANGES
 
 - Add in zope:view and zope:resource implementations into
   zope.component.zcml (dependency loaded with zope.component [zcml]).
- 
+
 3.6.0 (2009-03-12)
 ==================
 
@@ -24,7 +36,7 @@ CHANGES
   framework were still using those interfaces. They will be adapted
   for this change. If you were using some of those interfaces, you
   need to adapt your code as well:
-  
+
    - The IView and IDefaultViewName were moved to zope.publisher.interfaces.
 
    - The IResource was moved to zope.app.publisher.interfaces.

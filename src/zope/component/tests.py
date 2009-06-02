@@ -88,11 +88,11 @@ class A:
 
     def __repr__(self):
         return "%s%r" % (self.__class__.__name__, self.context)
-    
+
 class A12_1(A):
     component.adapts(I1, I2)
     interface.implements(IA1)
-    
+
 class A12_(A):
     component.adapts(I1, I2)
 
@@ -712,7 +712,7 @@ def test_ability_to_pickle_globalsitemanager():
 
 def test_persistent_component_managers():
     """
-Here, we'll demonstrate that changes work even when data are stored in 
+Here, we'll demonstrate that changes work even when data are stored in
 a database and when accessed from multiple connections.
 
 Start by setting up a database and creating two transaction
@@ -729,7 +729,7 @@ managers and database connections to work with.
     >>> r2 = c2.root()
 
 Create a set of components registries in the database, alternating
-connections. 
+connections.
 
     >>> from zope.component.persistentregistry import PersistentComponents
 
@@ -761,7 +761,7 @@ connections.
     >>> r1[2].queryUtility(I1)
     U1(1)
     >>> t1.commit()
-    
+
     >>> _ = t2.begin()
     >>> r2[1].registerUtility(U1(2))
     >>> r2[2].queryUtility(I1)
@@ -771,7 +771,7 @@ connections.
     U1(2)
     >>> t2.commit()
 
-    
+
     >>> _ = t1.begin()
     >>> r1[1].registerUtility(U12(1), I2)
     >>> r1[4].queryUtility(I2)
@@ -789,9 +789,9 @@ connections.
 
     >>> r1[1].registerHandler(handle1, info="First handler")
     >>> r1[2].registerHandler(handle, required=[U])
-    
+
     >>> r1[3].registerHandler(handle3)
-    
+
     >>> r1[4].registerHandler(handle4)
 
     >>> r1[4].handle(U1(1))
@@ -858,7 +858,7 @@ base = zope.component.globalregistry.GlobalAdapterRegistry(
 GlobalRegistry.adapters = base
 def clear_base():
     base.__init__(GlobalRegistry, 'adapters')
-    
+
 class IFoo(interface.Interface):
     pass
 class Foo(persistent.Persistent):
@@ -872,12 +872,12 @@ class Foo(persistent.Persistent):
 
 def test_deghostification_of_persistent_adapter_registries():
     """
-    
+
 We want to make sure that we see updates corrextly.
 
     >>> len(base._v_subregistries)
     0
-    
+
     >>> import ZODB.tests.util
     >>> db = ZODB.tests.util.DB()
     >>> tm1 = transaction.TransactionManager()
@@ -931,15 +931,17 @@ Cleanup:
 
 
 def test_multi_handler_unregistration():
-    """There was a bug where multiple handlers for the same required specification
-    would all be removed when one of them was unregistered:
+    """
+    There was a bug where multiple handlers for the same required
+    specification would all be removed when one of them was
+    unregistered:
 
     >>> class I(zope.interface.Interface):
     ...     pass
     >>> def factory1(event):
-    ...     print "| Factory 1 is here" 
+    ...     print "| Factory 1 is here"
     >>> def factory2(event):
-    ...     print "| Factory 2 is here" 
+    ...     print "| Factory 2 is here"
     >>> class Event(object):
     ...     zope.interface.implements(I)
     >>> from zope.component.registry import Components
@@ -960,11 +962,11 @@ def test_next_utilities():
     It is common for a utility to delegate its answer to a utility
     providing the same interface in one of the component registry's
     bases. Let's first create a global utility::
-    
+
       >>> import zope.interface
       >>> class IMyUtility(zope.interface.Interface):
       ...     pass
-    
+
       >>> class MyUtility(ConformsToIComponentLookup):
       ...     zope.interface.implements(IMyUtility)
       ...     def __init__(self, id, sm):
@@ -975,18 +977,18 @@ def test_next_utilities():
 
       >>> from zope.component import getGlobalSiteManager
       >>> gsm = getGlobalSiteManager()
-    
+
       >>> gutil = MyUtility('global', gsm)
       >>> gsm.registerUtility(gutil, IMyUtility, 'myutil')
-    
+
     Now, let's create two registries and set up the bases hierarchy::
-    
+
       >>> from zope.component.registry import Components
       >>> sm1 = Components('sm1', bases=(gsm, ))
       >>> sm1_1 = Components('sm1_1', bases=(sm1, ))
-    
+
     Now we create two utilities and insert them in our folder hierarchy:
-    
+
       >>> util1 = MyUtility('one', sm1)
       >>> sm1.registerUtility(util1, IMyUtility, 'myutil')
       >>> IComponentLookup(util1) is sm1
@@ -996,21 +998,21 @@ def test_next_utilities():
       >>> sm1_1.registerUtility(util1_1, IMyUtility, 'myutil')
       >>> IComponentLookup(util1_1) is sm1_1
       True
-    
+
     Now, if we ask `util1_1` for its next available utility we get the
     ``one`` utility::
-    
+
       >>> from zope.component import getNextUtility
       >>> getNextUtility(util1_1, IMyUtility, 'myutil')
       MyUtility('one')
-    
+
     Next we ask `util1` for its next utility and we should get the global version:
-    
+
       >>> getNextUtility(util1, IMyUtility, 'myutil')
       MyUtility('global')
-    
+
     However, if we ask the global utility for the next one, an error is raised
-    
+
       >>> getNextUtility(gutil, IMyUtility,
       ...                     'myutil') #doctest: +NORMALIZE_WHITESPACE
       Traceback (most recent call last):
@@ -1018,33 +1020,66 @@ def test_next_utilities():
       ComponentLookupError:
       No more utilities for <InterfaceClass zope.component.tests.IMyUtility>,
       'myutil' have been found.
-    
+
     You can also use `queryNextUtility` and specify a default:
-    
+
       >>> from zope.component import queryNextUtility
       >>> queryNextUtility(gutil, IMyUtility, 'myutil', 'default')
       'default'
-    
+
     Let's now ensure that the function also works with multiple registries. First
     we create another base registry:
-    
+
       >>> myregistry = Components()
-    
+
     We now set up another utility into that registry:
-    
+
       >>> custom_util = MyUtility('my_custom_util', myregistry)
       >>> myregistry.registerUtility(custom_util, IMyUtility, 'my_custom_util')
-    
+
     We add it as a base to the local site manager:
-    
+
       >>> sm1.__bases__ = (myregistry,) + sm1.__bases__
-    
+
     Both the ``myregistry`` and global utilities should be available:
-    
+
       >>> queryNextUtility(sm1, IMyUtility, 'my_custom_util')
       MyUtility('my_custom_util')
       >>> queryNextUtility(sm1, IMyUtility, 'myutil')
       MyUtility('global')
+    """
+
+def dont_leak_utility_registrations_in__subscribers():
+    """
+
+    We've observed utilities getting left in _subscribers when they
+    get unregistered.
+
+    >>> import zope.component.registry
+    >>> reg = zope.component.registry.Components()
+    >>> class C:
+    ...     def __init__(self, name):
+    ...         self.name = name
+    ...     def __repr__(self):
+    ...         return "C(%s)" % self.name
+
+    >>> c1 = C(1)
+    >>> reg.registerUtility(c1, I1)
+    >>> reg.registerUtility(c1, I1)
+    >>> list(reg.getAllUtilitiesRegisteredFor(I1))
+    [C(1)]
+
+    >>> reg.unregisterUtility(provided=I1)
+    True
+    >>> list(reg.getAllUtilitiesRegisteredFor(I1))
+    []
+
+    >>> reg.registerUtility(c1, I1)
+    >>> reg.registerUtility(C(2), I1)
+
+    >>> list(reg.getAllUtilitiesRegisteredFor(I1))
+    [C(2)]
+
     """
 
 class StandaloneTests(unittest.TestCase):

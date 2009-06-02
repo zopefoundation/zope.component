@@ -91,9 +91,11 @@ class Components(object):
             provided = _getUtilityProvided(component)
 
         reg = self._utility_registrations.get((provided, name))
-        if reg is not None and reg[:2] == (component, info):
-            # already registered
-            return
+        if reg is not None:
+            if reg[:2] == (component, info):
+                # already registered
+                return
+            self.unregisterUtility(reg[0], provided, name)
 
         subscribed = False
         for ((p, _), data) in self._utility_registrations.iteritems():
@@ -109,10 +111,12 @@ class Components(object):
 
         if event:
             notify(Registered(
-                UtilityRegistration(self, provided, name, component, info, factory)
+                UtilityRegistration(self, provided, name, component, info,
+                                    factory)
                 ))
 
-    def unregisterUtility(self, component=None, provided=None, name=u'', factory=None):
+    def unregisterUtility(self, component=None, provided=None, name=u'',
+                          factory=None):
         if factory:
             if component:
                 raise TypeError("Can't specify factory and component.")
@@ -120,7 +124,8 @@ class Components(object):
 
         if provided is None:
             if component is None:
-                raise TypeError("Must specify one of component, factory and provided")
+                raise TypeError("Must specify one of component, factory and "
+                                "provided")
             provided = _getUtilityProvided(component)
 
         old = self._utility_registrations.get((provided, name))
@@ -130,6 +135,9 @@ class Components(object):
 
         if component is None:
             component = old[0]
+
+        # Note that component is now the old thing registered
+
         del self._utility_registrations[(provided, name)]
         self.utilities.unregister((), provided, name)
 
@@ -436,7 +444,7 @@ class UtilityRegistration(object):
                 getattr(self.component, '__name__', `self.component`),
                 self.factory, self.info,
                 )
-        
+
     def __cmp__(self, other):
         return cmp(self.__repr__(), other.__repr__())
 
