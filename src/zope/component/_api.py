@@ -190,7 +190,10 @@ def queryNextUtility(context, interface, name='', default=None):
     specified name. If no utility was found, return the specified `default`
     value.
     """
-    sm = getSiteManager(context)
+    try:
+        sm = getSiteManager(context)
+    except ComponentLookupError:
+        return default
     bases = sm.__bases__
     for base in bases:
         util = base.queryUtility(interface, name, _marker)

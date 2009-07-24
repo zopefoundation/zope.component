@@ -1,8 +1,11 @@
 CHANGES
 *******
 
-3.7.1 (unreleased)
+3.7.1 (2009-07-24)
 ==================
+
+- Fixed a problem, where ``queryNextUtility`` could fail if the context could
+  not be adapted to a ``IComponentLookup``.
 
 - Fixed 2 related bugs:
 

@@ -1047,6 +1047,12 @@ def test_next_utilities():
       MyUtility('my_custom_util')
       >>> queryNextUtility(sm1, IMyUtility, 'myutil')
       MyUtility('global')
+
+    Note, if the context cannot be converted to a site manager, the default is
+    retruned:
+
+      >>> queryNextUtility(object(), IMyUtility, 'myutil', 'default')
+      'default'
     """
 
 def dont_leak_utility_registrations_in__subscribers():
