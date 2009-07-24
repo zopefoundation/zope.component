@@ -25,7 +25,7 @@ def read(*rnames):
 
 setup(
     name='zope.component',
-    version = '3.7.1',
+    version = '3.8.0dev',
     url='http://pypi.python.org/pypi/zope.component',
     license='ZPL 2.1',
     description='Zope Component Architecture',
