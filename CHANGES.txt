@@ -4,7 +4,16 @@ CHANGES
 3.8.0 (unreleased)
 ==================
 
-- ...
+- Removed the dependencies on zope.proxy and zope.security from the zcml extra:
+  zope.component does not hard depend on them anymore; the support for security
+  proxied components ZCML registrations is enabled only if zope.security and
+  zope.proxy are available.
+
+- Moved the IPossibleSite and ISite interfaces here from zope.location as they
+  are dealing with zope.component's concept of a site, but not with location.
+
+- Moved the zope.site.hooks functionality to zope.component.hooks as it isn't
+  actually dealing with zope.site's concept of a site.
 
 3.7.1 (2009-07-24)
 ==================

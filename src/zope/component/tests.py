@@ -15,16 +15,18 @@
 
 $Id$
 """
+import persistent
 import re
+import sys
 import unittest
 import transaction
-import persistent
 from cStringIO import StringIO
 
 from zope import interface, component
 from zope.interface.verify import verifyObject
 from zope.interface.interfaces import IInterface
 from zope.testing import doctest, renormalizing
+from zope.testing.testrunner.layer import UnitTests
 
 from zope.component.interfaces import ComponentLookupError
 from zope.component.interfaces import IComponentArchitecture
@@ -1635,6 +1637,28 @@ class ResourceViewTests(PlacelessSetup, unittest.TestCase):
         self.assertRaises(ValueError, xmlconfig, config, testing=1)
 
 
+class ConditionalSecurityLayer(UnitTests):
+
+    __name__ = 'ConditionalSecurity'
+    __bases__ = ()
+
+    def setUp(self):
+        setUp()
+        self.modules = {}
+        for m in ('zope.security', 'zope.proxy'):
+            self.modules[m] = sys.modules[m]
+            sys.modules[m] = None
+        import zope.component.zcml
+        reload(zope.component.zcml)
+
+    def tearDown(self):
+        tearDown()
+        for m in ('zope.security', 'zope.proxy'):
+            sys.modules[m] = self.modules[m]
+        import zope.component.zcml
+        reload(zope.component.zcml)
+
+
 def setUpRegistryTests(tests):
     setUp()
 
@@ -1655,6 +1679,12 @@ def test_suite():
                     r'exceptions.\1Error:'),
         ])
 
+    zcml_conditional = doctest.DocFileSuite('zcml_conditional.txt', checker=checker)
+    zcml_conditional.layer = ConditionalSecurityLayer()
+
+    hooks_conditional = doctest.DocFileSuite('hooks.txt', checker=checker)
+    hooks_conditional.layer = ConditionalSecurityLayer()
+
     return unittest.TestSuite((
         doctest.DocTestSuite(setUp=setUp, tearDown=tearDown),
         unittest.makeSuite(HookableTests),
@@ -1670,10 +1700,14 @@ def test_suite():
         doctest.DocFileSuite('registry.txt', checker=checker,
                              setUp=setUpRegistryTests,
                              tearDown=tearDownRegistryTests),
+        doctest.DocFileSuite('hooks.txt',checker=checker,
+                             setUp=setUp, tearDown=tearDown),
         doctest.DocFileSuite('event.txt',
                              setUp=setUp, tearDown=tearDown),
-        doctest.DocFileSuite('zcml.txt',checker=checker,
+        doctest.DocFileSuite('zcml.txt', checker=checker,
                              setUp=setUp, tearDown=tearDown),
+        zcml_conditional,
+        hooks_conditional,
         unittest.makeSuite(StandaloneTests),
         unittest.makeSuite(ResourceViewTests),
         ))
