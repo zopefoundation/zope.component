@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-3.8.0 (unreleased)
+3.8.0 (2009-11-16)
 ==================
 
 - Removed the dependencies on zope.proxy and zope.security from the zcml extra:
