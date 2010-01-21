@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-3.9.0 (unreleased)
+3.9.0 (2010-01-21)
 ==================
 
 - Add testlayer support. It is now possible to load a ZCML file within
