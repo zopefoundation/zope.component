@@ -4,8 +4,9 @@ CHANGES
 3.9.1 (unreleased)
 ==================
 
-- Nothing changed yet.
-
+- The tested testrunner somehow gets influenced by options of the outer
+  testrunner, such a the -v option. We modified the tests so that it avoids
+  this.
 
 3.9.0 (2010-01-21)
 ==================
