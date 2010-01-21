@@ -16,7 +16,10 @@ import os
 
 from zope.configuration import xmlconfig, config
 from zope.testing.cleanup import cleanUp
+from zope.component import provideHandler
 from zope.component.hooks import setHooks
+from zope.component.eventtesting import events, clearEvents
+
 
 class LayerBase(object):
     """Sane layer base class.
@@ -39,13 +42,13 @@ class LayerBase(object):
     The hack requires us to set __bases__, __module__ and
     __name__. This fools zope.testing into thinking that this layer
     instance is a class it can work with.
-    
+
     It'd be better if zope.testing just called a minimal API and
     didn't try to be fancy. Fancy layer inheritance mechanisms can
     then be implemented elsewhere if people want to. But unfortunately
     it does implement a fancy mechanism and we need to fool it.
     """
-    
+
     __bases__ = ()
 
     def __init__(self, package, name=None):
@@ -80,6 +83,10 @@ class ZCMLLayerBase(LayerBase):
         for feature in self.features:
             context.provideFeature(feature)
         self.context = self._load_zcml(context)
+        provideHandler(events.append, (None,))
+
+    def testTearDown(self):
+        clearEvents()
 
     def tearDown(self):
         cleanUp()
