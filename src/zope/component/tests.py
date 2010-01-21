@@ -1706,6 +1706,10 @@ def test_suite():
                              setUp=setUp, tearDown=tearDown),
         doctest.DocFileSuite('zcml.txt', checker=checker,
                              setUp=setUp, tearDown=tearDown),
+        doctest.DocFileSuite('testlayer.txt',
+                             optionflags=(doctest.ELLIPSIS +
+                                          doctest.NORMALIZE_WHITESPACE +
+                                          doctest.REPORT_NDIFF)),
         zcml_conditional,
         hooks_conditional,
         unittest.makeSuite(StandaloneTests),

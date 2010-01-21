@@ -25,6 +25,12 @@ class IAppb(Interface):
 class IApp(IAppb):
     pass
 
+class IApp2(IAppb):
+    pass
+
+class IApp3(IAppb):
+    pass
+
 class IContent(Interface): pass
 
 class Content(object):
@@ -41,4 +47,14 @@ class Comp(object):
     a = 1
     def f(): pass
 
+class Comp2(object):
+    def __init__(self, context):
+        self.context = context
+
+class Comp3(object):
+    def __init__(self, context):
+        self.context = context
+
 comp = Comp()
+
+content = Content()
