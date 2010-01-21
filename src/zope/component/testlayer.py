@@ -56,7 +56,8 @@ class LayerBase(object):
             name = self.__class__.__name__
         self.__name__ = name
         self.__module__ = package.__name__
-
+        self.package = package
+        
     def setUp(self):
         pass
 
@@ -109,4 +110,6 @@ class ZCMLFileLayer(ZCMLLayerBase):
                                       zcml_file)
 
     def _load_zcml(self, context):
-        return xmlconfig.file(self.zcml_file, context=context, execute=True)
+        return xmlconfig.file(self.zcml_file,
+                              package=self.package,
+                              context=context, execute=True)
