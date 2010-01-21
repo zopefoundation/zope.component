@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-3.9.1 (unreleased)
+3.9.1 (2010-01-21)
 ==================
 
 - The tested testrunner somehow gets influenced by options of the outer
