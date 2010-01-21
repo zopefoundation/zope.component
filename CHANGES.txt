@@ -1,10 +1,12 @@
 CHANGES
 *******
 
-3.8.1 (unreleased)
+3.9.0 (unreleased)
 ==================
 
-- ...
+- Add testlayer support. It is now possible to load a ZCML file within
+  tests more easily. See zope.component.testlayer.py and
+  zope.component.testlayer.txt.
 
 3.8.0 (2009-11-16)
 ==================
