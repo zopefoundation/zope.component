@@ -4,8 +4,9 @@ CHANGES
 3.9.2 (unreleased)
 ==================
 
-- Nothing changed yet.
-
+- Fixed a bug introduced by recent refactoring, where passing
+  CheckerPublic to securityAdapterFactory wrongly wrapped the factory
+  into a LocatingUntrustedAdapterFactory.
 
 3.9.1 (2010-01-21)
 ==================

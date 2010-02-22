@@ -1704,6 +1704,7 @@ def test_suite():
                              setUp=setUp, tearDown=tearDown),
         doctest.DocFileSuite('event.txt',
                              setUp=setUp, tearDown=tearDown),
+        doctest.DocTestSuite('zope.component.security'),
         doctest.DocFileSuite('zcml.txt', checker=checker,
                              setUp=setUp, tearDown=tearDown),
         doctest.DocFileSuite('testlayer.txt',

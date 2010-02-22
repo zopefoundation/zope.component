@@ -126,6 +126,7 @@ Of course, if no factory is provided at all, we will get an error:
   ZopeXMLConfigurationError: File "<string>", line 4.2-8.8
       ValueError: No factory specified
 
+
 Declaring ``for`` and ``provides`` in Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
