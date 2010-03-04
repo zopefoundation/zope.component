@@ -4,7 +4,10 @@ CHANGES
 3.9.3 (unreleased)
 ==================
 
-- No changes yet.
+- The ZCML directives provided by zope.component now register the components in
+  the registry returned by getSiteManager instead of the global registry. This
+  allows the hooking of the getSiteManager method before the load of a ZCML
+  file to register the components in a custom registry.
 
 3.9.2 (2010-01-22)
 ==================

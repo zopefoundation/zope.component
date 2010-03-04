@@ -1090,6 +1090,28 @@ def dont_leak_utility_registrations_in__subscribers():
 
     """
 
+def test_zcml_handler_site_manager():
+    """
+    The ZCML directives provided by zope.component use the ``getSiteManager``
+    method to get the registry where to register the components. This makes
+    possible to hook ``getSiteManager`` before loading a ZCML file:
+
+    >>> from zope.component.registry import Components
+    >>> registry = Components()
+    >>> def dummy(context=None):
+    ...     return registry
+    >>> from zope.component import getSiteManager
+    >>> ignore = getSiteManager.sethook(dummy)
+
+    >>> from zope.component.testfiles.components import comp, IApp
+    >>> from zope.component.zcml import handler
+    >>> handler('registerUtility', comp, IApp, u'')
+    >>> registry.getUtility(IApp) is comp
+    True
+    >>> ignore = getSiteManager.reset()
+
+    """
+
 class StandaloneTests(unittest.TestCase):
     def testStandalone(self):
         import subprocess

@@ -561,8 +561,8 @@ this very typical example of a <subscriber /> directive:
 Note how ZCML provides some additional information when registering
 components, such as the ZCML filename and line numbers:
 
-  >>> gsm = zope.component.getGlobalSiteManager()
-  >>> doc = [reg.info for reg in gsm.registeredSubscriptionAdapters()
+  >>> sm = zope.component.getSiteManager()
+  >>> doc = [reg.info for reg in sm.registeredSubscriptionAdapters()
   ...        if reg.provided is IS][0]
   >>> print doc
   File "<string>", line 4.2-9.8

@@ -45,7 +45,7 @@ def check_security_support():
             "supported because zope.security is not available")
 
 def handler(methodName, *args, **kwargs):
-    method = getattr(zope.component.getGlobalSiteManager(), methodName)
+    method = getattr(zope.component.getSiteManager(), methodName)
     method(*args, **kwargs)
 
 class IBasicComponentInformation(zope.interface.Interface):
