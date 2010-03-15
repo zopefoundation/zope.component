@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-3.9.3 (unreleased)
+3.9.3 (2010-03-08)
 ==================
 
 - The ZCML directives provided by zope.component now register the components in
