@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-3.9.4 (unreleased)
+3.9.4 (2010-04-30)
 ==================
 
 - Prefer the standard libraries doctest module to the one from zope.testing.
