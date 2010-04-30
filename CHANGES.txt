@@ -4,7 +4,7 @@ CHANGES
 3.9.4 (unreleased)
 ==================
 
-- ...
+- Prefer the standard libraries doctest module to the one from zope.testing.
 
 3.9.3 (2010-03-08)
 ==================
