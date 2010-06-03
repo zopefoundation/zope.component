@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Hooks for getting and setting a site in the thread global namespace.
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 

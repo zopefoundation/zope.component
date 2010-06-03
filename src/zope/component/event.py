@@ -13,8 +13,6 @@
 ##############################################################################
 """Implement Component Architecture-specific event dispatching, based
 on subscription adapters / handlers.
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 

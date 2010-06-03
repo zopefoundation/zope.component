@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Zope 3 Component Architecture
-
-$Id$
 """
 from zope.interface import Interface
 from zope.interface import implementedBy

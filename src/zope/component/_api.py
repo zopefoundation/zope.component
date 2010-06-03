@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Zope 3 Component Architecture
-
-$Id$
 """
 import sys
 import types

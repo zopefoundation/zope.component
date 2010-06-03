@@ -12,8 +12,6 @@
 #
 ############################################################################
 """Component and Component Architecture Interfaces
-
-$Id$
 """
 __docformat__ = "reStructuredText"
 

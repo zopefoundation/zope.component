@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Component Architecture configuration handlers
-
-$Id$
 """
 __docformat__ = "reStructuredText"
 

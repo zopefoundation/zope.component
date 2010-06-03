@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Components for testing
-
-$Id$
 """
 from zope.interface import Interface, Attribute, implements
 from zope.component import adapts

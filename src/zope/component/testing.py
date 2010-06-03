@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Placeless Test Setup
-
-$Id$
 """
 
 # HACK to make sure basicmost event subscriber is installed

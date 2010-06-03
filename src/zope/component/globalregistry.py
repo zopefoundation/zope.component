@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Global components support
-
-$Id$
 """
 from zope.interface import implements
 from zope.interface.adapter import AdapterRegistry

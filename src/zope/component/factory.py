@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Factory object
-
-$Id$
 """
 from zope.interface import implements, implementedBy
 from zope.interface.declarations import Implements

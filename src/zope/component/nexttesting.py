@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Helper functions for testing utilities that use get/queryNextUtility.
-
-$Id$
 """
 import zope.interface
 from zope.component.interfaces import IComponentLookup, IComponents

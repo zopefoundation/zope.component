@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Interface utility functions
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 

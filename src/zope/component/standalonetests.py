@@ -1,5 +1,5 @@
 """
-$Id$
+Standalone Tests
 """
 import unittest
 import doctest

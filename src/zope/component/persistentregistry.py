@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Persistent component managers
-
-$Id$
 """
 import persistent.mapping
 import persistent.list

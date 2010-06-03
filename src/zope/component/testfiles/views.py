@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Views test.
-
-$Id$
 """
 from zope.interface import Interface, implements, directlyProvides
 

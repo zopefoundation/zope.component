@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Sample adapter class for testing
-
-$Id$
 """
 import zope.interface
 import zope.component

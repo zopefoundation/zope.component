@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Placeless Test Setup
-
-$Id$
 """
 from zope.component import provideHandler
 from zope.component.event import objectEventNotify
