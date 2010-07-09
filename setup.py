@@ -23,6 +23,16 @@ import os
 from setuptools import setup, find_packages
 
 
+tests_require = [
+    'ZODB3',
+    'zope.hookable',
+    'zope.location',
+    'zope.proxy',
+    'zope.security',
+    'zope.testing',
+    ]
+
+
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
@@ -61,13 +71,7 @@ setup(
     package_dir = {'': 'src'},
 
     namespace_packages=['zope',],
-    tests_require = [
-        'zope.testing'
-        'zope.hookable',
-        'zope.location',
-        'zope.proxy',
-        'zope.security',
-        ],
+    tests_require = tests_require,
     install_requires=['setuptools',
                       'zope.interface',
                       'zope.event',
@@ -80,13 +84,7 @@ setup(
         zcml = ['zope.configuration',
                 'zope.i18nmessageid',
                 ],
-        test = ['ZODB3',
-                'zope.testing',
-                'zope.hookable',
-                'zope.location',
-                'zope.proxy',
-                'zope.security',
-                ],
+        test = tests_require,
         docs = ['z3c.recipe.sphinxdoc'],
         ),
     )
