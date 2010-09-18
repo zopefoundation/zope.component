@@ -26,9 +26,6 @@ from setuptools import setup, find_packages
 tests_require = [
     'ZODB3',
     'zope.hookable',
-    'zope.location',
-    'zope.proxy',
-    'zope.security',
     'zope.testing',
     ]
 
@@ -81,6 +78,10 @@ setup(
     extras_require = dict(
         hook = ['zope.hookable'],
         persistentregistry = ['ZODB3'],
+        security = ['zope.location',
+                    'zope.proxy',
+                    'zope.security',
+                    ],
         zcml = ['zope.configuration',
                 'zope.i18nmessageid',
                 ],

@@ -6,6 +6,9 @@ CHANGES
 
 - Got rid of the docs extra and the sphinxdoc recipe.
 
+- Created a "security" extra to move security-related dependencies out of the
+  "test" extra.
+
 3.9.5 (2010-07-09)
 ==================
 
