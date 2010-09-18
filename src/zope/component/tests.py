@@ -1729,6 +1729,8 @@ def test_suite():
         doctest.DocTestSuite('zope.component.security'),
         doctest.DocFileSuite('zcml.txt', checker=checker,
                              setUp=setUp, tearDown=tearDown),
+        doctest.DocFileSuite('configure.txt',
+                             setUp=setUp, tearDown=tearDown),
         doctest.DocFileSuite('testlayer.txt',
                              optionflags=(doctest.ELLIPSIS +
                                           doctest.NORMALIZE_WHITESPACE +

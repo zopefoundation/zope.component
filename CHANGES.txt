@@ -11,6 +11,8 @@ CHANGES
 
 - Use the new zope.testrunner package for tests.
 
+- Added a basic test for the configure.zcml file provided.
+
 3.9.5 (2010-07-09)
 ==================
 
