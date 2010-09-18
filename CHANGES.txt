@@ -1,13 +1,15 @@
 CHANGES
 *******
 
-3.9.6 (unreleased)
-==================
+3.10 (unreleased)
+=================
 
 - Got rid of the docs extra and the sphinxdoc recipe.
 
 - Created a "security" extra to move security-related dependencies out of the
   "test" extra.
+
+- Use the new zope.testrunner package for tests.
 
 3.9.5 (2010-07-09)
 ==================

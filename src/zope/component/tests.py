@@ -26,7 +26,7 @@ from zope import interface, component
 from zope.interface.verify import verifyObject
 from zope.interface.interfaces import IInterface
 from zope.testing import renormalizing
-from zope.testing.testrunner.layer import UnitTests
+from zope.testrunner.layer import UnitTests
 
 from zope.component.interfaces import ComponentLookupError
 from zope.component.interfaces import IComponentArchitecture

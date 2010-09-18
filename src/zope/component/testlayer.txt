@@ -51,7 +51,7 @@ Now we run some tests with this layer:
   ...        print "testFoo"
   >>> suite = unittest.TestSuite()
   >>> suite.addTest(unittest.makeSuite(TestCase))
-  >>> from zope.testing.testrunner.runner import Runner
+  >>> from zope.testrunner.runner import Runner
   >>> runner = Runner(args=[], found_suites=[suite])
   >>> succeeded = runner.run()
   Running zope.component.OurLayer tests:

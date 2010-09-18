@@ -27,6 +27,7 @@ tests_require = [
     'ZODB3',
     'zope.hookable',
     'zope.testing',
+    'zope.testrunner',
     ]
 
 
@@ -35,7 +36,7 @@ def read(*rnames):
 
 setup(
     name='zope.component',
-    version = '3.9.6dev',
+    version = '3.10dev',
     url='http://pypi.python.org/pypi/zope.component',
     license='ZPL 2.1',
     description='Zope Component Architecture',
