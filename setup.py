@@ -85,6 +85,5 @@ setup(
                 'zope.i18nmessageid',
                 ],
         test = tests_require,
-        docs = ['z3c.recipe.sphinxdoc'],
         ),
     )
