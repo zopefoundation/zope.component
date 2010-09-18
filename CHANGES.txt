@@ -4,7 +4,7 @@ CHANGES
 3.9.6 (unreleased)
 ==================
 
-- TBD
+- Got rid of the docs extra and the sphinxdoc recipe.
 
 3.9.5 (2010-07-09)
 ==================
