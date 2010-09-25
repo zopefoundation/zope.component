@@ -1,8 +1,8 @@
 CHANGES
 *******
 
-3.10 (unreleased)
-=================
+3.10.0 (2010-09-25)
+===================
 
 - Got rid of the docs extra and the sphinxdoc recipe.
 
