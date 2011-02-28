@@ -183,6 +183,12 @@ Adapters can adapt multiple objects:
 
     >>> component.provideAdapter(TwoPersonGreeter)
 
+Note that the declaration-order of the Interfaces beeing adapted to is
+important for adapter look up. It must be the the same as the order of
+parameters given to the adapter and used to query the adapter. This is
+especially the case when different Interfaces are adapt to (opposed to
+this example).
+
 To look up a multi-adapter, use either `queryMultiAdapter` or
 `getMultiAdapter`:
 
