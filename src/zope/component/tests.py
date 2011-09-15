@@ -213,6 +213,7 @@ def test_getSiteManager():
     We don't know anything about the default service manager, except that it
     is an `IComponentLookup`.
 
+      >>> from zope.component.interfaces import IComponentLookup
       >>> IComponentLookup.providedBy(component.getSiteManager())
       True
 
@@ -244,11 +245,11 @@ def test_getSiteManager():
 
     Using a context that is not adaptable to `IComponentLookup` should fail.
 
-      >>> component.getSiteManager(ob) #doctest: +NORMALIZE_WHITESPACE
+      >>> component.getSiteManager(ob) #doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
       Traceback (most recent call last):
       ...
       ComponentLookupError: ('Could not adapt', <instance Ob>,
-      <InterfaceClass zope.component.interfaces.IComponentLookup>)
+      <InterfaceClass zope...interfaces.IComponentLookup>)
     """
 
 def testAdapterInContext(self):
@@ -946,7 +947,7 @@ def test_multi_handler_unregistration():
     ...     print "| Factory 2 is here"
     >>> class Event(object):
     ...     zope.interface.implements(I)
-    >>> from zope.component.registry import Components
+    >>> from zope.interface.registry import Components
     >>> registry = Components()
     >>> registry.registerHandler(factory1, [I,])
     >>> registry.registerHandler(factory2, [I,])
@@ -985,7 +986,7 @@ def test_next_utilities():
 
     Now, let's create two registries and set up the bases hierarchy::
 
-      >>> from zope.component.registry import Components
+      >>> from zope.interface.registry import Components
       >>> sm1 = Components('sm1', bases=(gsm, ))
       >>> sm1_1 = Components('sm1_1', bases=(sm1, ))
 
@@ -1063,8 +1064,8 @@ def dont_leak_utility_registrations_in__subscribers():
     We've observed utilities getting left in _subscribers when they
     get unregistered.
 
-    >>> import zope.component.registry
-    >>> reg = zope.component.registry.Components()
+    >>> import zope.interface.registry
+    >>> reg = zope.interface.registry.Components()
     >>> class C:
     ...     def __init__(self, name):
     ...         self.name = name
@@ -1096,7 +1097,7 @@ def test_zcml_handler_site_manager():
     method to get the registry where to register the components. This makes
     possible to hook ``getSiteManager`` before loading a ZCML file:
 
-    >>> from zope.component.registry import Components
+    >>> from zope.interface.registry import Components
     >>> registry = Components()
     >>> def dummy(context=None):
     ...     return registry
@@ -1719,9 +1720,6 @@ def test_suite():
                              setUp=setUp, tearDown=tearDown),
         doctest.DocFileSuite('factory.txt',
                              setUp=setUp, tearDown=tearDown),
-        doctest.DocFileSuite('registry.txt', checker=checker,
-                             setUp=setUpRegistryTests,
-                             tearDown=tearDownRegistryTests),
         doctest.DocFileSuite('hooks.txt',checker=checker,
                              setUp=setUp, tearDown=tearDown),
         doctest.DocFileSuite('event.txt',

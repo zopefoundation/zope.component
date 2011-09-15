@@ -15,9 +15,8 @@
 """
 from zope.interface import implements
 from zope.interface.adapter import AdapterRegistry
-from zope.component.registry import Components
-from zope.component.interfaces import Invalid, IComponentLookup, IRegistry
-from zope.component.interfaces import ComponentLookupError
+from zope.interface.registry import Components
+from zope.component.interfaces import IComponentLookup
 
 def GAR(components, registryName):
     return getattr(components, registryName)
@@ -37,6 +36,7 @@ class GlobalAdapterRegistry(AdapterRegistry):
         return GAR, (self.__parent__, self.__name__)
 
 class BaseGlobalComponents(Components):
+    implements(IComponentLookup)
 
     def _init_registries(self):
         self.adapters = GlobalAdapterRegistry(self, 'adapters')
@@ -66,7 +66,6 @@ def getGlobalSiteManager():
 
 def provideUtility(component, provides=None, name=u''):
     base.registerUtility(component, provides, name, event=False)
-
 
 def provideAdapter(factory, adapts=None, provides=None, name=''):
     base.registerAdapter(factory, adapts, provides, name, event=False)

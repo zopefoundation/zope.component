@@ -26,7 +26,7 @@ Let's set a site now. A site has to be an object that provides the
 ``getSiteManager`` method, which is specified by
 ``zope.component.interfaces.IPossibleSite``:
 
->>> from zope.component.registry import Components
+>>> from zope.interface.registry import Components
 >>> class Site(object):
 ...     def __init__(self):
 ...         self.registry = Components('components')

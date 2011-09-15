@@ -17,7 +17,7 @@ import persistent.mapping
 import persistent.list
 import zope.interface.adapter
 
-import zope.component.registry
+from zope.interface.registry import Components
 
 class PersistentAdapterRegistry(
     zope.interface.adapter.VerifyingAdapterRegistry,
@@ -41,7 +41,7 @@ class PersistentAdapterRegistry(
         self._v_lookup.changed(self)
         
         
-class PersistentComponents(zope.component.registry.Components):
+class PersistentComponents(Components):
 
     def _init_registries(self):
         self.adapters = PersistentAdapterRegistry()

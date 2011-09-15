@@ -4,8 +4,24 @@ CHANGES
 3.10.1 (unreleased)
 ===================
 
-- Nothing changed yet.
+- Moved code from ``zope.component.registry`` which implements a basic
+  nonperistent component registry to ``zope.interface.registry``.  This code
+  was moved from ``zope.component`` into ``zope.interface`` to make porting
+  systems (such as Pyramid) that rely only on a basic component registry to
+  Python 3 possible without needing to port the entirety of the
+  ``zope.component`` package.  Backwards compatibility import shims have been
+  left behind in ``zope.component``, so this change will not break any
+  existing code.
 
+- Interfaces moved from ``zope.component.interfaces`` to
+  ``zope.interface.interfaces``: ``ComponentLookupError``, ``Invalid``,
+  ``IObjectEvent``, ``ObjectEvent``, ``IComponentLookup``, ``IRegistration``,
+  ``IUtilityRegistration``, ``IAdapterRegistration``,
+  ``ISubscriptionAdapterRegistration``, ``IHandlerRegistration``,
+  ``IRegistrationEvent``, ``RegistrationEvent``, ``IRegistered``,
+  ``Registered``, ``IUnregistered``, ``Unregistered``,
+  ``IComponentRegistry``, and ``IComponents``.  Backwards compatibility shims
+  left in place.
 
 3.10.0 (2010-09-25)
 ===================
