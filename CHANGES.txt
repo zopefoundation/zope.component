@@ -1,7 +1,12 @@
 CHANGES
 *******
 
-3.10.1 (unreleased)
+3.11.1 (unreleased)
+===================
+
+- No changes yet.
+
+3.11.0 (2011-09-22)
 ===================
 
 - Moved code from ``zope.component.registry`` which implements a basic
