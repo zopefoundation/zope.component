@@ -23,8 +23,6 @@ CHANGES
   ``IComponentRegistry``, and ``IComponents``.  Backwards compatibility shims
   left in place.
 
-- Depend on zope.interface >= 3.8.0.
-
 3.10.0 (2010-09-25)
 ===================
 

@@ -71,7 +71,7 @@ setup(
     namespace_packages=['zope',],
     tests_require = tests_require,
     install_requires=['setuptools',
-                      'zope.interface>=3.8.0',
+                      'zope.interface',
                       'zope.event',
                       ],
     include_package_data = True,
