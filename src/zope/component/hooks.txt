@@ -63,3 +63,19 @@ Finally we can unset the site and the global component registry is used again:
 None
 >>> getSiteManager()
 <BaseGlobalComponents base>
+
+
+Context manager
+===============
+
+There also is a context manager for setting the site, which is especially
+useful when writing tests:
+
+>>> import zope.component.hooks
+>>> print getSite()
+None
+>>> with zope.component.hooks.site(site2):
+...     getSite() is site2
+True
+>>> print getSite()
+None

@@ -4,7 +4,8 @@ CHANGES
 3.11.1 (unreleased)
 ===================
 
-- No changes yet.
+- Add convenience function zope.component.hooks.site (a contextmanager),
+  so one can write ``with site(foo): ...``.
 
 3.11.0 (2011-09-22)
 ===================

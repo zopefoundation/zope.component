@@ -15,6 +15,7 @@
 """
 __docformat__ = 'restructuredtext'
 
+import contextlib
 import threading
 import zope.component
 
@@ -75,6 +76,14 @@ def setSite(site=None):
 
 def getSite():
     return siteinfo.site
+
+
+@contextlib.contextmanager
+def site(site):
+    old_site = getSite()
+    setSite(site)
+    yield
+    setSite(old_site)
 
 
 def getSiteManager(context=None):

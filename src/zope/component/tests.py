@@ -14,6 +14,8 @@
 """Component Architecture Tests
 """
 
+import __future__
+
 import doctest
 import persistent
 import re
@@ -1720,8 +1722,10 @@ def test_suite():
                              setUp=setUp, tearDown=tearDown),
         doctest.DocFileSuite('factory.txt',
                              setUp=setUp, tearDown=tearDown),
-        doctest.DocFileSuite('hooks.txt',checker=checker,
-                             setUp=setUp, tearDown=tearDown),
+        doctest.DocFileSuite('hooks.txt', checker=checker,
+                             setUp=setUp, tearDown=tearDown,
+                             globs=dict(
+                    with_statement=__future__.with_statement)),
         doctest.DocFileSuite('event.txt',
                              setUp=setUp, tearDown=tearDown),
         doctest.DocTestSuite('zope.component.security'),
