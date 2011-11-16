@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-3.11.1 (unreleased)
+3.12.0 (2011-11-16)
 ===================
 
 - Add convenience function zope.component.hooks.site (a contextmanager),
