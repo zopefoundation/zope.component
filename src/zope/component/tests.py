@@ -1707,7 +1707,9 @@ def test_suite():
     zcml_conditional = doctest.DocFileSuite('zcml_conditional.txt', checker=checker)
     zcml_conditional.layer = ConditionalSecurityLayer()
 
-    hooks_conditional = doctest.DocFileSuite('hooks.txt', checker=checker)
+    with_globs = dict(with_statement=__future__.with_statement)
+    hooks_conditional = doctest.DocFileSuite(
+        'hooks.txt', checker=checker, globs=with_globs)
     hooks_conditional.layer = ConditionalSecurityLayer()
 
     return unittest.TestSuite((
@@ -1724,8 +1726,7 @@ def test_suite():
                              setUp=setUp, tearDown=tearDown),
         doctest.DocFileSuite('hooks.txt', checker=checker,
                              setUp=setUp, tearDown=tearDown,
-                             globs=dict(
-                    with_statement=__future__.with_statement)),
+                             globs=with_globs),
         doctest.DocFileSuite('event.txt',
                              setUp=setUp, tearDown=tearDown),
         doctest.DocTestSuite('zope.component.security'),
