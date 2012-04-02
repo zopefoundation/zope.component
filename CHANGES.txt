@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-3.12.1 (unreleased)
+3.12.1 (2012-04-02)
 ===================
 
 - Wrap ``with site(foo)`` in try/finally (LP768151).
