@@ -82,8 +82,10 @@ def getSite():
 def site(site):
     old_site = getSite()
     setSite(site)
-    yield
-    setSite(old_site)
+    try:
+        yield
+    finally:
+        setSite(old_site)
 
 
 def getSiteManager(context=None):

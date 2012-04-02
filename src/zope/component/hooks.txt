@@ -80,3 +80,18 @@ None
 True
 >>> print getSite()
 None
+
+The site is properly restored even if the body of the with statement
+raises an exception:
+
+>>> print getSite()
+None
+>>> with zope.component.hooks.site(site2):
+...    getSite() is site2
+...    raise ValueError('An error in the body')
+Traceback (most recent call last):
+    ...
+ValueError: An error in the body
+>>> print getSite()
+None
+
