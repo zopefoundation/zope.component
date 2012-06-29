@@ -1,18 +1,22 @@
-Welcome to zope.component's documentation!
-==========================================
+:mod:`zope.component`
+=====================
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
-   README
+   narr
    socketexample
    event
    factory
-   registry
    persistentregistry
    zcml
+   configure
+   hooks
+   testlayer
+
+   api
 
 Indices and tables
 ==================

@@ -13,16 +13,13 @@
 ##############################################################################
 """Persistent component managers
 """
-import persistent.mapping
-import persistent.list
-import zope.interface.adapter
-
+from persistent import Persistent
+from persistent.mapping import PersistentMapping
+from persistent.list import PersistentList
+from zope.interface.adapter import VerifyingAdapterRegistry
 from zope.interface.registry import Components
 
-class PersistentAdapterRegistry(
-    zope.interface.adapter.VerifyingAdapterRegistry,
-    persistent.Persistent,
-    ):
+class PersistentAdapterRegistry(VerifyingAdapterRegistry, Persistent):
 
     def changed(self, originally_changed):
         if originally_changed is self:
@@ -48,7 +45,7 @@ class PersistentComponents(Components):
         self.utilities = PersistentAdapterRegistry()
 
     def _init_registrations(self):
-        self._utility_registrations = persistent.mapping.PersistentMapping()
-        self._adapter_registrations = persistent.mapping.PersistentMapping()
-        self._subscription_registrations = persistent.list.PersistentList()
-        self._handler_registrations = persistent.list.PersistentList()
+        self._utility_registrations = PersistentMapping()
+        self._adapter_registrations = PersistentMapping()
+        self._subscription_registrations = PersistentList()
+        self._handler_registrations = PersistentList()

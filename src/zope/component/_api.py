@@ -25,6 +25,7 @@ from zope.component.interfaces import IComponentRegistrationConvenience
 from zope.component.interfaces import IFactory
 from zope.component.interfaces import ComponentLookupError
 from zope.component.interfaces import IComponentLookup
+from zope.component._compat import _BLANK
 from zope.component._declaration import adaptedBy
 from zope.component._declaration import adapter
 from zope.component._declaration import adapts
@@ -33,7 +34,7 @@ from zope.component._declaration import adapts
 # to our Python version if not.
 try:
     from zope.hookable import hookable
-except ImportError:
+except ImportError: #pragma NO COVER
     from zope.component.hookable import hookable
 
 # getSiteManager() returns a component registry.  Although the term
@@ -42,6 +43,8 @@ except ImportError:
 base = None
 @hookable
 def getSiteManager(context=None):
+    """ See IComponentArchitecture.
+    """
     global base
     if context is None:
         if base is None:
@@ -52,7 +55,7 @@ def getSiteManager(context=None):
         # to avoid the recursion implied by using a local `getAdapter()` call.
         try:
             return IComponentLookup(context)
-        except TypeError, error:
+        except TypeError as error:
             raise ComponentLookupError(*error.args)
 
 # Adapter API
@@ -90,26 +93,26 @@ def queryAdapterInContext(object, interface, context, default=None):
 
     return getSiteManager(context).queryAdapter(object, interface, '', default)
 
-def getAdapter(object, interface=Interface, name=u'', context=None):
+def getAdapter(object, interface=Interface, name=_BLANK, context=None):
     adapter = queryAdapter(object, interface, name, None, context)
     if adapter is None:
         raise ComponentLookupError(object, interface, name)
     return adapter
 
-def queryAdapter(object, interface=Interface, name=u'', default=None,
+def queryAdapter(object, interface=Interface, name=_BLANK, default=None,
                  context=None):
     if context is None:
         return adapter_hook(interface, object, name, default)
     return getSiteManager(context).queryAdapter(object, interface, name,
                                                 default)
 
-def getMultiAdapter(objects, interface=Interface, name=u'', context=None):
+def getMultiAdapter(objects, interface=Interface, name=_BLANK, context=None):
     adapter = queryMultiAdapter(objects, interface, name, context=context)
     if adapter is None:
         raise ComponentLookupError(objects, interface, name)
     return adapter
 
-def queryMultiAdapter(objects, interface=Interface, name=u'', default=None,
+def queryMultiAdapter(objects, interface=Interface, name=_BLANK, default=None,
                       context=None):
     try:
         sitemanager = getSiteManager(context)
@@ -136,10 +139,7 @@ def subscribers(objects, interface, context=None):
     return sitemanager.subscribers(objects, interface)
 
 def handle(*objects):
-    sitemanager = getSiteManager(None)
-    # iterating over subscribers assures they get executed
-    for ignored in sitemanager.subscribers(objects, None):
-        pass
+    getSiteManager(None).subscribers(objects, None)
 
 #############################################################################
 # Register the component architectures adapter hook, with the adapter hook
@@ -150,7 +150,7 @@ def handle(*objects):
 def adapter_hook(interface, object, name='', default=None):
     try:
         sitemanager = getSiteManager()
-    except ComponentLookupError:
+    except ComponentLookupError: #pragma NO COVER w/o context, cannot test
         # Oh blast, no site manager. This should *never* happen!
         return None
     return sitemanager.queryAdapter(object, interface, name, default)
@@ -216,13 +216,23 @@ def getNextUtility(context, interface, name=''):
 # Factories
 
 def createObject(__factory_name, *args, **kwargs):
+    """Invoke the named factory and return the result.
+
+    ``__factory_name`` is a positional-only argument.
+    """
     context = kwargs.pop('context', None)
     return getUtility(IFactory, __factory_name, context)(*args, **kwargs)
 
 def getFactoryInterfaces(name, context=None):
+    """Return the interface provided by the named factory's objects
+
+    Result might be a single interface. XXX
+    """
     return getUtility(IFactory, name, context).getInterfaces()
 
 def getFactoriesFor(interface, context=None):
+    """Return info on all factories implementing the given interface.
+    """
     utils = getSiteManager(context)
     for (name, factory) in utils.getUtilitiesFor(IFactory):
         interfaces = factory.getInterfaces()

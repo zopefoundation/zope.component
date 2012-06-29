@@ -11,22 +11,26 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Implement Component Architecture-specific event dispatching, based
-on subscription adapters / handlers.
-"""
-__docformat__ = 'restructuredtext'
+"""Component Architecture-specific event dispatching
 
-import zope.component.interfaces
-import zope.event
+Based on subscription adapters / handlers.
+"""
+
+from zope.event import subscribers as event_subscribers
+
+from zope.component.interfaces import IObjectEvent
+from zope.component._api import subscribers as component_subscribers
+from zope.component._declaration import adapter
 
 
 def dispatch(*event):
-    zope.component.subscribers(event, None)
+    component_subscribers(event, None)
 
-zope.event.subscribers.append(dispatch)
+event_subscribers.append(dispatch)
 
 
-@zope.component.adapter(zope.component.interfaces.IObjectEvent)
+@adapter(IObjectEvent)
 def objectEventNotify(event):
-    """Event subscriber to dispatch ObjectEvents to interested adapters."""
-    zope.component.subscribers((event.object, event), None)
+    """Dispatch ObjectEvents to interested adapters.
+    """
+    component_subscribers((event.object, event), None)

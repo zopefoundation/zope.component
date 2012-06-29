@@ -1,54 +1,49 @@
 """
-Standalone Tests
+See: https://bugs.launchpad.net/zope3/+bug/98401
 """
-import unittest
-import doctest
 import sys
 import pickle
 
-if __name__ == "__main__":
-    sys.path = pickle.loads(sys.stdin.read())
+def write(x):
+    sys.stdout.write('%s\n' % x)
 
-from zope import interface
-from zope.component.testing import setUp, tearDown
+if __name__ == "__main__": #pragma NO COVER (runs in subprocess)
+    #sys.path = pickle.loads(sys.stdin.read())
+    write('XXXXXXXXXX')
+    for p in sys.path:
+        write('- %s' % p)
+    write('XXXXXXXXXX')
 
-class I1(interface.Interface):
-    pass
+    import zope
+    from zope.interface import Interface
+    from zope.interface import implementer
 
-class I2(interface.Interface):
-    pass
+    class I1(Interface):
+        pass
 
-class Ob(object):
-    interface.implements(I1)
-    def __repr__(self):
-        return '<instance Ob>'
+    class I2(Interface):
+        pass
 
-ob = Ob()
+    @implementer(I1)
+    class Ob(object):
+        def __repr__(self):
+            return '<instance Ob>'
 
-class Comp(object):
-    interface.implements(I2)
-    def __init__(self, context):
-        self.context = context
+    ob = Ob()
 
-def providing_adapter_sets_adapter_hook():
-    """
-    A side effect of importing installs the adapter hook.  See
-    http://www.zope.org/Collectors/Zope3-dev/674.
+    @implementer(I2)
+    class Comp(object):
+        def __init__(self, context):
+            self.context = context
 
-      >>> import zope.component
-      >>> zope.component.provideAdapter(Comp, (I1,), I2)
-      >>> adapter = I2(ob)
-      >>> adapter.__class__ is Comp
-      True
-      >>> adapter.context is ob
-      True
-    """
+    write('YYYYYYYYY')
+    for p in zope.__path__:
+        write('- %s' % p)
+    write('YYYYYYYYY')
+    import zope.component
 
-
-def test_suite():
-    return unittest.TestSuite((
-        doctest.DocTestSuite(setUp=setUp, tearDown=tearDown),
-        ))
-
-if __name__ == "__main__":
-    unittest.main(defaultTest='test_suite')
+    zope.component.provideAdapter(Comp, (I1,), I2)
+    adapter = I2(ob)
+    write('ZZZZZZZZ')
+    assert adapter.__class__ is Comp
+    assert adapter.context is ob

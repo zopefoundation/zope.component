@@ -13,22 +13,25 @@
 ##############################################################################
 """Sample adapter class for testing
 """
-import zope.interface
-import zope.component
-import components
 
-class I1(zope.interface.Interface):
+from zope.interface import Interface
+from zope.interface import implementer
+
+from zope.component import adapter
+from zope.component.testfiles import components
+
+class I1(Interface):
     pass
 
-class I2(zope.interface.Interface):
+class I2(Interface):
     pass
 
-class I3(zope.interface.Interface):
+class I3(Interface):
     def f1(): pass
     def f2(): pass
     def f3(): pass
 
-class IS(zope.interface.Interface):
+class IS(Interface):
     pass
 
 
@@ -36,23 +39,27 @@ class Adapter(object):
     def __init__(self, *args):
         self.context = args
 
+@implementer(I1)
 class A1(Adapter):
-    zope.interface.implements(I1)
+    pass
 
+@implementer(I2)
 class A2(Adapter):
-    zope.interface.implements(I2)
+    pass
 
+@adapter(components.IContent, I1, I2)
+@implementer(I3)
 class A3(Adapter):
-    zope.component.adapts(components.IContent, I1, I2)
-    zope.interface.implements(I3)
+    pass
 
 class A4:
     pass
 
 a4 = A4()
 
+@implementer(I1, I2)
 class A5:
-    zope.interface.implements(I1, I2)
+    pass
 
 a5 = A5()
 

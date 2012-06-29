@@ -13,13 +13,15 @@
 ##############################################################################
 """zope.security support for the configuration handlers
 """
-__docformat__ = "reStructuredText"
-
 from zope.interface import providedBy
-from zope.proxy import ProxyBase, getProxiedObject
-from zope.security.adapter import LocatingTrustedAdapterFactory, \
-    LocatingUntrustedAdapterFactory, TrustedAdapterFactory
-from zope.security.checker import Checker, CheckerPublic, InterfaceChecker
+from zope.proxy import ProxyBase
+from zope.proxy import getProxiedObject
+from zope.security.adapter import LocatingTrustedAdapterFactory
+from zope.security.adapter import LocatingUntrustedAdapterFactory
+from zope.security.adapter import TrustedAdapterFactory
+from zope.security.checker import Checker
+from zope.security.checker import CheckerPublic
+from zope.security.checker import InterfaceChecker
 from zope.security.proxy import Proxy
 
 
@@ -60,7 +62,8 @@ def proxify(ob, checker=None, provides=None, permission=None):
 
     if checker is None:
         if provides is None or permission is None:
-            raise ValueError, 'Required arguments: checker or both provides and permissions'
+            raise ValueError('Required arguments: '
+                                'checker or both provides and permissions')
         if permission == PublicPermission:
             permission = CheckerPublic
         checker = InterfaceChecker(provides, permission)
@@ -84,82 +87,6 @@ def protectedFactory(original_factory, provides, permission):
     return factory
 
 def securityAdapterFactory(factory, permission, locate, trusted):
-    """
-    If a permission is provided when wrapping the adapter, it will be
-    wrapped in a LocatingAdapterFactory.
-
-      >>> class Factory:
-      ...     pass
-
-    If both locate and trusted are False and a non-public
-    permission is provided, then the factory is wrapped into a
-    LocatingUntrustedAdapterFactory:
-
-      >>> factory = securityAdapterFactory(Factory, 'zope.AnotherPermission',
-      ...    locate=False, trusted=False)
-
-      >>> isinstance(factory, LocatingUntrustedAdapterFactory)
-      True
-
-    If a PublicPermission is provided, then the factory is not touched.
-
-      >>> factory = securityAdapterFactory(Factory, PublicPermission,
-      ...    locate=False, trusted=False)
-
-      >>> factory is Factory
-      True
-
-    Same for CheckerPublic:
-
-      >>> factory = securityAdapterFactory(Factory, CheckerPublic,
-      ...    locate=False, trusted=False)
-
-      >>> factory is Factory
-      True
-
-    If the permission is None, the factory isn't touched:
-
-      >>> factory = securityAdapterFactory(Factory, None,
-      ...    locate=False, trusted=False)
-
-      >>> factory is Factory
-      True
-
-    If the factory is trusted and a no permission is provided then the
-    adapter is wrapped into a TrustedAdapterFactory:
-
-      >>> factory = securityAdapterFactory(Factory, None,
-      ...    locate=False, trusted=True)
-
-      >>> isinstance(factory, TrustedAdapterFactory)
-      True
-
-    Same for PublicPermission:
-
-      >>> factory = securityAdapterFactory(Factory, PublicPermission,
-      ...    locate=False, trusted=True)
-
-      >>> isinstance(factory, TrustedAdapterFactory)
-      True
-
-    Same for CheckerPublic:
-
-      >>> factory = securityAdapterFactory(Factory, CheckerPublic,
-      ...    locate=False, trusted=True)
-
-      >>> isinstance(factory, TrustedAdapterFactory)
-      True
-
-    If the factory is trusted and a locate is true, then the
-    adapter is wrapped into a LocatingTrustedAdapterFactory:
-
-      >>> factory = securityAdapterFactory(Factory, 'zope.AnotherPermission',
-      ...    locate=True, trusted=True)
-
-      >>> isinstance(factory, LocatingTrustedAdapterFactory)
-      True
-
-    """
     if permission == PublicPermission:
         permission = CheckerPublic
     if locate or (permission is not None and permission is not CheckerPublic):

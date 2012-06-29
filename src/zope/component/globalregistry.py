@@ -13,10 +13,12 @@
 ##############################################################################
 """Global components support
 """
-from zope.interface import implements
+from zope.interface import implementer
 from zope.interface.adapter import AdapterRegistry
 from zope.interface.registry import Components
+
 from zope.component.interfaces import IComponentLookup
+from zope.component._compat import _BLANK
 
 def GAR(components, registryName):
     return getattr(components, registryName)
@@ -35,8 +37,8 @@ class GlobalAdapterRegistry(AdapterRegistry):
     def __reduce__(self):
         return GAR, (self.__parent__, self.__name__)
 
+@implementer(IComponentLookup)
 class BaseGlobalComponents(Components):
-    implements(IComponentLookup)
 
     def _init_registries(self):
         self.adapters = GlobalAdapterRegistry(self, 'adapters')
@@ -50,7 +52,7 @@ base = BaseGlobalComponents('base')
 
 try:
     from zope.testing.cleanup import addCleanUp
-except ImportError:
+except ImportError: #pragma NO COVER
     pass
 else:
     addCleanUp(lambda: base.__init__('base'))
@@ -64,10 +66,10 @@ def getGlobalSiteManager():
 # We eventually want to deprecate these in favor of using the global
 # component registry directly.
 
-def provideUtility(component, provides=None, name=u''):
+def provideUtility(component, provides=None, name=_BLANK):
     base.registerUtility(component, provides, name, event=False)
 
-def provideAdapter(factory, adapts=None, provides=None, name=''):
+def provideAdapter(factory, adapts=None, provides=None, name=_BLANK):
     base.registerAdapter(factory, adapts, provides, name, event=False)
 
 def provideSubscriptionAdapter(factory, adapts=None, provides=None):
@@ -75,12 +77,3 @@ def provideSubscriptionAdapter(factory, adapts=None, provides=None):
 
 def provideHandler(factory, adapts=None):
     base.registerHandler(factory, adapts, event=False)
-
-import zope.component._api # see http://www.zope.org/Collectors/Zope3-dev/674
-# Ideally, we will switch to an explicit adapter hook registration.  For now,
-# if you provide an adapter, we want to make sure that the adapter hook is
-# registered, and that registration depends on code in _api, which itself
-# depends on code in this module.  So, for now, we do another of these nasty
-# circular import workarounds.  See also standalonetests.py, as run by
-# tests.py in StandaloneTests, for a test that fails without this hack, and
-# succeeds with it.

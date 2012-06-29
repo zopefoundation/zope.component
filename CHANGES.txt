@@ -1,10 +1,32 @@
 CHANGES
 *******
 
-3.12.2 (unreleased)
-===================
+4.0.0 (unreleased)
+==================
 
-- Nothing changed yet.
+- Added PyPy and Python 3.2 support:
+
+  - Security support omitted until ``zope.security`` ported.
+
+  - Persistent registry support omitted until ``ZODB`` ported (or
+    ``persistent`` factored out).
+
+- 100% unit test coverage.
+
+- Removed the long-deprecated ``layer`` argument to the
+  ``zope.component.zcml.view`` and ``zope.component.zcml.resource``
+  ZCML directives.
+
+- Added support for continuous integration using ``tox`` and ``jenkins``.
+
+- Got tests to run using ``setup.py test``.
+
+- Added ``Sphinx`` documentation.
+
+- Added ``setup.py docs`` alias (installs ``Sphinx`` and dependencies).
+
+- Added ``setup.py dev`` alias (runs ``setup.py develop`` plus installs
+  ``nose`` and ``coverage``).
 
 
 3.12.1 (2012-04-02)

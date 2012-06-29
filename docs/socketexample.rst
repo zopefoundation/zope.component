@@ -39,35 +39,41 @@ aimed at providing a comprehensive insight into adapters, but is too abstract
 for many as an initial read. Thus, we will only explain adapters in the context
 of the component architecture's API.
 
-So let's say that we have a German socket
+So let's say that we have a German socket:
 
-  >>> from zope.interface import Interface, implements
+.. doctest::
 
-  >>> class IGermanSocket(Interface):
-  ...     pass
+   >>> from zope.interface import Interface, implements
 
-  >>> class Socket(object):
-  ...     def __repr__(self):
-  ...         return '<instance of %s>' %self.__class__.__name__
+   >>> class IGermanSocket(Interface):
+   ...     pass
 
-  >>> class GermanSocket(Socket):
-  ...     """German wall socket."""
-  ...     implements(IGermanSocket)
+   >>> class Socket(object):
+   ...     def __repr__(self):
+   ...         return '<instance of %s>' %self.__class__.__name__
+
+   >>> class GermanSocket(Socket):
+   ...     """German wall socket."""
+   ...     implements(IGermanSocket)
 
 and we want to convert it to an US socket
 
-  >>> class IUSSocket(Interface):
-  ...     pass
+.. doctest::
+
+   >>> class IUSSocket(Interface):
+   ...     pass
 
 so that our shaver can be used in Germany. So we go to a German electronics
 store to look for an adapter that we can plug in the wall:
 
-  >>> class GermanToUSSocketAdapter(Socket):
-  ...     implements(IUSSocket)
-  ...     __used_for__ = IGermanSocket
-  ...     
-  ...     def __init__(self, socket):
-  ...         self.context = socket
+.. doctest::
+
+   >>> class GermanToUSSocketAdapter(Socket):
+   ...     implements(IUSSocket)
+   ...     __used_for__ = IGermanSocket
+   ...     
+   ...     def __init__(self, socket):
+   ...         self.context = socket
 
 Note that I could have called the passed in socket any way I like, but
 `context` is the standard name accepted.
@@ -80,9 +86,11 @@ Before we can use the adapter, we have to buy it and make it part of our
 inventory. In the component architecture we do this by registering the adapter
 with the framework, more specifically with the global site manager:
 
-  >>> import zope.component
-  >>> gsm = zope.component.getGlobalSiteManager()
-  >>> gsm.registerAdapter(GermanToUSSocketAdapter, (IGermanSocket,), IUSSocket)
+.. doctest::
+
+   >>> import zope.component
+   >>> gsm = zope.component.getGlobalSiteManager()
+   >>> gsm.registerAdapter(GermanToUSSocketAdapter, (IGermanSocket,), IUSSocket)
 
 `zope.component` is the component architecture API that is being
 presented by this file. You registered an adapter from `IGermanSocket`
@@ -91,49 +99,61 @@ to `IUSSocket` having no name (thus the empty string).
 Anyways, you finally get back to your hotel room and shave, since you have not
 been able to shave in the plane. In the bathroom you discover a socket:
 
-  >>> bathroomDE = GermanSocket()
-  >>> IGermanSocket.providedBy(bathroomDE)
-  True
+.. doctest::
+
+   >>> bathroomDE = GermanSocket()
+   >>> IGermanSocket.providedBy(bathroomDE)
+   True
 
 You now insert the adapter in the German socket
 
-  >>> bathroomUS = zope.component.getAdapter(bathroomDE, IUSSocket, '')
+.. doctest::
+
+   >>> bathroomUS = zope.component.getAdapter(bathroomDE, IUSSocket, '')
 
 so that the socket now provides the US version:
 
-  >>> IUSSocket.providedBy(bathroomUS)
-  True
+.. doctest::
+
+   >>> IUSSocket.providedBy(bathroomUS)
+   True
 
 Now you can insert your shaver and get on with your day. 
 
 After a week you travel for a couple of days to the Prague and you notice that
 the Czech have yet another socket type:
 
-  >>> class ICzechSocket(Interface):
-  ...     pass
+.. doctest::
 
-  >>> class CzechSocket(Socket):
-  ...     implements(ICzechSocket)
+   >>> class ICzechSocket(Interface):
+   ...     pass
 
-  >>> czech = CzechSocket()
+   >>> class CzechSocket(Socket):
+   ...     implements(ICzechSocket)
+
+   >>> czech = CzechSocket()
 
 You try to find an adapter for your shaver in your bag, but you fail, since
 you do not have one:
 
-  >>> zope.component.getAdapter(czech, IUSSocket, '') \
-  ... #doctest: +NORMALIZE_WHITESPACE
-  Traceback (most recent call last):
-  ...
-  ComponentLookupError: (<instance of CzechSocket>, 
-                         <InterfaceClass __builtin__.IUSSocket>,
-                         '')
+.. doctest::
+
+   >>> zope.component.getAdapter(czech, IUSSocket, '') \
+   ... #doctest: +NORMALIZE_WHITESPACE
+   Traceback (most recent call last):
+   ...
+   ComponentLookupError: (<instance of CzechSocket>, 
+                           <InterfaceClass __builtin__.IUSSocket>,
+                           '')
 
 or the more graceful way:
 
-  >>> marker = object()
-  >>> socket = zope.component.queryAdapter(czech, IUSSocket, '', marker)
-  >>> socket is marker
-  True
+.. doctest::
+
+   >>> marker = object()
+   >>> socket = zope.component.queryAdapter(czech, IUSSocket, '', marker)
+   >>> socket is marker
+   True
 
 In the component architecture API any `get*` method will fail with a specific
 exception, if a query failed, whereby methods starting with `query*` will
@@ -149,53 +169,63 @@ automatically from 110 volts to 240 volts, but your DVD player cannot. So you
 have to buy another adapter that also handles converting the voltage and the
 frequency of the AC current:
 
-  >>> class GermanToUSSocketAdapterAndTransformer(object):
-  ...     implements(IUSSocket)
-  ...     __used_for__ = IGermanSocket
-  ...     
-  ...     def __init__(self, socket):
-  ...         self.context = socket
+.. doctest::
+
+   >>> class GermanToUSSocketAdapterAndTransformer(object):
+   ...     implements(IUSSocket)
+   ...     __used_for__ = IGermanSocket
+   ...     
+   ...     def __init__(self, socket):
+   ...         self.context = socket
 
 Now, we need a way to keep the two adapters apart. Thus we register them with
 a name:
 
-  >>> gsm.registerAdapter(GermanToUSSocketAdapter,
-  ...                     (IGermanSocket,), IUSSocket, 'shaver',)
-  >>> gsm.registerAdapter(GermanToUSSocketAdapterAndTransformer,
-  ...                     (IGermanSocket,), IUSSocket, 'dvd')
+.. doctest::
+
+   >>> gsm.registerAdapter(GermanToUSSocketAdapter,
+   ...                     (IGermanSocket,), IUSSocket, 'shaver',)
+   >>> gsm.registerAdapter(GermanToUSSocketAdapterAndTransformer,
+   ...                     (IGermanSocket,), IUSSocket, 'dvd')
 
 Now we simply look up the adapters using their labels (called *name*):
 
-  >>> socket = zope.component.getAdapter(bathroomDE, IUSSocket, 'shaver')
-  >>> socket.__class__ is GermanToUSSocketAdapter
-  True
+.. doctest::
 
-  >>> socket = zope.component.getAdapter(bathroomDE, IUSSocket, 'dvd')
-  >>> socket.__class__ is GermanToUSSocketAdapterAndTransformer
-  True
+   >>> socket = zope.component.getAdapter(bathroomDE, IUSSocket, 'shaver')
+   >>> socket.__class__ is GermanToUSSocketAdapter
+   True
+
+   >>> socket = zope.component.getAdapter(bathroomDE, IUSSocket, 'dvd')
+   >>> socket.__class__ is GermanToUSSocketAdapterAndTransformer
+   True
 
 Clearly, we do not have an adapter for the MP3 player
 
-  >>> zope.component.getAdapter(bathroomDE, IUSSocket, 'mp3') \
-  ... #doctest: +NORMALIZE_WHITESPACE
-  Traceback (most recent call last):
-  ...
-  ComponentLookupError: (<instance of GermanSocket>, 
-                         <InterfaceClass __builtin__.IUSSocket>,
-                         'mp3')
+.. doctest::
+
+   >>> zope.component.getAdapter(bathroomDE, IUSSocket, 'mp3') \
+   ... #doctest: +NORMALIZE_WHITESPACE
+   Traceback (most recent call last):
+   ...
+   ComponentLookupError: (<instance of GermanSocket>, 
+                           <InterfaceClass __builtin__.IUSSocket>,
+                           'mp3')
 
 but you could use the 'dvd' adapter in this case of course. ;)
 
 Sometimes you want to know all adapters that are available. Let's say you want
 to know about all the adapters that convert a German to a US socket type:
 
-  >>> sockets = list(zope.component.getAdapters((bathroomDE,), IUSSocket))
-  >>> len(sockets)
-  3
-  >>> names = [name for name, socket in sockets]
-  >>> names.sort()
-  >>> names
-  [u'', u'dvd', u'shaver']
+.. doctest::
+
+   >>> sockets = list(zope.component.getAdapters((bathroomDE,), IUSSocket))
+   >>> len(sockets)
+   3
+   >>> names = [name for name, socket in sockets]
+   >>> names.sort()
+   >>> names
+   [u'', u'dvd', u'shaver']
 
 `zope.component.getAdapters()` returns a list of tuples. The first
 entry of the tuple is the name of the adapter and the second is the
@@ -210,72 +240,92 @@ and you want to listen to some music using your MP3 player. But darn, the MP3
 player plug has a ground pin and all the adapters you have do not support
 that:
 
-  >>> class IUSGroundedSocket(IUSSocket):
-  ...     pass
+.. doctest::
+
+   >>> class IUSGroundedSocket(IUSSocket):
+   ...     pass
 
 So you go out another time to buy an adapter. This time, however, you do not
 buy yet another adapter, but a piece that provides the grounding plug:
 
-  >>> class IGrounder(Interface):
-  ...     pass
+.. doctest::
 
-  >>> class Grounder(object):
-  ...     implements(IGrounder)
-  ...     def __repr__(self):
-  ...         return '<instance of Grounder>'
+   >>> class IGrounder(Interface):
+   ...     pass
+
+   >>> class Grounder(object):
+   ...     implements(IGrounder)
+   ...     def __repr__(self):
+   ...         return '<instance of Grounder>'
 
 
 Then together they will provided a grounded us socket:
 
-  >>> class GroundedGermanToUSSocketAdapter(object):
-  ...     implements(IUSGroundedSocket)
-  ...     __used_for__ = (IGermanSocket, IGrounder)
-  ...     def __init__(self, socket, grounder):
-  ...         self.socket, self.grounder = socket, grounder
+.. doctest::
+
+   >>> class GroundedGermanToUSSocketAdapter(object):
+   ...     implements(IUSGroundedSocket)
+   ...     __used_for__ = (IGermanSocket, IGrounder)
+   ...     def __init__(self, socket, grounder):
+   ...         self.socket, self.grounder = socket, grounder
 
 You now register the combination, so that you know you can create a
 `IUSGroundedSocket`:
 
-  >>> gsm.registerAdapter(GroundedGermanToUSSocketAdapter,
-  ...                 (IGermanSocket, IGrounder), IUSGroundedSocket, 'mp3')
+.. doctest::
+
+   >>> gsm.registerAdapter(GroundedGermanToUSSocketAdapter,
+   ...                 (IGermanSocket, IGrounder), IUSGroundedSocket, 'mp3')
 
 Given the grounder
 
-  >>> grounder = Grounder()
+.. doctest::
+
+   >>> grounder = Grounder()
 
 and a German socket
 
-  >>> livingroom = GermanSocket()
+.. doctest::
+
+   >>> livingroom = GermanSocket()
 
 we can now get a grounded US socket:
 
-  >>> socket = zope.component.getMultiAdapter((livingroom, grounder), 
-  ...                                         IUSGroundedSocket, 'mp3')
+.. doctest::
 
-  >>> socket.__class__ is GroundedGermanToUSSocketAdapter
-  True
-  >>> socket.socket is livingroom
-  True
-  >>> socket.grounder is grounder
-  True
+   >>> socket = zope.component.getMultiAdapter((livingroom, grounder), 
+   ...                                         IUSGroundedSocket, 'mp3')
+
+.. doctest::
+
+   >>> socket.__class__ is GroundedGermanToUSSocketAdapter
+   True
+   >>> socket.socket is livingroom
+   True
+   >>> socket.grounder is grounder
+   True
 
 Of course, you do not have a 'dvd' grounded US socket available:
 
-  >>> zope.component.getMultiAdapter((livingroom, grounder),
-  ...                                IUSGroundedSocket, 'dvd') \
-  ... #doctest: +NORMALIZE_WHITESPACE
-  Traceback (most recent call last):
-  ...
-  ComponentLookupError: ((<instance of GermanSocket>, 
-                          <instance of Grounder>), 
-                         <InterfaceClass __builtin__.IUSGroundedSocket>,
-                         'dvd')
+.. doctest::
+
+   >>> zope.component.getMultiAdapter((livingroom, grounder),
+   ...                                IUSGroundedSocket, 'dvd') \
+   ... #doctest: +NORMALIZE_WHITESPACE
+   Traceback (most recent call last):
+   ...
+   ComponentLookupError: ((<instance of GermanSocket>, 
+                           <instance of Grounder>), 
+                           <InterfaceClass __builtin__.IUSGroundedSocket>,
+                           'dvd')
 
 
-  >>> socket = zope.component.queryMultiAdapter(
-  ...     (livingroom, grounder), IUSGroundedSocket, 'dvd', marker)
-  >>> socket is marker
-  True
+.. doctest::
+
+   >>> socket = zope.component.queryMultiAdapter(
+   ...     (livingroom, grounder), IUSGroundedSocket, 'dvd', marker)
+   >>> socket is marker
+   True
 
 Again, you might want to read `adapter.txt` in `zope.interface` for a more
 comprehensive coverage of multi-adapters.
@@ -290,58 +340,68 @@ events.
 
 Let's say one of our adapters overheated and caused a small fire:
 
-  >>> class IFire(Interface):
-  ...     pass
+.. doctest::
 
-  >>> class Fire(object):
-  ...     implements(IFire)
+   >>> class IFire(Interface):
+   ...     pass
 
-  >>> fire = Fire()
+   >>> class Fire(object):
+   ...     implements(IFire)
+
+   >>> fire = Fire()
 
 We want to use all available objects to put out the fire:
 
-  >>> class IFireExtinguisher(Interface):
-  ...     def extinguish():
-  ...         pass
+.. doctest::
 
-  >>> class FireExtinguisher(object):
-  ...     def __init__(self, fire):
-  ...         pass
-  ...     def extinguish(self):
-  ...         "Place extinguish code here."
-  ...         print 'Used ' + self.__class__.__name__ + '.'
+   >>> class IFireExtinguisher(Interface):
+   ...     def extinguish():
+   ...         pass
+
+   >>> class FireExtinguisher(object):
+   ...     def __init__(self, fire):
+   ...         pass
+   ...     def extinguish(self):
+   ...         "Place extinguish code here."
+   ...         print 'Used ' + self.__class__.__name__ + '.'
 
 Here some specific methods to put out the fire:
 
-  >>> class PowderExtinguisher(FireExtinguisher):
-  ...     pass
-  >>> gsm.registerSubscriptionAdapter(PowderExtinguisher, 
-  ...                                 (IFire,), IFireExtinguisher)
+.. doctest::
 
-  >>> class Blanket(FireExtinguisher):
-  ...     pass
-  >>> gsm.registerSubscriptionAdapter(Blanket, (IFire,), IFireExtinguisher)
+   >>> class PowderExtinguisher(FireExtinguisher):
+   ...     pass
+   >>> gsm.registerSubscriptionAdapter(PowderExtinguisher, 
+   ...                                 (IFire,), IFireExtinguisher)
 
-  >>> class SprinklerSystem(FireExtinguisher):
-  ...     pass
-  >>> gsm.registerSubscriptionAdapter(SprinklerSystem,
-  ...                                 (IFire,), IFireExtinguisher)
+   >>> class Blanket(FireExtinguisher):
+   ...     pass
+   >>> gsm.registerSubscriptionAdapter(Blanket, (IFire,), IFireExtinguisher)
+
+   >>> class SprinklerSystem(FireExtinguisher):
+   ...     pass
+   >>> gsm.registerSubscriptionAdapter(SprinklerSystem,
+   ...                                 (IFire,), IFireExtinguisher)
 
 Now let use all these things to put out the fire:
 
-  >>> extinguishers = zope.component.subscribers((fire,), IFireExtinguisher)
-  >>> extinguishers.sort()
-  >>> for extinguisher in extinguishers:
-  ...     extinguisher.extinguish()
-  Used Blanket.
-  Used PowderExtinguisher.
-  Used SprinklerSystem.
+.. doctest::
+
+   >>> extinguishers = zope.component.subscribers((fire,), IFireExtinguisher)
+   >>> extinguishers.sort()
+   >>> for extinguisher in extinguishers:
+   ...     extinguisher.extinguish()
+   Used Blanket.
+   Used PowderExtinguisher.
+   Used SprinklerSystem.
 
 If no subscribers are found for a particular object, then an empty list is
 returned: 
 
-  >>> zope.component.subscribers((object(),), IFireExtinguisher)
-  []
+.. doctest::
+
+   >>> zope.component.subscribers((object(),), IFireExtinguisher)
+   []
 
 
 Utilities
@@ -367,39 +427,49 @@ days. (You just hate wet shavers.)
 So you decide to go to your favorite hardware store and by a Diesel-powered
 electric generator. The generator provides of course a US-style socket:
 
-  >>> class Generator(object):
-  ...     implements(IUSSocket)
-  ...     def __repr__(self):
-  ...         return '<instance of Generator>'
+.. doctest::
 
-  >>> generator = Generator()
+   >>> class Generator(object):
+   ...     implements(IUSSocket)
+   ...     def __repr__(self):
+   ...         return '<instance of Generator>'
+
+   >>> generator = Generator()
 
 Like for adapters, we now have to add the newly-acquired generator to our
 inventory by registering it as a utility:
 
-  >>> gsm.registerUtility(generator, IUSSocket)
+.. doctest::
+
+   >>> gsm.registerUtility(generator, IUSSocket)
 
 We can now get the utility using
 
-  >>> utility = zope.component.getUtility(IUSSocket)
-  >>> utility is generator
-  True
+.. doctest::
+
+   >>> utility = zope.component.getUtility(IUSSocket)
+   >>> utility is generator
+   True
 
 As you can see, it is very simple to register and retrieve utilities. If a
 utility does not exist for a particular interface, such as the German socket,
 then the lookup fails
 
-  >>> zope.component.getUtility(IGermanSocket)
-  Traceback (most recent call last):
-  ...
-  ComponentLookupError: (<InterfaceClass __builtin__.IGermanSocket>, '')
+.. doctest::
+
+   >>> zope.component.getUtility(IGermanSocket)
+   Traceback (most recent call last):
+   ...
+   ComponentLookupError: (<InterfaceClass __builtin__.IGermanSocket>, '')
 
 or more gracefully when specifying a default value:
 
-  >>> default = object()
-  >>> utility = zope.component.queryUtility(IGermanSocket, default=default)
-  >>> utility is default
-  True
+.. doctest::
+
+   >>> default = object()
+   >>> utility = zope.component.queryUtility(IGermanSocket, default=default)
+   >>> utility is default
+   True
 
 Note: The only difference between `getUtility()` and `queryUtility()` is the
 fact that you can specify a default value for the latter function, so that it
@@ -420,46 +490,58 @@ source. Then you think about solar panels! After a storm there is usually very
 nice weather, so why not? Via the Web you order a set of 110V/120W solar
 panels that provide a regular US-style socket as output:
 
-  >>> class SolarPanel(object):
-  ...     implements(IUSSocket)
-  ...     def __repr__(self):
-  ...         return '<instance of Solar Panel>'
+.. doctest::
 
-  >>> panel = SolarPanel()
+   >>> class SolarPanel(object):
+   ...     implements(IUSSocket)
+   ...     def __repr__(self):
+   ...         return '<instance of Solar Panel>'
+
+   >>> panel = SolarPanel()
 
 Once it arrives, we add it to our inventory:
 
-  >>> gsm.registerUtility(panel, IUSSocket, 'Solar Panel')
+.. doctest::
+
+   >>> gsm.registerUtility(panel, IUSSocket, 'Solar Panel')
 
 You can now access the solar panel using
 
-  >>> utility = zope.component.getUtility(IUSSocket, 'Solar Panel')
-  >>> utility is panel
-  True
+.. doctest::
+
+   >>> utility = zope.component.getUtility(IUSSocket, 'Solar Panel')
+   >>> utility is panel
+   True
 
 Of course, if a utility is not available, then the lookup will simply fail
 
-  >>> zope.component.getUtility(IUSSocket, 'Wind Mill')
-  Traceback (most recent call last):
-  ...
-  ComponentLookupError: (<InterfaceClass __builtin__.IUSSocket>, 'Wind Mill')
+.. doctest::
+
+   >>> zope.component.getUtility(IUSSocket, 'Wind Mill')
+   Traceback (most recent call last):
+   ...
+   ComponentLookupError: (<InterfaceClass __builtin__.IUSSocket>, 'Wind Mill')
 
 or more gracefully when specifying a default value:
 
-  >>> default = object()
-  >>> utility = zope.component.queryUtility(IUSSocket, 'Wind Mill',
-  ...                                       default=default)
-  >>> utility is default
-  True
+.. doctest::
+
+   >>> default = object()
+   >>> utility = zope.component.queryUtility(IUSSocket, 'Wind Mill',
+   ...                                       default=default)
+   >>> utility is default
+   True
 
 Now you want to look at all the utilities you have for a particular kind. The
 following API function will return a list of name/utility pairs:
 
-  >>> utils = list(zope.component.getUtilitiesFor(IUSSocket))
-  >>> utils.sort()
-  >>> utils #doctest: +NORMALIZE_WHITESPACE
-  [(u'', <instance of Generator>), 
-   (u'Solar Panel', <instance of Solar Panel>)]
+.. doctest::
+
+   >>> utils = list(zope.component.getUtilitiesFor(IUSSocket))
+   >>> utils.sort()
+   >>> utils #doctest: +NORMALIZE_WHITESPACE
+   [(u'', <instance of Generator>), 
+      (u'Solar Panel', <instance of Solar Panel>)]
 
 Another method of looking up all utilities is by using
 `getAllUtilitiesRegisteredFor(iface)`. This function will return an iterable
@@ -467,10 +549,12 @@ of utilities (without names); however, it will also return overridden
 utilities. If you are not using multiple site managers, you will not actually
 need this method.
 
-  >>> utils = list(zope.component.getAllUtilitiesRegisteredFor(IUSSocket))
-  >>> utils.sort()
-  >>> utils
-  [<instance of Generator>, <instance of Solar Panel>]
+.. doctest::
+
+   >>> utils = list(zope.component.getAllUtilitiesRegisteredFor(IUSSocket))
+   >>> utils.sort()
+   >>> utils
+   [<instance of Generator>, <instance of Solar Panel>]
 
 
 Factories
@@ -490,35 +574,45 @@ assembled. This assembly would be done by a factory, so let's create one for
 the solar panel. To do this, we can use a standard implementation of the
 `IFactory` interface:
 
-  >>> from zope.component.factory import Factory
-  >>> factory = Factory(SolarPanel, 
-  ...                   'Solar Panel',
-  ...                   'This factory creates a solar panel.')
+.. doctest::
+
+   >>> from zope.component.factory import Factory
+   >>> factory = Factory(SolarPanel, 
+   ...                   'Solar Panel',
+   ...                   'This factory creates a solar panel.')
 
 Optionally, I could have also specified the interfaces that the created object
 will provide, but the factory class is smart enough to determine the
 implemented interface from the class. We now register the factory:
 
-  >>> from zope.component.interfaces import IFactory
-  >>> gsm.registerUtility(factory, IFactory, 'SolarPanel')
+.. doctest::
+
+   >>> from zope.component.interfaces import IFactory
+   >>> gsm.registerUtility(factory, IFactory, 'SolarPanel')
 
 We can now get a list of interfaces the produced object will provide:
 
-  >>> ifaces = zope.component.getFactoryInterfaces('SolarPanel')
-  >>> IUSSocket in ifaces
-  True
+.. doctest::
+
+   >>> ifaces = zope.component.getFactoryInterfaces('SolarPanel')
+   >>> IUSSocket in ifaces
+   True
 
 By the way, this is equivalent to
 
-  >>> ifaces2 = factory.getInterfaces()
-  >>> ifaces is ifaces2
-  True
+.. doctest::
+
+   >>> ifaces2 = factory.getInterfaces()
+   >>> ifaces is ifaces2
+   True
 
 Of course you can also just create an object:
 
-  >>> panel = zope.component.createObject('SolarPanel')
-  >>> panel.__class__ is SolarPanel
-  True
+.. doctest::
+
+   >>> panel = zope.component.createObject('SolarPanel')
+   >>> panel.__class__ is SolarPanel
+   True
 
 Note: Ignore the first argument (`None`) for now; it is the context of the
 utility lookup, which is usually an optional argument, but cannot be in this
@@ -527,17 +621,21 @@ to the specified callable.
 
 Once you register several factories
 
-  >>> gsm.registerUtility(Factory(Generator), IFactory, 'Generator')
+.. doctest::
+
+   >>> gsm.registerUtility(Factory(Generator), IFactory, 'Generator')
 
 you can also determine, which available factories will create objects
 providing a certain interface:
 
-  >>> factories = zope.component.getFactoriesFor(IUSSocket)
-  >>> factories = [(name, factory.__class__) for name, factory in factories]
-  >>> factories.sort()
-  >>> factories #doctest: +NORMALIZE_WHITESPACE
-  [(u'Generator', <class 'zope.component.factory.Factory'>), 
-   (u'SolarPanel', <class 'zope.component.factory.Factory'>)]
+.. doctest::
+
+   >>> factories = zope.component.getFactoriesFor(IUSSocket)
+   >>> factories = [(name, factory.__class__) for name, factory in factories]
+   >>> factories.sort()
+   >>> factories #doctest: +NORMALIZE_WHITESPACE
+   [(u'Generator', <class 'zope.component.factory.Factory'>), 
+      (u'SolarPanel', <class 'zope.component.factory.Factory'>)]
 
 
 Site Managers
@@ -552,46 +650,56 @@ able to delegate requests to their parent locations. The root site manager is
 commonly known as *global site manager*, since it is always available. You can
 always get the global site manager using the API:
 
-  >>> gsm = zope.component.getGlobalSiteManager()
+.. doctest::
 
-  >>> from zope.component import globalSiteManager
-  >>> gsm is globalSiteManager
-  True
-  >>> from zope.component.interfaces import IComponentLookup
-  >>> IComponentLookup.providedBy(gsm)
-  True
-  >>> from zope.component.interfaces import IComponents
-  >>> IComponents.providedBy(gsm)
-  True
+   >>> gsm = zope.component.getGlobalSiteManager()
+
+   >>> from zope.component import globalSiteManager
+   >>> gsm is globalSiteManager
+   True
+   >>> from zope.component.interfaces import IComponentLookup
+   >>> IComponentLookup.providedBy(gsm)
+   True
+   >>> from zope.component.interfaces import IComponents
+   >>> IComponents.providedBy(gsm)
+   True
 
 You can also lookup at site manager in a given context. The only requirement
 is that the context can be adapted to a site manager. So let's create a
 special site manager:
 
-  >>> from zope.component.globalregistry import BaseGlobalComponents
-  >>> sm = BaseGlobalComponents()
+.. doctest::
+
+   >>> from zope.component.globalregistry import BaseGlobalComponents
+   >>> sm = BaseGlobalComponents()
 
 Now we create a context that adapts to the site manager via the `__conform__`
 method as specified in PEP 246.
 
-  >>> class Context(object):
-  ...     def __init__(self, sm):
-  ...         self.sm = sm
-  ...     def __conform__(self, interface):
-  ...         if interface.isOrExtends(IComponentLookup):
-  ...             return self.sm
+.. doctest::
+
+   >>> class Context(object):
+   ...     def __init__(self, sm):
+   ...         self.sm = sm
+   ...     def __conform__(self, interface):
+   ...         if interface.isOrExtends(IComponentLookup):
+   ...             return self.sm
 
 We now instantiate the `Context` with our special site manager:
 
-  >>> context = Context(sm)
-  >>> context.sm is sm
-  True
+.. doctest::
+
+   >>> context = Context(sm)
+   >>> context.sm is sm
+   True
 
 We can now ask for the site manager of this context:
 
-  >>> lsm = zope.component.getSiteManager(context)
-  >>> lsm is sm
-  True
+.. doctest::
+
+   >>> lsm = zope.component.getSiteManager(context)
+   >>> lsm is sm
+   True
 
 The site manager instance `lsm` is formally known as a *local site manager* of
 `context`.

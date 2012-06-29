@@ -13,16 +13,17 @@
 ##############################################################################
 """Adapter declarations
 """
-import types
 import sys
 
-class adapter:
+from zope.component._compat import CLASS_TYPES
+
+class adapter(object):
 
     def __init__(self, *interfaces):
         self.interfaces = interfaces
 
     def __call__(self, ob):
-        if isinstance(ob, _class_types):
+        if isinstance(ob, CLASS_TYPES):
             ob.__component_adapts__ = _adapts_descr(self.interfaces)
         else:
             ob.__component_adapts__ = self.interfaces
@@ -33,11 +34,8 @@ def adapts(*interfaces):
     frame = sys._getframe(1)
     locals = frame.f_locals
 
-    # Try to make sure we were called from a class def. In 2.2.0 we can't
-    # check for __module__ since it doesn't seem to be added to the locals
-    # until later on.
-    if (locals is frame.f_globals) or (
-        ('__module__' not in locals) and sys.version_info[:3] > (2, 2, 0)):
+    # Ensure we were called from a class def.
+    if locals is frame.f_globals or '__module__' not in locals:
         raise TypeError("adapts can be used only from a class definition.")
 
     if '__component_adapts__' in locals:
@@ -47,8 +45,6 @@ def adapts(*interfaces):
 
 def adaptedBy(ob):
     return getattr(ob, '__component_adapts__', None)
-
-_class_types = type, types.ClassType
 
 class _adapts_descr(object):
     def __init__(self, interfaces):

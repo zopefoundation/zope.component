@@ -15,7 +15,12 @@
 import os
 
 from zope.configuration import xmlconfig, config
-from zope.testing.cleanup import cleanUp
+try:
+    from zope.testing.cleanup import cleanUp
+except ImportError:
+    def cleanUp():
+        pass
+
 from zope.component import provideHandler
 from zope.component.hooks import setHooks
 from zope.component.eventtesting import events, clearEvents

@@ -5,3 +5,9 @@
 ./docs
 ./parts
 *.egg-info
+.coverage
+docs/_build
+.tox
+nosetests.xml
+coverage.xml
+__pycache__

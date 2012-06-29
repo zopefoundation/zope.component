@@ -13,17 +13,19 @@
 ##############################################################################
 """Factory object
 """
-from zope.interface import implements, implementedBy
+from zope.interface import implementer
+from zope.interface import implementedBy
 from zope.interface.declarations import Implements
 from zope.component.interfaces import IFactory
 
+
+@implementer(IFactory)
 class Factory(object):
     """Generic factory implementation.
 
     The purpose of this implementation is to provide a quick way of creating
     factories for classes, functions and other objects.
     """
-    implements(IFactory)
 
     def __init__(self, callable, title='', description='', interfaces=None):
         self._callable = callable
@@ -41,5 +43,5 @@ class Factory(object):
             return spec
         return implementedBy(self._callable)
 
-    def __repr__(self):
+    def __repr__(self): #pragma NO COVER
         return '<%s for %s>' % (self.__class__.__name__, repr(self._callable))

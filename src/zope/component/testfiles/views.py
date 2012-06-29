@@ -13,7 +13,10 @@
 ##############################################################################
 """Views test.
 """
-from zope.interface import Interface, implements, directlyProvides
+
+from zope.interface import Interface
+from zope.interface import implementer
+from zope.interface import directlyProvides
 
 class Request(object):
 
@@ -29,8 +32,8 @@ class IV(Interface):
 
 class IC(Interface): pass
 
+@implementer(IV)
 class V1(object):
-    implements(IV)
 
     def __init__(self, context, request):
         self.context = context
@@ -46,6 +49,7 @@ class VZMI(V1):
     def index(self):
         return 'ZMI here'
 
+@implementer(IV)
 class R1(object):
 
     def index(self):
@@ -57,7 +61,6 @@ class R1(object):
     def __init__(self, request):
         pass
 
-    implements(IV)
 
 class RZMI(R1):
     pass

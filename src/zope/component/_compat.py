@@ -11,27 +11,32 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Placeless Test Setup
-"""
 
-# HACK to make sure basicmost event subscriber is installed
-import zope.component.event
+import sys
+import types
 
-# we really don't need special setup now:
-try:
-    from zope.testing.cleanup import CleanUp as PlacelessSetup
-except ImportError:
-    class PlacelessSetup(object):
-        def cleanUp(self):
-            from zope.component.globalregistry import base
-            base.__init__('base')
-        def setUp(self):
-            self.cleanUp()
-        def tearDown(self):
-            self.cleanUp()
+if sys.version_info[0] < 3: #pragma NO COVER
 
-def setUp(test=None):
-    PlacelessSetup().setUp()
+    import cPickle as _pickle
 
-def tearDown(test=None):
-    PlacelessSetup().tearDown()
+    def _u(s):
+        return unicode(s, 'unicode_escape')
+
+    CLASS_TYPES = (type, types.ClassType)
+
+    PYTHON3 = False
+    PYTHON2 = True
+
+else: #pragma NO COVER
+
+    import pickle as _pickle
+
+    def _u(s):
+        return s
+
+    CLASS_TYPES = (type,)
+
+    PYTHON3 = True
+    PYTHON2 = False
+
+_BLANK = _u('')

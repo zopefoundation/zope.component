@@ -13,8 +13,10 @@
 ##############################################################################
 """Components for testing
 """
-from zope.interface import Interface, Attribute, implements
-from zope.component import adapts
+from zope.interface import Interface
+from zope.interface import Attribute
+from zope.interface import implementer
+from zope.component import adapter
 
 class IAppb(Interface):
     a = Attribute('test attribute')
@@ -31,12 +33,14 @@ class IApp3(IAppb):
 
 class IContent(Interface): pass
 
+@implementer(IContent)
 class Content(object):
-    implements(IContent)
+    pass
 
+@adapter(IContent)
+@implementer(IApp)
 class Comp(object):
-    adapts(IContent)
-    implements(IApp)
+    pass
 
     def __init__(self, *args):
         # Ignore arguments passed to constructor
