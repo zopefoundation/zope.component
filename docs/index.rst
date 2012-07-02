@@ -15,8 +15,8 @@ Contents:
    configure
    hooks
    testlayer
-
    api
+   hacking
 
 Indices and tables
 ==================
