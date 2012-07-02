@@ -1,6 +1,11 @@
 Package configuration
 =====================
 
+.. testsetup::
+
+   from zope.component.testing import setUp
+   setUp()
+
 The ``zope.component`` package provides a ZCML file that configures some basic
 event handlers.
 
@@ -28,3 +33,9 @@ event handlers.
    True
    >>> registry.dispatchHandlerRegistrationEvent in handlers
    True
+
+
+.. testcleanup::
+
+   from zope.component.testing import tearDown
+   tearDown()
