@@ -30,11 +30,14 @@ class PersistentAdapterRegistry(VerifyingAdapterRegistry, Persistent):
         state = super(PersistentAdapterRegistry, self).__getstate__().copy()
         for name in self._delegated:
             state.pop(name, 0)
+        state.pop('ro', None)
         return state
 
     def __setstate__(self, state):
+        bases = state.pop('__bases__', ())
         super(PersistentAdapterRegistry, self).__setstate__(state)
         self._createLookup()
+        self.__bases__ = bases
         self._v_lookup.changed(self)
         
         

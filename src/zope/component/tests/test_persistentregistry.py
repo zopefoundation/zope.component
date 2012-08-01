@@ -96,7 +96,7 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         self.assertEqual(state['_provided'], {})
         self.assertEqual(state['_adapters'], [])
         self.assertEqual(state['_subscribers'], [])
-        self.assertEqual(state['ro'], [registry] + list(bases))
+        self.assertNotIn('ro', state)
 
     def test___getstate___skips_delegated_names(self):
         registry, jar, OID = self._makeOneWithJar()
@@ -111,6 +111,15 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         self.assertFalse('_v_lookup' in registry.__dict__)
         registry.__setstate__(state)
         self.assertTrue('_v_lookup' in registry.__dict__)
+
+    def test___setstate___rebuilds__ro(self):
+        from zope.component import globalSiteManager
+        bases = (globalSiteManager.adapters, globalSiteManager.utilities)
+        registry, jar, OID = self._makeOneWithJar(bases=bases)
+        state = registry.__getstate__()
+        registry.__setstate__(state)
+        self.assertEqual(registry.__bases__, bases)
+        self.assertEqual(registry.ro, [registry] + list(bases))
 
 
 class PersistentComponentsTests(unittest.TestCase):
