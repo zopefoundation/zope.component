@@ -951,7 +951,7 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         self.assertEqual(state['_provided'], {})
         self.assertEqual(state['_adapters'], [])
         self.assertEqual(state['_subscribers'], [])
-        self.assertNotIn('ro', state)
+        self.assertFalse('ro' in state)
 
     def test___setstate___rebuilds__ro(self):
         from zope.component import globalSiteManager
