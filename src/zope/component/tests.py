@@ -951,7 +951,16 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         self.assertEqual(state['_provided'], {})
         self.assertEqual(state['_adapters'], [])
         self.assertEqual(state['_subscribers'], [])
-        self.assertEqual(state['ro'], [registry] + list(bases))
+        self.assertNotIn('ro', state)
+
+    def test___setstate___rebuilds__ro(self):
+        from zope.component import globalSiteManager
+        bases = (globalSiteManager.adapters, globalSiteManager.utilities)
+        registry, jar, OID = self._makeOneWithJar(bases=bases)
+        state = registry.__getstate__()
+        registry.__setstate__(state)
+        self.assertEqual(registry.__bases__, bases)
+        self.assertEqual(registry.ro, [registry] + list(bases))
 
 
 def test_multi_handler_unregistration():
