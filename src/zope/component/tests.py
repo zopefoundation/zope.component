@@ -932,6 +932,28 @@ Cleanup:
     """
 
 
+class PersistentAdapterRegistryTests(unittest.TestCase):
+
+    def _getTargetClass(self):
+        from zope.component.persistentregistry import PersistentAdapterRegistry
+        return PersistentAdapterRegistry
+
+    def _makeOne(self, *args, **kw):
+        return self._getTargetClass()(*args, **kw)
+
+    def test___getstate___simple(self):
+        from zope.component import globalSiteManager
+        bases = (globalSiteManager.adapters, globalSiteManager.utilities)
+        registry = self._makeOne(bases=bases)
+        state = registry.__getstate__()
+        self.assertEqual(state['__bases__'], bases)
+        self.assertEqual(state['_generation'], 1)
+        self.assertEqual(state['_provided'], {})
+        self.assertEqual(state['_adapters'], [])
+        self.assertEqual(state['_subscribers'], [])
+        self.assertEqual(state['ro'], [registry] + list(bases))
+
+
 def test_multi_handler_unregistration():
     """
     There was a bug where multiple handlers for the same required
