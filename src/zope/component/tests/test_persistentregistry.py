@@ -59,10 +59,10 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         jar._cache = self._makeCache(jar)
         return jar
 
-    def _makeOneWithJar(self, dirty=False):
+    def _makeOneWithJar(self, dirty=False, **kw):
         # Borrowed from persistent.tests.test_pyPersistence.
         OID = _makeOctets('\x01' * 8)
-        inst = self._makeOne()
+        inst = self._makeOne(**kw)
         jar = self._makeJar()
         jar._cache.new_ghost(OID, inst) # assigns _p_jar, _p_oid
         return inst, jar, OID
@@ -87,14 +87,16 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         self.assertEqual(registry._generation, 2)
 
     def test___getstate___simple(self):
-        registry, jar, OID = self._makeOneWithJar()
+        from zope.component import globalSiteManager
+        bases = (globalSiteManager.adapters, globalSiteManager.utilities)
+        registry, jar, OID = self._makeOneWithJar(bases=bases)
         state = registry.__getstate__()
-        self.assertEqual(state['__bases__'], ())
+        self.assertEqual(state['__bases__'], bases)
         self.assertEqual(state['_generation'], 1)
         self.assertEqual(state['_provided'], {})
         self.assertEqual(state['_adapters'], [])
         self.assertEqual(state['_subscribers'], [])
-        self.assertEqual(state['ro'], [registry])
+        self.assertEqual(state['ro'], [registry] + list(bases))
 
     def test___getstate___skips_delegated_names(self):
         registry, jar, OID = self._makeOneWithJar()
