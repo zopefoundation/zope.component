@@ -95,7 +95,7 @@ def getInterfaceAllDocs(interface):
             str(interface.__doc__).lower()]
 
     if IInterface.providedBy(interface):
-        for name in interface:
+        for name in sorted(interface):
             docs.append(
                 str(interface.getDescriptionFor(name).__doc__).lower())
 
