@@ -1,10 +1,17 @@
 CHANGES
 *******
 
-4.0.3 (unreleased)
+4.1.0 (unreleased)
 ==================
 
-- TBD
+- Changed "ZODB3" depdendency to "persistent".
+
+- ``tox`` now runs all tests for Python 3.2 and 3.3.
+
+- Enable buildout for Python 3.
+
+- Fixed new failing tests.
+
 
 4.0.2 (2012-12-31)
 ==================

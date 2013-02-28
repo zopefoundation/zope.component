@@ -44,7 +44,7 @@ def alltests():
 
     class NullHandler(logging.Handler):
         level = 50
-        
+
         def emit(self, record):
             pass
 
@@ -70,7 +70,7 @@ def read(*rnames):
 
 setup(
     name='zope.component',
-    version='4.0.3dev',
+    version='4.1.0dev',
     url='http://pypi.python.org/pypi/zope.component',
     license='ZPL 2.1',
     description='Zope Component Architecture',
@@ -112,7 +112,7 @@ setup(
     zip_safe = False,
     extras_require = {
         'hook': ['zope.hookable'],
-        'persistentregistry': ['ZODB3'],
+        'persistentregistry': ['persistent'],
         'security': ['zope.location',
                     'zope.proxy',
                     'zope.security',

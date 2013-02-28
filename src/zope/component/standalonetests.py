@@ -8,7 +8,12 @@ def write(x):
     sys.stdout.write('%s\n' % x)
 
 if __name__ == "__main__": #pragma NO COVER (runs in subprocess)
-    #sys.path = pickle.loads(sys.stdin.read())
+    if sys.version_info[0] >= 3:
+        # TextIO? Are you kidding me?
+        data = sys.stdin.buffer.read()
+    else:
+        data = sys.stdin.read()
+    sys.path = pickle.loads(data)
     write('XXXXXXXXXX')
     for p in sys.path:
         write('- %s' % p)

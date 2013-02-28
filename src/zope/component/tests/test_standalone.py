@@ -41,6 +41,7 @@ class StandaloneTests(unittest.TestCase):
                 raise # TODO verify sanity of a pass on EINTR :-/
         if rc != 0:
             output = process.stdout.read()
+            output = output.decode() if isinstance(output, bytes) else output
             sys.stderr.write('#' * 80 + '\n')
             sys.stdout.write(output)
             sys.stderr.write('#' * 80 + '\n')
