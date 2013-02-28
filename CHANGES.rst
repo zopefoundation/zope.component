@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-4.1.0 (unreleased)
+4.1.0 (2013-02-28)
 ==================
 
 - Changed "ZODB3" depdendency to "persistent".
