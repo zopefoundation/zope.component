@@ -131,6 +131,12 @@ def resetHooks():
     from zope.component import _api
     _api.adapter_hook.reset()
     _api.getSiteManager.reset()
+    # be sure the old adapter hook isn't cached, since
+    # it is derived from the SiteManager
+    try:
+        del siteinfo.adapter_hook
+    except AttributeError:
+        pass
 
 # Clear the site thread global
 clearSite = setSite
