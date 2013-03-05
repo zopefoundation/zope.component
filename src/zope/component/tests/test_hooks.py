@@ -293,6 +293,7 @@ class Test_resetHooks(unittest.TestCase):
 
     def test_it(self):
         import zope.component._api
+        from zope.component import hooks
         class _Hook(object):
             def __init__(self):
                 self._reset = False
@@ -303,9 +304,17 @@ class Test_resetHooks(unittest.TestCase):
         with _Monkey(zope.component._api,
                      adapter_hook=adapter_hook,
                      getSiteManager=getSiteManager):
+            # Access the adapter_hook of the site info to be
+            # sure it caches
+            getattr(hooks.siteinfo, 'adapter_hook')
+            self.assertTrue('adapter_hook' in hooks.siteinfo.__dict__)
+
             self._callFUT()
+
         self.assertTrue(adapter_hook._reset)
         self.assertTrue(getSiteManager._reset)
+        # adapter_hook cache also reset
+        self.assertFalse('adapter_hook' in hooks.siteinfo.__dict__)
 
 
 _SM = object()
@@ -341,4 +350,3 @@ def test_suite():
         unittest.makeSuite(Test_setHooks),
         unittest.makeSuite(Test_resetHooks),
     ))
-
