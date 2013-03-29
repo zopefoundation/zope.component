@@ -4,7 +4,8 @@ CHANGES
 4.1.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Reset the cached ``adapter_hooks`` at
+  ``zope.testing.cleanup.cleanUp`` time (LP1100501).
 
 
 4.1.0 (2013-02-28)
