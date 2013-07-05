@@ -27,8 +27,8 @@ class HookableTests(unittest.TestCase):
         def foo():
             pass
         hooked = hookable(foo)
-        self.failUnless(hooked.original is foo)
-        self.failUnless(hooked.implementation is foo)
+        self.assertTrue(hooked.original is foo)
+        self.assertTrue(hooked.implementation is foo)
 
     def test_ctor_extra_arg(self):
         from zope.component.hookable import hookable
@@ -50,8 +50,8 @@ class HookableTests(unittest.TestCase):
             pass
         hooked = hookable(foo)
         hooked.sethook(bar)
-        self.failUnless(hooked.original is foo)
-        self.failUnless(hooked.implementation is bar)
+        self.assertTrue(hooked.original is foo)
+        self.assertTrue(hooked.implementation is bar)
 
     def test_reset(self):
         from zope.component.hookable import hookable
@@ -62,8 +62,8 @@ class HookableTests(unittest.TestCase):
         hooked = hookable(foo)
         hooked.sethook(bar)
         hooked.reset()
-        self.failUnless(hooked.original is foo)
-        self.failUnless(hooked.implementation is foo)
+        self.assertTrue(hooked.original is foo)
+        self.assertTrue(hooked.implementation is foo)
 
     def test_cant_assign_original(self):
         from zope.component.hookable import hookable
