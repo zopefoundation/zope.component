@@ -4,6 +4,8 @@ CHANGES
 4.1.1 (unreleased)
 ==================
 
+- Updated ``boostrap.py`` to version 2.2.
+
 - Reset the cached ``adapter_hooks`` at
   ``zope.testing.cleanup.cleanUp`` time (LP1100501).
 
