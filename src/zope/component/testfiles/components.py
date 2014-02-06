@@ -17,6 +17,7 @@ from zope.interface import Interface
 from zope.interface import Attribute
 from zope.interface import implementer
 from zope.component import adapter
+from zope.component import named
 
 class IAppb(Interface):
     a = Attribute('test attribute')
@@ -40,7 +41,6 @@ class Content(object):
 @adapter(IContent)
 @implementer(IApp)
 class Comp(object):
-    pass
 
     def __init__(self, *args):
         # Ignore arguments passed to constructor
@@ -57,6 +57,14 @@ class Comp3(object):
     def __init__(self, context):
         self.context = context
 
+@adapter(IContent)
+@implementer(IApp)
+@named('app')
+class Comp4(object):
+    def __init__(self, context=None):
+        self.context = context
+
 comp = Comp()
+comp4 = Comp4()
 
 content = Content()

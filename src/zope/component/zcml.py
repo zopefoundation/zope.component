@@ -26,7 +26,7 @@ from zope.interface import providedBy
 from zope.schema import TextLine
 
 from zope.component._api import getSiteManager
-from zope.component._declaration import adaptedBy
+from zope.component._declaration import adaptedBy, getName
 from zope.component.interface import provideInterface
 from zope.component._compat import _BLANK
 
@@ -181,6 +181,10 @@ def adapter(_context, factory, provides=None, for_=None, permission=None,
 
         if provides is None:
             raise TypeError("Missing 'provides' attribute")
+
+    if name == '':
+        if len(factory) == 1:
+            name = getName(factory[0])
 
     # Generate a single factory from multiple factories:
     factories = factory
@@ -379,6 +383,12 @@ def utility(_context, provides=None, component=None, factory=None,
             provides = provides[0]
         else:
             raise TypeError("Missing 'provides' attribute")
+
+    if name == '':
+        if factory:
+            name = getName(factory)
+        else:
+            name = getName(component)
 
     if permission is not None:
         component = proxify(component, provides=provides, permission=permission)

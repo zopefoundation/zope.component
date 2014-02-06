@@ -69,9 +69,9 @@ the <adapter /> directive:
 
 .. doctest::
 
+   >>> import zope.component
    >>> from zope.component.tests.examples import clearZCML
    >>> clearZCML()
-   >>> import zope.component
    >>> zope.component.queryAdapter(Content(), IApp, 'test') is None
    True
 
@@ -143,13 +143,13 @@ Of course, if no factory is provided at all, we will get an error:
          ValueError: No factory specified
 
 
-Declaring ``for`` and ``provides`` in Python
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Declaring ``for``, ``provides`` and ``name`` in Python
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The <adapter /> directive can figure out from the in-line Python
-declaration (using ``zope.component.adapts()`` or
-``zope.component.adapter()`` as well as ``zope.interface.implements``)
-what the adapter should be registered for and what it provides:
+The <adapter /> directive can figure out from the in-line Python declaration
+(using ``zope.component.adapts()`` or ``zope.component.adapter()``,
+``zope.interface.implements`` as well as ``zope.component.named``) what the
+adapter should be registered for and what it provides:
 
 .. doctest::
 
@@ -192,6 +192,14 @@ ZCML can't figure out what it should provide either:
       ...
    ZopeXMLConfigurationError: File "<string>", line 4.2-7.8
          TypeError: Missing 'provides' attribute
+
+Let's now register an adapter that has a name specified in Python:
+
+   >>> runSnippet('''
+   ...   <adapter factory="zope.component.testfiles.components.Comp4" />''')
+
+   >>> zope.component.getAdapter(Content(), IApp, 'app').__class__
+   <class 'zope.component.testfiles.components.Comp4'>
 
 A not so common edge case is registering adapters directly for
 classes, not for interfaces.  For example:
@@ -1036,6 +1044,27 @@ We can repeat the same drill for utility factories:
       ...
    ZopeXMLConfigurationError: File "<string>", line 4.2-4.59
          TypeError: Missing 'provides' attribute
+
+Declaring ``name`` in Python
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Let's now register a utility that has a name specified in Python:
+
+   >>> runSnippet('''
+   ...   <utility component="zope.component.testfiles.components.comp4" />''')
+
+   >>> from zope.component.testfiles.components import comp4
+   >>> zope.component.getUtility(IApp, name='app') is comp4
+   True
+
+   >>> runSnippet('''
+   ...   <utility factory="zope.component.testfiles.components.Comp4" />''')
+
+   >>> zope.component.getUtility(IApp, name='app') is comp4
+   False
+   >>> zope.component.getUtility(IApp, name='app').__class__
+   <class 'zope.component.testfiles.components.Comp4'>
+
 
 Protected utilities
 ~~~~~~~~~~~~~~~~~~~

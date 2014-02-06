@@ -16,6 +16,7 @@
 from zope.interface import Interface
 from zope.interface import implementedBy
 from zope.interface import moduleProvides
+from zope.interface import named
 from zope.interface import providedBy
 
 from zope.component.interfaces import ComponentLookupError

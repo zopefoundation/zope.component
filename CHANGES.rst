@@ -1,13 +1,16 @@
 CHANGES
 *******
 
-4.1.1 (unreleased)
+4.2.0 (unreleased)
 ==================
 
 - Updated ``boostrap.py`` to version 2.2.
 
 - Reset the cached ``adapter_hooks`` at
   ``zope.testing.cleanup.cleanUp`` time (LP1100501).
+
+- Implemented ability to specify adapter and utility names in Python. Use
+  the ``@zope.component.named(name)`` decorator to specify the name.
 
 
 4.1.0 (2013-02-28)

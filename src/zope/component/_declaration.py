@@ -15,7 +15,7 @@
 """
 import sys
 
-from zope.component._compat import CLASS_TYPES
+from zope.component._compat import CLASS_TYPES, _BLANK
 
 class adapter(object):
 
@@ -45,6 +45,9 @@ def adapts(*interfaces):
 
 def adaptedBy(ob):
     return getattr(ob, '__component_adapts__', None)
+
+def getName(ob):
+    return getattr(ob, '__component_name__', _BLANK)
 
 class _adapts_descr(object):
     def __init__(self, interfaces):
