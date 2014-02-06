@@ -52,7 +52,7 @@ Now we run some tests with this layer:
    >>> import unittest
    >>> class TestCase(unittest.TestCase):
    ...    layer = layer
-   ...    
+   ...
    ...    def testFoo(self):
    ...        print "testFoo"
    >>> suite = unittest.TestSuite()
@@ -66,7 +66,7 @@ Now we run some tests with this layer:
    testSetUp called
    testFoo
    testTearDown called
-     Ran 1 tests with 0 failures and 0 errors in ... seconds.
+     Ran 1 tests with 0 failures, 0 errors and 0 skipped in ... seconds.
    Tearing down left over layers:
      Tear down zope.component.OurLayer tearDown called
    in ... seconds.
@@ -87,7 +87,7 @@ is ``ftesting.zcml``, but here we'll load a test ``testlayer.zcml``.
 
    >>> class TestCase(unittest.TestCase):
    ...    layer = zcml_file_layer
-   ...    
+   ...
    ...    def testFoo(self):
    ...        # we should now have the adapter registered
    ...        from zope import component
@@ -105,7 +105,7 @@ Since the ZCML sets up an adapter, we expect the tests to pass:
    >>> succeeded = runner.run()
    Running zope.component.testfiles.ZCMLFileLayer tests:
      Set up zope.component.testfiles.ZCMLFileLayer in ... seconds.
-     Ran 1 tests with 0 failures and 0 errors in ... seconds.
+     Ran 1 tests with 0 failures, 0 errors and 0 skipped in ... seconds.
    Tearing down left over layers:
      Tear down zope.component.testfiles.ZCMLFileLayer in ... seconds.
 
