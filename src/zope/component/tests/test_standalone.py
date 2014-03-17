@@ -31,21 +31,25 @@ class StandaloneTests(unittest.TestCase):
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.STDOUT,
                                    stdin=subprocess.PIPE)
-        pickle.dump(sys.path, process.stdin)
-        process.stdin.close()
-
         try:
-            rc = process.wait()
-        except OSError as e:
-            if e.errno != 4: # MacIntel raises apparently unimportant EINTR?
-                raise # TODO verify sanity of a pass on EINTR :-/
-        if rc != 0:
-            output = process.stdout.read()
-            output = output.decode() if isinstance(output, bytes) else output
-            sys.stderr.write('#' * 80 + '\n')
-            sys.stdout.write(output)
-            sys.stderr.write('#' * 80 + '\n')
-            self.fail('Output code: %d' % rc)
+            pickle.dump(sys.path, process.stdin)
+            process.stdin.close()
+
+            try:
+                rc = process.wait()
+            except OSError as e:
+                if e.errno != 4: # MacIntel raises apparently unimportant EINTR?
+                    raise # TODO verify sanity of a pass on EINTR :-/
+            if rc != 0:
+                output = process.stdout.read()
+                if isinstance(output, bytes):
+                    output = output.decode()
+                sys.stderr.write('#' * 80 + '\n')
+                sys.stdout.write(output)
+                sys.stderr.write('#' * 80 + '\n')
+                self.fail('Output code: %d' % rc)
+        finally:
+            process.stdout.close()
 
 def test_suite():
     return unittest.TestSuite((
