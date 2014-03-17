@@ -4,7 +4,7 @@ CHANGES
 4.2.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Added support for Python 3.4.
 
 
 4.2.0 (2014-02-05)
