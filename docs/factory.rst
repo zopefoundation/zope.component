@@ -43,7 +43,7 @@ Now we use the factory to create the instance
 
 .. doctest::
 
-   >>> kl = factory(1, 2, foo=3, bar=4)
+   >>> kl = factory(1, 2, foo=3)
 
 and make sure that the correct class was used to create the object:
 
@@ -52,14 +52,14 @@ and make sure that the correct class was used to create the object:
    >>> kl.__class__
    <class 'Klass'>
 
-Since we passed in a couple positional and keyword arguments
+Since we passed in a couple positional and a keyword argument
   
 .. doctest::
 
    >>> kl.args
    (1, 2)
    >>> kl.kw
-   {'foo': 3, 'bar': 4}
+   {'foo': 3}
    
    >>> factory2(3)
    3
@@ -123,13 +123,13 @@ Creating an Object
 
 .. doctest::
 
-   >>> kl = zope.component.createObject('klass', 1, 2, foo=3, bar=4)
+   >>> kl = zope.component.createObject('klass', 1, 2, foo=3)
    >>> isinstance(kl, Klass)
    True
    >>> kl.args
    (1, 2)
    >>> kl.kw
-   {'foo': 3, 'bar': 4}
+   {'foo': 3}
 
 Accessing Provided Interfaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
