@@ -12,3 +12,4 @@ build
 nosetests.xml
 coverage.xml
 .coverage
+dist/
