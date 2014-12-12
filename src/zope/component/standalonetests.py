@@ -4,7 +4,7 @@ See: https://bugs.launchpad.net/zope3/+bug/98401
 import sys
 import pickle
 
-def write(x):
+def write(x): # pragma: NO COVER
     sys.stdout.write('%s\n' % x)
 
 if __name__ == "__main__": #pragma NO COVER (runs in subprocess)
