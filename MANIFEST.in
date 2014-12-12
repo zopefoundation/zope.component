@@ -8,3 +8,9 @@ global-exclude *.dll
 global-exclude *.pyc
 global-exclude *.pyo
 global-exclude *.so
+global-exclude coverage.xml
+
+include *.py
+include .travis.yml
+include buildout.cfg
+include tox.ini
