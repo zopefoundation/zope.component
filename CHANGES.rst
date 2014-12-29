@@ -1,20 +1,20 @@
-CHANGES
-*******
+Changes
+=======
 
 4.2.2 (unreleased)
-==================
+------------------
 
 -TBD
 
 
 4.2.1 (2014-03-19)
-==================
+------------------
 
 - Added support for Python 3.4.
 
 
 4.2.0 (2014-02-05)
-==================
+------------------
 
 - Updated ``boostrap.py`` to version 2.2.
 
@@ -26,7 +26,7 @@ CHANGES
 
 
 4.1.0 (2013-02-28)
-==================
+------------------
 
 - Changed "ZODB3" depdendency to "persistent".
 
@@ -38,18 +38,18 @@ CHANGES
 
 
 4.0.2 (2012-12-31)
-==================
+------------------
 
 - Fleshed out PyPI Trove classifiers.
 
 4.0.1 (2012-11-21)
-==================
+------------------
 
 - Added support for Python 3.3.
 
 
 4.0.0 (2012-07-02)
-==================
+------------------
 
 - Added PyPy and Python 3.2 support:
 
@@ -77,19 +77,19 @@ CHANGES
 
 
 3.12.1 (2012-04-02)
-===================
+-------------------
 
 - Wrap ``with site(foo)`` in try/finally (LP768151).
 
 
 3.12.0 (2011-11-16)
-===================
+-------------------
 
 - Add convenience function zope.component.hooks.site (a contextmanager),
   so one can write ``with site(foo): ...``.
 
 3.11.0 (2011-09-22)
-===================
+-------------------
 
 - Moved code from ``zope.component.registry`` which implements a basic
   nonperistent component registry to ``zope.interface.registry``.  This code
@@ -113,7 +113,7 @@ CHANGES
 - Depend on zope.interface >= 3.8.0.
 
 3.10.0 (2010-09-25)
-===================
+-------------------
 
 - Got rid of the docs extra and the sphinxdoc recipe.
 
@@ -125,17 +125,17 @@ CHANGES
 - Added a basic test for the configure.zcml file provided.
 
 3.9.5 (2010-07-09)
-==================
+------------------
 
 - Fix test requirements specification.
 
 3.9.4 (2010-04-30)
-==================
+------------------
 
 - Prefer the standard libraries doctest module to the one from zope.testing.
 
 3.9.3 (2010-03-08)
-==================
+------------------
 
 - The ZCML directives provided by zope.component now register the components in
   the registry returned by getSiteManager instead of the global registry. This
@@ -143,28 +143,28 @@ CHANGES
   file to register the components in a custom registry.
 
 3.9.2 (2010-01-22)
-==================
+------------------
 
 - Fixed a bug introduced by recent refactoring, where passing
   CheckerPublic to securityAdapterFactory wrongly wrapped the factory
   into a LocatingUntrustedAdapterFactory.
 
 3.9.1 (2010-01-21)
-==================
+------------------
 
 - The tested testrunner somehow gets influenced by options of the outer
   testrunner, such a the -v option. We modified the tests so that it avoids
   this.
 
 3.9.0 (2010-01-21)
-==================
+------------------
 
 - Add testlayer support. It is now possible to load a ZCML file within
   tests more easily. See zope.component.testlayer.py and
   zope.component.testlayer.txt.
 
 3.8.0 (2009-11-16)
-==================
+------------------
 
 - Removed the dependencies on zope.proxy and zope.security from the zcml extra:
   zope.component does not hard depend on them anymore; the support for security
@@ -178,7 +178,7 @@ CHANGES
   actually dealing with zope.site's concept of a site.
 
 3.7.1 (2009-07-24)
-==================
+------------------
 
 - Fixed a problem, where ``queryNextUtility`` could fail if the context could
   not be adapted to a ``IComponentLookup``.
@@ -199,7 +199,7 @@ CHANGES
     or in the database even though it isn't used.
 
 3.7.0 (2009-05-21)
-==================
+------------------
 
 - The HookableTests were not run by the testrunner.
 
@@ -207,7 +207,7 @@ CHANGES
   zope.component.zcml (dependency loaded with zope.component [zcml]).
 
 3.6.0 (2009-03-12)
-==================
+------------------
 
 - IMPORTANT: the interfaces that were defined in the
   zope.component.bbb.interfaces and deprecated for years are
@@ -243,14 +243,14 @@ CHANGES
   zope3-dev at zope.org is now retired.
 
 3.5.1 (2008-07-25)
-==================
+------------------
 
 - Fix bug introduced in 3.5.0: <utility factory="..."> no longer supported
   interfaces declared in Python and always wanted an explicit provides="..."
   attribute. https://bugs.launchpad.net/zope3/+bug/251865
 
 3.5.0 (2008-07-25)
-==================
+------------------
 
 - Support registration of utilities via factories through the component registry
   and return factory information in the registration information. This fixes
@@ -261,12 +261,12 @@ CHANGES
   all utilities when registering a new one.
 
 3.4.0 (2007-09-29)
-==================
+------------------
 
 No further changes since 3.4.0a1.
 
 3.4.0a1 (2007-04-22)
-====================
+--------------------
 
 Corresponds to zope.component from Zope 3.4.0a1.
 
@@ -275,17 +275,17 @@ Corresponds to zope.component from Zope 3.4.0a1.
   for the proposal describing the changes.
 
 3.2.0.2 (2006-04-15)
-====================
+--------------------
 
 - Fix packaging bug:  'package_dir' must be a *relative* path.
 
 3.2.0.1 (2006-04-14)
-====================
+--------------------
 
 - Packaging change: suppress inclusion of 'setup.cfg' in 'sdist' builds.
 
 3.2.0 (2006-01-05)
-==================
+------------------
 
 Corresponds to the verison of the zope.component package shipped as part of
 the Zope 3.2.0 release.
@@ -304,7 +304,7 @@ the Zope 3.2.0 release.
   is now always optional, and should no longer be passed.
 
 3.0.0 (2004-11-07)
-==================
+------------------
 
 Corresponds to the verison of the zope.component package shipped as part of
 the Zope X3.0.0 release.
