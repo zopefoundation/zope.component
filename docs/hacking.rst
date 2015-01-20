@@ -167,7 +167,7 @@ Running the tests using  :mod:`zc.buildout`
    ...
    Generated script '.../bin/buildout'
    $ bin/buildout
-   Develop: '/home/tseaver/projects/Zope/BTK/component/.'
+   Develop: '/home/jrandom/projects/Zope/BTK/component/.'
    ...
    Generated script '.../bin/sphinx-quickstart'.
    Generated script '.../bin/sphinx-build'.
@@ -302,7 +302,7 @@ option:  you can "push" your branch to Launchpad:
 
 .. code-block:: sh
 
-   $ bzr push lp:~tseaver/zope.component/cool_feature
+   $ bzr push lp:~jrandom/zope.component/cool_feature
 
 After pushing your branch, you can link it to a bug report on Launchpad,
 or request that the maintainers merge your branch using the Launchpad
