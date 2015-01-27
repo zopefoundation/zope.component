@@ -1,6 +1,10 @@
 ``zope.component``
 ==================
 
+.. image:: https://pypip.in/version/zope.component/badge.svg?style=flat
+    :target: https://pypi.python.org/pypi/zope.component/
+    :alt: Latest Version
+
 .. image:: https://travis-ci.org/zopefoundation/zope.component.png?branch=master
         :target: https://travis-ci.org/zopefoundation/zope.component
 
