@@ -1,1 +1,13 @@
+persistent
 repoze.sphinx.autointerface
+BTrees
+ZODB
+zope.component
+zope.configuration
+zope.hookable
+zope.i18nmessageid
+zope.location
+zope.proxy
+zope.security
+zope.testing
+zope.testrunner
