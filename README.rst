@@ -8,6 +8,10 @@
 .. image:: https://travis-ci.org/zopefoundation/zope.component.png?branch=master
         :target: https://travis-ci.org/zopefoundation/zope.component
 
+.. image:: https://readthedocs.org/projects/zopecomponent/badge/?version=latest
+        :target: http://zopecomponent.readthedocs.org/en/latest/
+        :alt: Documentation Status
+
 .. note::
 
    This package is intended to be independently reusable in any Python
