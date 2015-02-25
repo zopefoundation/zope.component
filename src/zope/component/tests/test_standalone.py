@@ -15,43 +15,50 @@
 """
 import unittest
 
+try:
+    import zope.security
+except ImportError:
+    _HAS_ZOPE_SECURITY = False
+else:
+    _HAS_ZOPE_SECURITY = True
 
-class StandaloneTests(unittest.TestCase):
-    def testStandalone(self):
-        # See: https://bugs.launchpad.net/zope3/+bug/98401
-        import subprocess
-        import sys
-        import os
-        import pickle
+    class StandaloneTests(unittest.TestCase):
+        def testStandalone(self):
+            # See: https://bugs.launchpad.net/zope3/+bug/98401
+            import subprocess
+            import sys
+            import os
+            import pickle
 
-        executable = os.path.abspath(sys.executable)
-        where = os.path.dirname(os.path.dirname(__file__))
-        program = os.path.join(where, 'standalonetests.py')
-        process = subprocess.Popen([executable, program],
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.STDOUT,
-                                   stdin=subprocess.PIPE)
-        try:
-            pickle.dump(sys.path, process.stdin)
-            process.stdin.close()
-
+            executable = os.path.abspath(sys.executable)
+            where = os.path.dirname(os.path.dirname(__file__))
+            program = os.path.join(where, 'standalonetests.py')
+            process = subprocess.Popen([executable, program],
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.STDOUT,
+                                    stdin=subprocess.PIPE)
             try:
-                rc = process.wait()
-            except OSError as e:
-                if e.errno != 4: # MacIntel raises apparently unimportant EINTR?
-                    raise # TODO verify sanity of a pass on EINTR :-/
-            if rc != 0:
-                output = process.stdout.read()
-                if isinstance(output, bytes):
-                    output = output.decode()
-                sys.stderr.write('#' * 80 + '\n')
-                sys.stdout.write(output)
-                sys.stderr.write('#' * 80 + '\n')
-                self.fail('Output code: %d' % rc)
-        finally:
-            process.stdout.close()
+                pickle.dump(sys.path, process.stdin)
+                process.stdin.close()
+
+                try:
+                    rc = process.wait()
+                except OSError as e:
+                    # MacIntel raises apparently unimportant EINTR?
+                    if e.errno != 4:
+                        raise # TODO verify sanity of a pass on EINTR :-/
+                if rc != 0:
+                    output = process.stdout.read()
+                    if isinstance(output, bytes):
+                        output = output.decode()
+                    sys.stderr.write('#' * 80 + '\n')
+                    sys.stdout.write(output)
+                    sys.stderr.write('#' * 80 + '\n')
+                    self.fail('Output code: %d' % rc)
+            finally:
+                process.stdout.close()
 
 def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(StandaloneTests),
-    ))
+    if _HAS_ZOPE_SECURITY:
+        return unittest.makeSuite(StandaloneTests)
+    return unittest.TestSuite()
