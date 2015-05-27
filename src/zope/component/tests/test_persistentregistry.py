@@ -37,6 +37,8 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
             def new_ghost(self, oid, obj):
                 obj._p_jar = self._jar
                 obj._p_oid = oid
+            def update_object_size_estimation(self, oid, size):
+                return
 
         return _Cache(jar)
 

@@ -4,7 +4,7 @@ Changes
 4.2.2 (unreleased)
 ------------------
 
--TBD
+- Fix test cases for PyPy and PyPy3.
 
 
 4.2.1 (2014-03-19)
