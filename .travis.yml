@@ -4,9 +4,11 @@ env:
     - TOXENV=py26
     - TOXENV=py26min
     - TOXENV=py27
+    - TOXENV=py27-pure
     - TOXENV=py32
     - TOXENV=py33
     - TOXENV=py34
+    - TOXENV=py34-pure
     - TOXENV=pypy
     - TOXENV=pypy3
     - TOXENV=coverage
