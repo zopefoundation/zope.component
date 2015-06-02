@@ -297,6 +297,77 @@ class Test_adapter(unittest.TestCase):
                          ('registerAdapter', _Factory, (Interface,), IFoo,
                           '', 'TESTING'))
 
+class Test_zcml_functional(unittest.TestCase):
+    # These mimic the snippets in the zcml.rst doctests
+
+    def setUp(self):
+        from zope.component.tests.examples import clearZCML
+        clearZCML()
+    tearDown = setUp
+
+    def _runSnippet(self, snippet):
+        from zope.configuration import xmlconfig
+        template = """\
+        <configure xmlns='http://namespaces.zope.org/zope'
+                   i18n_domain="zope">
+           <include package="zope.component" file="meta.zcml" />
+           %s
+        </configure>""" % snippet
+        xmlconfig.string(template)
+
+
+    @skipIfNoSecurity
+    def test_with_proxy_factory_public_permission(self):
+        # Using the public permission doesn't give you a location proxy
+        from zope.proxy import isProxy
+        from zope.security.proxy import removeSecurityProxy
+        from zope.component.testfiles.components import Content
+        from zope.component.testfiles.adapter import I1, A1
+        from zope.security.checker import ProxyFactory
+
+        self._runSnippet('''
+            <adapter
+            for="zope.component.testfiles.components.IContent"
+            provides="zope.component.testfiles.adapter.I1"
+            factory="zope.component.testfiles.adapter.A1"
+            permission="zope.Public"
+            trusted="yes"
+             />''')
+        ob = Content()
+        p = ProxyFactory(ob)
+
+        a = I1(p)
+
+        self.assertTrue(isProxy(a))
+
+        self.assertTrue(type(removeSecurityProxy(a)) is A1)
+
+    @skipIfNoSecurity
+    def test_located_proxy_factory(self):
+        # Passing locate results in a security proxy around a location proxy
+        from zope.proxy import isProxy
+        from zope.security.proxy import removeSecurityProxy
+        from zope.component.testfiles.components import Content
+        from zope.component.testfiles.adapter import I1
+        from zope.security.checker import ProxyFactory
+        from zope.location.location import LocationProxy
+
+        self._runSnippet('''
+        <adapter
+          for="zope.component.testfiles.components.IContent"
+          provides="zope.component.testfiles.adapter.I1"
+          factory="zope.component.testfiles.adapter.A1"
+          trusted="yes"
+          locate="yes"
+          />
+        ''')
+        ob = Content()
+        p = ProxyFactory(ob)
+        a = I1(p)
+
+        self.assertTrue(isProxy(a))
+
+        self.assertTrue(type(removeSecurityProxy(a)) is LocationProxy)
 
 class Test_subscriber(unittest.TestCase):
 
@@ -745,7 +816,6 @@ class Test_utility(unittest.TestCase):
         self.assertEqual(action['discriminator'], None)
         self.assertEqual(action['args'], ('', IFoo))
 
-
 class Test_interface(unittest.TestCase):
 
     def _callFUT(self, *args, **kw):
@@ -1175,4 +1245,5 @@ def test_suite():
         unittest.makeSuite(Test_interface),
         unittest.makeSuite(Test_view),
         unittest.makeSuite(Test_resource),
+        unittest.makeSuite(Test_zcml_functional),
     ))
