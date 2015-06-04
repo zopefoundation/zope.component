@@ -70,7 +70,7 @@ def read(*rnames):
 
 setup(
     name='zope.component',
-    version='4.2.2',
+    version='4.2.3.dev0',
     url='https://github.com/zopefoundation/zope.component',
     license='ZPL 2.1',
     description='Zope Component Architecture',
