@@ -1,7 +1,7 @@
 Changes
 =======
 
-4.2.2 (unreleased)
+4.2.2 (2015-06-04)
 ------------------
 
 - Fix test cases for PyPy and PyPy3.
