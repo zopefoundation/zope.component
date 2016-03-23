@@ -70,7 +70,7 @@ def read(*rnames):
 
 setup(
     name='zope.component',
-    version='4.2.3.dev0',
+    version='4.3.0.dev0',
     url='https://github.com/zopefoundation/zope.component',
     license='ZPL 2.1',
     description='Zope Component Architecture',
@@ -91,10 +91,8 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.2",
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
