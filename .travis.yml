@@ -7,12 +7,10 @@ matrix:
     - python: 3.5
       env: TOXENV=py35-pure
 env:
-    - TOXENV=py26
-    - TOXENV=py26-minimal
     - TOXENV=py27
+    - TOXENV=py27-minimal
     - TOXENV=py27-pure
     - TOXENV=pypy
-    - TOXENV=py32
     - TOXENV=py33
     - TOXENV=py34
     - TOXENV=py34-pure
