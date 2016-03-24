@@ -8,6 +8,7 @@ matrix:
       env: TOXENV=py35-pure
 env:
     - TOXENV=py27
+    - TOXENV=py27-minimal
     - TOXENV=py27-pure
     - TOXENV=pypy
     - TOXENV=py33
