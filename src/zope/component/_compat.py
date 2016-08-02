@@ -19,9 +19,6 @@ if sys.version_info[0] < 3: #pragma NO COVER
 
     import cPickle as _pickle
 
-    def _u(s):
-        return unicode(s, 'unicode_escape')
-
     CLASS_TYPES = (type, types.ClassType)
 
     PYTHON3 = False
@@ -31,12 +28,9 @@ else: #pragma NO COVER
 
     import pickle as _pickle
 
-    def _u(s):
-        return s
-
     CLASS_TYPES = (type,)
 
     PYTHON3 = True
     PYTHON2 = False
 
-_BLANK = _u('')
+_BLANK = u''
