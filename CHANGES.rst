@@ -1,7 +1,7 @@
 Changes
 =======
 
-4.3.0 (unreleased)
+4.3.0 (2016-08-26)
 ------------------
 
 - When testing ``PURE_PYTHON`` environments under ``tox``, avoid poisoning
