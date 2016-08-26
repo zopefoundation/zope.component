@@ -22,6 +22,7 @@ This package represents the core of the Zope Component Architecture.
 Together with the zope.interface_ package, it provides facilities for
 defining, registering and looking up components.
 
-Please see http://docs.zope.org/zope.component/ for the documentation.
+Please see http://zopecomponent.readthedocs.org/en/latest/ for the
+documentation.
 
 .. _zope.interface: https://github.com/zopefoundation/zope.interface
