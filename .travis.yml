@@ -1,11 +1,5 @@
 language: python
 sudo: false
-matrix:
-  include:
-    - python: 3.5
-      env: TOXENV=py35
-    - python: 3.5
-      env: TOXENV=py35-pure
 env:
     - TOXENV=py27
     - TOXENV=py27-minimal
@@ -14,6 +8,8 @@ env:
     - TOXENV=py33
     - TOXENV=py34
     - TOXENV=py34-pure
+    - TOXENV=py35
+    - TOXENV=py35-pure
     - TOXENV=pypy3
     - TOXENV=coverage
     - TOXENV=docs
