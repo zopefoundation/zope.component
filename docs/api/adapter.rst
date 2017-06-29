@@ -358,7 +358,8 @@ Let's register some adapters first:
    >>> gsm.registerAdapter(Comp, [None], I5, 'foo')
 
 Now we get all the adapters that are registered for ``ob`` that provide
-``I5`` (note that on Python 2 the names will be ``unicode``):
+``I5`` (note that the names are always text strings, meaning that on
+Python 2 the names will be ``unicode``):
 
 .. doctest::
 
@@ -367,10 +368,10 @@ Now we get all the adapters that are registered for ``ob`` that provide
    >>> [(str(name), adapter.__class__.__name__) for name, adapter in adapters]
    [('', 'Comp'), ('foo', 'Comp')]
    >>> try:
-   ...    unicode = unicode
+   ...    text = unicode
    ... except NameError:
-   ...    unicode = str # Python 3
-   >>> [isinstance(name, unicode) for name, _ in adapters]
+   ...    text = str # Python 3
+   >>> [isinstance(name, text) for name, _ in adapters]
    [True, True]
 
 Note that the output doesn't include None values. If an adapter

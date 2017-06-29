@@ -231,15 +231,16 @@ to know about all the adapters that convert a German to a US socket type:
 entry of the tuple is the name of the adapter and the second is the
 adapter itself.
 
-Note that the names are ``unicode`` on Python 2:
+Note that the names are always text strings, meaning ``unicode`` on
+Python 2:
 
 .. doctest::
 
    >>> try:
-   ...    unicode = unicode
+   ...    text = unicode
    ... except NameError:
-   ...    unicode = str
-   >>> [isinstance(name, unicode) for name, _ in sockets]
+   ...    text = str
+   >>> [isinstance(name, text) for name, _ in sockets]
    [True, True, True]
 
 
