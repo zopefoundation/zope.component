@@ -358,14 +358,20 @@ Let's register some adapters first:
    >>> gsm.registerAdapter(Comp, [None], I5, 'foo')
 
 Now we get all the adapters that are registered for ``ob`` that provide
-``I5``:
+``I5`` (note that on Python 2 the names will be ``unicode``):
 
 .. doctest::
 
    >>> from zope.component import getAdapters
    >>> adapters = sorted(getAdapters((ob,), I5))
-   >>> [(name, adapter.__class__.__name__) for name, adapter in adapters]
-   [(u'', 'Comp'), (u'foo', 'Comp')]
+   >>> [(str(name), adapter.__class__.__name__) for name, adapter in adapters]
+   [('', 'Comp'), ('foo', 'Comp')]
+   >>> try:
+   ...    unicode = unicode
+   ... except NameError:
+   ...    unicode = str # Python 3
+   >>> [isinstance(name, unicode) for name, _ in adapters]
+   [True, True]
 
 Note that the output doesn't include None values. If an adapter
 factory returns None, it is as if it wasn't present.
@@ -374,8 +380,8 @@ factory returns None, it is as if it wasn't present.
 
    >>> gsm.registerAdapter(lambda context: None, [I1], I5, 'nah')
    >>> adapters = sorted(getAdapters((ob,), I5))
-   >>> [(name, adapter.__class__.__name__) for name, adapter in adapters]
-   [(u'', 'Comp'), (u'foo', 'Comp')]
+   >>> [(str(name), adapter.__class__.__name__) for name, adapter in adapters]
+   [('', 'Comp'), ('foo', 'Comp')]
 
 
 Subscription Adapters
@@ -402,4 +408,3 @@ Helpers for Declaring / Testing Adapters
 
    from zope.component.testing import tearDown
    tearDown()
-

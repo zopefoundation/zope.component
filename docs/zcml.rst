@@ -15,7 +15,7 @@ This helper will let us easily execute ZCML snippets:
 
 .. doctest::
 
-   >>> from cStringIO import StringIO
+   >>> from io import BytesIO
    >>> from zope.configuration.xmlconfig import xmlconfig
    >>> def runSnippet(snippet):
    ...     template = """\
@@ -23,7 +23,7 @@ This helper will let us easily execute ZCML snippets:
    ...                i18n_domain="zope">
    ...     %s
    ...     </configure>"""
-   ...     xmlconfig(StringIO(template % snippet))
+   ...     xmlconfig(BytesIO((template % snippet).encode("ascii")))
 
 adapter
 -------
@@ -225,8 +225,10 @@ instance of the ``Content`` class:
 .. doctest::
 
    >>> import zope.interface
-   >>> class MyContent:
-   ...     zope.interface.implements(IContent)
+   >>> @zope.interface.implementer(IContent)
+   ... class MyContent(object):
+   ...     pass
+
    >>> zope.component.getAdapter(MyContent(), I1, '')  # doctest: +ELLIPSIS
    Traceback (most recent call last):
       ...
@@ -495,7 +497,7 @@ adapter:
    >>> p = ProxyFactory(ob)
    >>> a = I1(p)
    >>> type(a)
-   <type 'zope.security._proxy._Proxy'>
+   <... 'zope.security...proxy...Proxy...'>
 
 While the adapter is security-proxied, the object it adapts is now
 proxy-free.  The adapter has umlimited access to it:
@@ -544,7 +546,7 @@ adapter:
    >>> p = ProxyFactory(ob)
    >>> a = I1(p)
    >>> type(a)
-   <type 'zope.security._proxy._Proxy'>
+   <... 'zope.security...proxy...Proxy...'>
 
 Since we protected the adapter with a permission, we now encounter a
 location proxy behind the security proxy:
@@ -576,7 +578,7 @@ permission (``zope.Public``), there will be no location proxy:
    >>> p = ProxyFactory(ob)
    >>> a = I1(p)
    >>> type(a)
-   <type 'zope.security._proxy._Proxy'>
+   <... 'zope.security...proxy...Proxy...'>
 
    >>> a = removeSecurityProxy(a)
    >>> type(a) is A1
@@ -601,7 +603,7 @@ get location proxies:
    >>> p = ProxyFactory(ob)
    >>> a = I1(p)
    >>> type(a)
-   <type 'zope.security._proxy._Proxy'>
+   <... 'zope.security...proxy...Proxy...'>
 
    >>> a = removeSecurityProxy(a)
    >>> type(a)
@@ -614,7 +616,7 @@ subscriber
 With the <subscriber /> directive you can register subscription
 adapters or event subscribers with the adapter registry.  Consider
 this very typical example of a <subscriber /> directive:
- 
+
 .. doctest::
 
    >>> clearZCML()
@@ -644,7 +646,7 @@ components, such as the ZCML filename and line numbers:
    >>> sm = zope.component.getSiteManager()
    >>> doc = [reg.info for reg in sm.registeredSubscriptionAdapters()
    ...        if reg.provided is IS][0]
-   >>> print doc
+   >>> print(doc)
    File "<string>", line 4.2-9.8
      Could not read source.
 
@@ -818,7 +820,7 @@ unproxied access to it, but the subscriber itself is proxied:
    >>> p = ProxyFactory(content)
    >>> a3 = zope.component.subscribers((p, a1), IS)[0]
    >>> type(a3)
-   <type 'zope.security._proxy._Proxy'>
+   <... 'zope.security...proxy...Proxy...'>
 
 There's no location proxy behind the security proxy:
 
@@ -866,7 +868,7 @@ With a proxied object, we again get a security-proxied subscriber:
    >>> a3 = zope.component.subscribers((p, a1), IS)[0]
 
    >>> type(a3)
-   <type 'zope.security._proxy._Proxy'>
+   <... 'zope.security...proxy...Proxy...'>
 
    >>> removeSecurityProxy(a3).context[0] is content
    True
@@ -1129,6 +1131,10 @@ First we provide a stub configuration context:
 .. doctest::
 
    >>> import re, pprint
+   >>> try:
+   ...     from cStringIO import StringIO
+   ... except ImportError:
+   ...     from io import StringIO
    >>> atre = re.compile(' at [0-9a-fA-Fx]+')
    >>> class Context(object):
    ...    actions = ()
@@ -1139,7 +1145,7 @@ First we provide a stub configuration context:
    ...        pprinter = pprint.PrettyPrinter(stream=stream, width=60)
    ...        pprinter.pprint(self.actions)
    ...        r = stream.getvalue()
-   ...        return (''.join(atre.split(r))).strip()
+   ...        return (u''.join(atre.split(r))).strip()
    >>> context = Context()
 
 Then we provide a test interface that we'd like to register:
@@ -1168,7 +1174,7 @@ However, after calling the directive handler...
    ((None,
      <function provideInterface>,
      ('',
-      <InterfaceClass __builtin__.I>,
+      <InterfaceClass ....I>,
       <InterfaceClass zope.component.tests.examples.ITestType>)),)
 
 ...it does provide ``ITestType``:

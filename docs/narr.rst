@@ -1,6 +1,8 @@
 Zope Component Architecture
 ===========================
 
+.. currentmodule:: zope.component
+
 This package, together with `zope.interface`, provides facilities for
 defining, registering and looking up components.  There are two basic
 kinds of components: adapters and utilities.
@@ -14,22 +16,23 @@ definition:
 
 .. doctest::
 
+   >>> from __future__ import print_function
    >>> from zope import interface
 
    >>> class IGreeter(interface.Interface):
    ...     def greet():
    ...         "say hello"
 
-   >>> class Greeter:
-   ...     interface.implements(IGreeter)
+   >>> @interface.implementer(IGreeter)
+   ... class Greeter(object):
    ...
    ...     def __init__(self, other="world"):
    ...         self.other = other
    ...
    ...     def greet(self):
-   ...         print "Hello", self.other
+   ...         print(("Hello %s" % (self.other)))
 
-We can register an instance this class using `provideUtility` [1]_:
+We can register an instance this class using :func:`provideUtility` [1]_:
 
 .. doctest::
 
@@ -37,9 +40,9 @@ We can register an instance this class using `provideUtility` [1]_:
    >>> greet = Greeter('bob')
    >>> component.provideUtility(greet, IGreeter, 'robert')
 
-In this example we registered the utility as providing the `IGreeter`
+In this example we registered the utility as providing the ``IGreeter``
 interface with a name of 'bob'. We can look the interface up with
-either `queryUtility` or `getUtility`:
+either :func:`queryUtility` or :func:`getUtility`:
 
 .. doctest::
 
@@ -49,7 +52,7 @@ either `queryUtility` or `getUtility`:
    >>> component.getUtility(IGreeter, 'robert').greet()
    Hello bob
 
-`queryUtility` and `getUtility` differ in how failed lookups are handled:
+:func:`queryUtility` and :func:`getUtility` differ in how failed lookups are handled:
 
 .. doctest::
 
@@ -63,7 +66,7 @@ either `queryUtility` or `getUtility`:
    ComponentLookupError: (<InterfaceClass ...IGreeter>, 'ted')
 
 If a component provides only one interface, as in the example above,
-then we can omit the provided interface from the call to `provideUtility`:
+then we can omit the provided interface from the call to :func:`provideUtility`:
 
 .. doctest::
 
@@ -95,21 +98,20 @@ for different people:
    >>> class IPerson(interface.Interface):
    ...     name = interface.Attribute("Name")
 
-   >>> class PersonGreeter:
-   ...
-   ...     component.adapts(IPerson)
-   ...     interface.implements(IGreeter)
+   >>> @component.adapter(IPerson)
+   ... @interface.implementer(IGreeter)
+   ... class PersonGreeter(object):
    ...
    ...     def __init__(self, person):
    ...         self.person = person
    ...
    ...     def greet(self):
-   ...         print "Hello", self.person.name
+   ...         print("Hello", self.person.name)
 
 The class defines a constructor that takes an argument for every
 object adapted.
 
-We used `component.adapts` to declare what we adapt.  We can find
+We used :func:`adapter` to declare what we adapt.  We can find
 out if an object declares that it adapts anything using adaptedBy:
 
 .. doctest::
@@ -139,8 +141,8 @@ interface:
 
 .. doctest::
 
-   >>> class Person:
-   ...     interface.implements(IPerson)
+   >>> @interface.implementer(IPerson)
+   ... class Person(object):
    ...
    ...     def __init__(self, name):
    ...         self.name = name
@@ -156,7 +158,7 @@ how to register the adapter.
    >>> class BobPersonGreeter(PersonGreeter):
    ...     name = 'Bob'
    ...     def greet(self):
-   ...         print "Hello", self.person.name, "my name is", self.name
+   ...         print("Hello", self.person.name, "my name is", self.name)
 
    >>> component.provideAdapter(
    ...                        BobPersonGreeter, [IPerson], IGreeter, 'bob')
@@ -172,7 +174,7 @@ The arguments can also be provided as keyword arguments:
    ...     factory=TedPersonGreeter, adapts=[IPerson],
    ...     provides=IGreeter, name='ted')
 
-For named adapters, use `queryAdapter`, or `getAdapter`:
+For named adapters, use :func:`queryAdapter`, or :func:`getAdapter`:
 
 .. doctest::
 
@@ -182,8 +184,8 @@ For named adapters, use `queryAdapter`, or `getAdapter`:
    >>> component.getAdapter(Person("Sally"), IGreeter, 'ted').greet()
    Hello Sally my name is Ted
 
-If an adapter can't be found, `queryAdapter` returns a default value
-and `getAdapter` raises an error:
+If an adapter can't be found, :func:`queryAdapter` returns a default value
+and :func:`getAdapter` raises an error:
 
 .. doctest::
 
@@ -200,18 +202,17 @@ Adapters can adapt multiple objects:
 
 .. doctest::
 
-   >>> class TwoPersonGreeter:
-   ...
-   ...     component.adapts(IPerson, IPerson)
-   ...     interface.implements(IGreeter)
+   >>> @component.adapter(IPerson, IPerson)
+   ... @interface.implementer(IGreeter)
+   ... class TwoPersonGreeter(object):
    ...
    ...     def __init__(self, person, greeter):
    ...         self.person = person
    ...         self.greeter = greeter
    ...
    ...     def greet(self):
-   ...         print "Hello", self.person.name
-   ...         print "my name is", self.greeter.name
+   ...         print("Hello", self.person.name)
+   ...         print("my name is", self.greeter.name)
 
    >>> component.provideAdapter(TwoPersonGreeter)
 
@@ -221,8 +222,8 @@ parameters given to the adapter and used to query the adapter. This is
 especially the case when different Interfaces are adapt to (opposed to
 this example).
 
-To look up a multi-adapter, use either `queryMultiAdapter` or
-`getMultiAdapter`:
+To look up a multi-adapter, use either :func:`queryMultiAdapter` or
+:func:`getMultiAdapter`:
 
 .. doctest::
 
@@ -250,7 +251,7 @@ adapter decorator to declare that a callable object adapts some interfaces
 
 
 In this example, the personJob function simply returns the person's
-`job` attribute if present, or None if it's not present.  An adapter
+``job`` attribute if present, or None if it's not present.  An adapter
 factory can return None to indicate that adaptation wasn't possible.
 Let's register this adapter and try it out:
 
@@ -302,8 +303,8 @@ Perhaps we have documents:
    ...     summary = interface.Attribute("Document summary")
    ...     body = interface.Attribute("Document text")
 
-   >>> class Document:
-   ...     interface.implements(IDocument)
+   >>> @interface.implementer(IDocument)
+   ... class Document(object):
    ...     def __init__(self, summary, body):
    ...         self.summary, self.body = summary, body
 
@@ -313,9 +314,9 @@ line:
 
 .. doctest::
 
-   >>> class SingleLineSummary:
-   ...     component.adapts(IDocument)
-   ...     interface.implements(IValidate)
+   >>> @component.adapter(IDocument)
+   ... @interface.implementer(IValidate)
+   ... class SingleLineSummary(object):
    ...
    ...     def __init__(self, doc):
    ...         self.doc = doc
@@ -330,10 +331,9 @@ Or we might require the body to be at least 1000 characters in length:
 
 .. doctest::
 
-   >>> class AdequateLength:
-   ...     component.adapts(IDocument)
-   ...     interface.implements(IValidate)
-   ...
+   >>> @component.adapter(IDocument)
+   ... @interface.implementer(IValidate)
+   ... class AdequateLength(object):
    ...     def __init__(self, doc):
    ...         self.doc = doc
    ...
@@ -410,8 +410,8 @@ To register the subscriber above, we define a document-created event:
    >>> class IDocumentCreated(interface.Interface):
    ...     doc = interface.Attribute("The document that was created")
 
-   >>> class DocumentCreated:
-   ...     interface.implements(IDocumentCreated)
+   >>> @interface.implementer(IDocumentCreated)
+   ... class DocumentCreated(object):
    ...
    ...     def __init__(self, doc):
    ...         self.doc = doc
@@ -424,7 +424,7 @@ We'll also change our handler definition to:
    ... def documentCreated(event):
    ...     event.doc.created = datetime.datetime.utcnow()
 
-This marks the handler as an adapter of `IDocumentCreated` events.
+This marks the handler as an adapter of ``IDocumentCreated`` events.
 
 Now we'll register the handler  [1]_:
 
@@ -432,7 +432,7 @@ Now we'll register the handler  [1]_:
 
    >>> component.provideHandler(documentCreated)
 
-Now, if we can create an event and use the `handle` function to call
+Now, if we can create an event and use the :func:`handle` function to call
 handlers registered for the event:
 
 .. doctest::

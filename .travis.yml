@@ -3,9 +3,6 @@ sudo: false
 matrix:
   include:
     - python: 2.7
-      env: DOCS=1
-      # The doctests only run on Python 2.7
-    - python: 2.7
       env: MINIMAL="-t !persistentregistry -t !security"
 python:
   - 2.7
@@ -13,12 +10,11 @@ python:
   - 3.5
   - 3.6
   - pypy-5.6.0
-  - pypy3.3-5.5-alpha
 
 script:
   - coverage run -m zope.testrunner --test-path=src $MINIMAL
-  - if [[ -n "$DOCS" ]]; then sphinx-build -b html    -d docs/_build/doctrees docs docs/_build/html; fi
-  - if [[ -n "$DOCS" ]]; then coverage run `which sphinx-build` -b doctest -d docs/_build/doctrees docs docs/_build/doctest; fi
+  - if [[ -z "$MINIMAL" ]]; then sphinx-build                      -b html    -d docs/_build/doctrees docs docs/_build/html; fi
+  - if [[ -z "$MINIMAL" ]]; then coverage run -a `which sphinx-build` -b doctest -d docs/_build/doctrees docs docs/_build/doctest; fi
 
 after_success:
   - coveralls

@@ -14,10 +14,10 @@ The Factory Class
    >>> class IKlass(Interface):
    ...     pass
 
-   >>> from zope.interface import implements
-   >>> class Klass(object):
-   ...     implements(IKlass)
-   ... 
+   >>> from zope.interface import implementer
+   >>> @implementer(IKlass)
+   ... class Klass(object):
+   ...
    ...     def __init__(self, *args, **kw): #*
    ...         self.args = args
    ...         self.kw = kw
@@ -53,14 +53,14 @@ and make sure that the correct class was used to create the object:
    <class 'Klass'>
 
 Since we passed in a couple positional and a keyword argument
-  
+
 .. doctest::
 
    >>> kl.args
    (1, 2)
    >>> kl.kw
    {'foo': 3}
-   
+
    >>> factory2(3)
    3
    >>> factory3(3)
@@ -94,16 +94,16 @@ Provided Interfaces
    >>> implemented = factory.getInterfaces()
    >>> implemented.isOrExtends(IKlass)
    True
-   >>> list(implemented)
-   [<InterfaceClass __builtin__.IKlass>]
-   
+   >>> list(implemented) == [IKlass]
+   True
+
    >>> implemented2 = factory2.getInterfaces()
    >>> list(implemented2)
    []
-   
+
    >>> implemented3 = factory3.getInterfaces()
-   >>> list(implemented3)
-   [<InterfaceClass __builtin__.IFunction>]
+   >>> list(implemented3) == [IFunction]
+   True
 
 
 The Component Architecture Factory API
@@ -113,7 +113,7 @@ The Component Architecture Factory API
 
    >>> import zope.component
    >>> factory = Factory(Klass, 'Klass', 'Klassier')
-   >>> gsm = zope.component.getGlobalSiteManager() 
+   >>> gsm = zope.component.getGlobalSiteManager()
 
    >>> from zope.component.interfaces import IFactory
    >>> gsm.registerUtility(factory, IFactory, 'klass')
@@ -139,15 +139,14 @@ Accessing Provided Interfaces
    >>> implemented = zope.component.getFactoryInterfaces('klass')
    >>> implemented.isOrExtends(IKlass)
    True
-   >>> [iface for iface in implemented]
-   [<InterfaceClass __builtin__.IKlass>]
+   >>> [iface for iface in implemented] == [IKlass]
+   True
 
 List of All Factories
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. doctest::
 
-   >>> [(name, fac.__class__) for name, fac in
+   >>> [(str(name), fac.__class__) for name, fac in
    ...  zope.component.getFactoriesFor(IKlass)]
-   [(u'klass', <class 'zope.component.factory.Factory'>)]
-
+   [('klass', <class 'zope.component.factory.Factory'>)]
