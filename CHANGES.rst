@@ -4,8 +4,11 @@ Changes
 4.4.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add support for Python 3.6.
 
+- Drop support for Python 3.3.
+
+- Drop support for "setup.py test".
 
 4.3.0 (2016-08-26)
 ------------------
