@@ -1,0 +1,9 @@
+[run]
+source = zope.component
+
+[report]
+exclude_lines =
+    pragma: no cover
+    pragma NO COVER
+    if __name__ == '__main__':
+    raise NotImplementedError

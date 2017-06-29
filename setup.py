@@ -22,51 +22,44 @@
 import os
 from setuptools import setup, find_packages
 
+HOOK_REQUIRES = [
+    'zope.hookable',
+]
 
-TESTS_REQUIRE = [
-    'zope.testing',
-    'zope.component[hook]',
-    'zope.component[persistentregistry]',
-    'zope.component[security]',
-    'zope.component[zcml]',
+PERSISTENTREGISTRY_REQUIRES = [
+    'persistent',
+]
+
+SECURITY_REQUIRES = [
+    'zope.location',
+    'zope.proxy',
+    'zope.security',
+]
+
+ZCML_REQUIRES = [
+    'zope.configuration',
+    'zope.i18nmessageid',
+]
+
+MIN_TESTS_REQUIRE = (
+    HOOK_REQUIRES
+    + ZCML_REQUIRES
+    + [
+        'zope.testing',
+        'zope.testrunner',
     ]
+)
 
-def _modname(path, base, name=''):
-    if path == base:
-        return name
-    dirname, basename = os.path.split(path)
-    return _modname(dirname, base, basename + '.' + name)
-
-def alltests():
-    import logging
-    import pkg_resources
-    import unittest
-
-    class NullHandler(logging.Handler):
-        level = 50
-
-        def emit(self, record):
-            pass
-
-    logging.getLogger().addHandler(NullHandler())
-
-    suite = unittest.TestSuite()
-    base = pkg_resources.working_set.find(
-        pkg_resources.Requirement.parse('zope.component')).location
-    for dirpath, dirnames, filenames in os.walk(base):
-        if os.path.basename(dirpath) == 'tests':
-            for filename in filenames:
-                if ( filename.endswith('.py') and
-                     filename.startswith('test') ):
-                    mod = __import__(
-                        _modname(dirpath, base, os.path.splitext(filename)[0]),
-                        {}, {}, ['*'])
-                    suite.addTest(mod.test_suite())
-    return suite
+TESTS_REQUIRE = (
+    MIN_TESTS_REQUIRE
+    + PERSISTENTREGISTRY_REQUIRES
+    + SECURITY_REQUIRES
+)
 
 
 def read(*rnames):
-    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+    with open(os.path.join(os.path.dirname(__file__), *rnames)) as f:
+        return f.read()
 
 setup(
     name='zope.component',
@@ -80,9 +73,9 @@ setup(
         read('README.rst')
         + '\n' +
         read('CHANGES.rst')
-        ),
-    packages = find_packages('src'),
-    package_dir = {'': 'src'},
+    ),
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -93,35 +86,34 @@ setup(
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Framework :: Zope3",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     namespace_packages=['zope',],
-    tests_require = TESTS_REQUIRE,
-    test_suite='__main__.alltests',
-    install_requires=['setuptools',
-                      'zope.interface>=4.1.0',
-                      'zope.event',
-                      ],
-    include_package_data = True,
-    zip_safe = False,
-    extras_require = {
-        'hook': ['zope.hookable'],
-        'persistentregistry': ['persistent'],
-        'security': ['zope.location',
-                    'zope.proxy',
-                    'zope.security',
-                    ],
-        'zcml': ['zope.configuration',
-                'zope.i18nmessageid',
-                ],
+    tests_require=TESTS_REQUIRE,
+    install_requires=[
+        'setuptools',
+        'zope.interface>=4.1.0',
+        'zope.event',
+    ],
+    include_package_data=True,
+    zip_safe=False,
+    extras_require={
+        'hook': HOOK_REQUIRES,
+        'persistentregistry': PERSISTENTREGISTRY_REQUIRES,
+        'security': SECURITY_REQUIRES,
+        'zcml': ZCML_REQUIRES,
+        'mintests': MIN_TESTS_REQUIRE,
         'test': TESTS_REQUIRE,
-        'testing': TESTS_REQUIRE + ['nose', 'coverage'],
-        'docs': ['Sphinx', 'repoze.sphinx.autointerface'],
-        },
-    )
+        'docs': [
+            'Sphinx',
+            'repoze.sphinx.autointerface',
+            'ZODB',
+        ],
+    },
+)
