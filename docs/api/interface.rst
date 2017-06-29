@@ -115,7 +115,7 @@ We can register ``IDemo`` as providing more than one interface:
    False
    >>> queryInterface('zope.component.tests.examples.IQI') is None
    True
-   
+
    >>> provideInterface('', IQI, ITestType)
    >>> ITestType.providedBy(IQI)
    True
@@ -175,8 +175,8 @@ We can register ``IDemo`` as providing more than one interface:
    >>> provideInterface('', ISII, ITestType)
    >>> ITestType.providedBy(ISII)
    True
-   >>> searchInterfaceIds(None, 'zope.component.tests.examples.ISII')
-   [u'zope.component.tests.examples.ISII']
+   >>> [str(x) for x in searchInterfaceIds(None, 'zope.component.tests.examples.ISII')]
+   ['zope.component.tests.examples.ISII']
 
 .. testcleanup::
 

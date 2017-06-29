@@ -5,7 +5,7 @@ The component architecture provides an application framework that provides its
 functionality through loosely-connected components. A *component* can be any
 Python object and has a particular purpose associated with it. Thus, in a
 component-based applications you have many small component in contrast to
-classical object-oriented development, where you have a few big objects. 
+classical object-oriented development, where you have a few big objects.
 
 Components communicate via specific APIs, which are formally defined by
 interfaces, which are provided by the `zope.interface` package. *Interfaces*
@@ -43,7 +43,7 @@ So let's say that we have a German socket:
 
 .. doctest::
 
-   >>> from zope.interface import Interface, implements
+   >>> from zope.interface import Interface, implementer
 
    >>> class IGermanSocket(Interface):
    ...     pass
@@ -52,9 +52,9 @@ So let's say that we have a German socket:
    ...     def __repr__(self):
    ...         return '<instance of %s>' %self.__class__.__name__
 
-   >>> class GermanSocket(Socket):
+   >>> @implementer(IGermanSocket)
+   ... class GermanSocket(Socket):
    ...     """German wall socket."""
-   ...     implements(IGermanSocket)
 
 and we want to convert it to an US socket
 
@@ -68,10 +68,10 @@ store to look for an adapter that we can plug in the wall:
 
 .. doctest::
 
-   >>> class GermanToUSSocketAdapter(Socket):
-   ...     implements(IUSSocket)
+   >>> @implementer(IUSSocket)
+   ... class GermanToUSSocketAdapter(Socket):
    ...     __used_for__ = IGermanSocket
-   ...     
+   ...
    ...     def __init__(self, socket):
    ...         self.context = socket
 
@@ -118,7 +118,7 @@ so that the socket now provides the US version:
    >>> IUSSocket.providedBy(bathroomUS)
    True
 
-Now you can insert your shaver and get on with your day. 
+Now you can insert your shaver and get on with your day.
 
 After a week you travel for a couple of days to the Prague and you notice that
 the Czech have yet another socket type:
@@ -128,8 +128,9 @@ the Czech have yet another socket type:
    >>> class ICzechSocket(Interface):
    ...     pass
 
-   >>> class CzechSocket(Socket):
-   ...     implements(ICzechSocket)
+   >>> @implementer(ICzechSocket)
+   ... class CzechSocket(Socket):
+   ...     pass
 
    >>> czech = CzechSocket()
 
@@ -142,7 +143,7 @@ you do not have one:
    ... #doctest: +NORMALIZE_WHITESPACE
    Traceback (most recent call last):
    ...
-   ComponentLookupError: (<instance of CzechSocket>, 
+   ComponentLookupError: (<instance of CzechSocket>,
                            <InterfaceClass __builtin__.IUSSocket>,
                            '')
 
@@ -171,10 +172,10 @@ frequency of the AC current:
 
 .. doctest::
 
-   >>> class GermanToUSSocketAdapterAndTransformer(object):
-   ...     implements(IUSSocket)
+   >>> @implementer(IUSSocket)
+   ... class GermanToUSSocketAdapterAndTransformer(object):
    ...     __used_for__ = IGermanSocket
-   ...     
+   ...
    ...     def __init__(self, socket):
    ...         self.context = socket
 
@@ -208,7 +209,7 @@ Clearly, we do not have an adapter for the MP3 player
    ... #doctest: +NORMALIZE_WHITESPACE
    Traceback (most recent call last):
    ...
-   ComponentLookupError: (<instance of GermanSocket>, 
+   ComponentLookupError: (<instance of GermanSocket>,
                            <InterfaceClass __builtin__.IUSSocket>,
                            'mp3')
 
@@ -222,14 +223,26 @@ to know about all the adapters that convert a German to a US socket type:
    >>> sockets = list(zope.component.getAdapters((bathroomDE,), IUSSocket))
    >>> len(sockets)
    3
-   >>> names = [name for name, socket in sockets]
-   >>> names.sort()
+   >>> names = sorted([str(name) for name, socket in sockets])
    >>> names
-   [u'', u'dvd', u'shaver']
+   ['', 'dvd', 'shaver']
 
-`zope.component.getAdapters()` returns a list of tuples. The first
+:func:`zope.component.getAdapters` returns a list of tuples. The first
 entry of the tuple is the name of the adapter and the second is the
 adapter itself.
+
+Note that the names are always text strings, meaning ``unicode`` on
+Python 2:
+
+.. doctest::
+
+   >>> try:
+   ...    text = unicode
+   ... except NameError:
+   ...    text = str
+   >>> [isinstance(name, text) for name, _ in sockets]
+   [True, True, True]
+
 
 
 Multi-Adapters
@@ -253,8 +266,8 @@ buy yet another adapter, but a piece that provides the grounding plug:
    >>> class IGrounder(Interface):
    ...     pass
 
-   >>> class Grounder(object):
-   ...     implements(IGrounder)
+   >>> @implementer(IGrounder)
+   ... class Grounder(object):
    ...     def __repr__(self):
    ...         return '<instance of Grounder>'
 
@@ -263,8 +276,8 @@ Then together they will provided a grounded us socket:
 
 .. doctest::
 
-   >>> class GroundedGermanToUSSocketAdapter(object):
-   ...     implements(IUSGroundedSocket)
+   >>> @implementer(IUSGroundedSocket)
+   ... class GroundedGermanToUSSocketAdapter(object):
    ...     __used_for__ = (IGermanSocket, IGrounder)
    ...     def __init__(self, socket, grounder):
    ...         self.socket, self.grounder = socket, grounder
@@ -293,7 +306,7 @@ we can now get a grounded US socket:
 
 .. doctest::
 
-   >>> socket = zope.component.getMultiAdapter((livingroom, grounder), 
+   >>> socket = zope.component.getMultiAdapter((livingroom, grounder),
    ...                                         IUSGroundedSocket, 'mp3')
 
 .. doctest::
@@ -314,8 +327,8 @@ Of course, you do not have a 'dvd' grounded US socket available:
    ... #doctest: +NORMALIZE_WHITESPACE
    Traceback (most recent call last):
    ...
-   ComponentLookupError: ((<instance of GermanSocket>, 
-                           <instance of Grounder>), 
+   ComponentLookupError: ((<instance of GermanSocket>,
+                           <instance of Grounder>),
                            <InterfaceClass __builtin__.IUSGroundedSocket>,
                            'dvd')
 
@@ -345,8 +358,9 @@ Let's say one of our adapters overheated and caused a small fire:
    >>> class IFire(Interface):
    ...     pass
 
-   >>> class Fire(object):
-   ...     implements(IFire)
+   >>> @implementer(IFire)
+   ... class Fire(object):
+   ...     pass
 
    >>> fire = Fire()
 
@@ -358,12 +372,18 @@ We want to use all available objects to put out the fire:
    ...     def extinguish():
    ...         pass
 
-   >>> class FireExtinguisher(object):
+   >>> from functools import total_ordering
+   >>> @total_ordering
+   ... class FireExtinguisher(object):
    ...     def __init__(self, fire):
    ...         pass
    ...     def extinguish(self):
    ...         "Place extinguish code here."
-   ...         print 'Used ' + self.__class__.__name__ + '.'
+   ...         print('Used ' + self.__class__.__name__ + '.')
+   ...     def __lt__(self, other):
+   ...         return type(self).__name__ < type(other).__name__
+   ...     def __eq__(self, other):
+   ...         return self is other
 
 Here some specific methods to put out the fire:
 
@@ -371,7 +391,7 @@ Here some specific methods to put out the fire:
 
    >>> class PowderExtinguisher(FireExtinguisher):
    ...     pass
-   >>> gsm.registerSubscriptionAdapter(PowderExtinguisher, 
+   >>> gsm.registerSubscriptionAdapter(PowderExtinguisher,
    ...                                 (IFire,), IFireExtinguisher)
 
    >>> class Blanket(FireExtinguisher):
@@ -396,7 +416,7 @@ Now let use all these things to put out the fire:
    Used SprinklerSystem.
 
 If no subscribers are found for a particular object, then an empty list is
-returned: 
+returned:
 
 .. doctest::
 
@@ -429,8 +449,8 @@ electric generator. The generator provides of course a US-style socket:
 
 .. doctest::
 
-   >>> class Generator(object):
-   ...     implements(IUSSocket)
+   >>> @implementer(IUSSocket)
+   ... class Generator(object):
    ...     def __repr__(self):
    ...         return '<instance of Generator>'
 
@@ -492,8 +512,8 @@ panels that provide a regular US-style socket as output:
 
 .. doctest::
 
-   >>> class SolarPanel(object):
-   ...     implements(IUSSocket)
+   >>> @implementer(IUSSocket)
+   ... class SolarPanel(object):
    ...     def __repr__(self):
    ...         return '<instance of Solar Panel>'
 
@@ -537,11 +557,9 @@ following API function will return a list of name/utility pairs:
 
 .. doctest::
 
-   >>> utils = list(zope.component.getUtilitiesFor(IUSSocket))
-   >>> utils.sort()
-   >>> utils #doctest: +NORMALIZE_WHITESPACE
-   [(u'', <instance of Generator>), 
-      (u'Solar Panel', <instance of Solar Panel>)]
+   >>> utils = sorted(list(zope.component.getUtilitiesFor(IUSSocket)))
+   >>> [(str(name), socket) for name, socket in utils]
+   [('', <instance of Generator>), ('Solar Panel', <instance of Solar Panel>)]
 
 Another method of looking up all utilities is by using
 `getAllUtilitiesRegisteredFor(iface)`. This function will return an iterable
@@ -551,8 +569,8 @@ need this method.
 
 .. doctest::
 
-   >>> utils = list(zope.component.getAllUtilitiesRegisteredFor(IUSSocket))
-   >>> utils.sort()
+   >>> utils = sorted(list(zope.component.getAllUtilitiesRegisteredFor(IUSSocket)),
+   ...                key=lambda x: type(x).__name__)
    >>> utils
    [<instance of Generator>, <instance of Solar Panel>]
 
@@ -577,7 +595,7 @@ the solar panel. To do this, we can use a standard implementation of the
 .. doctest::
 
    >>> from zope.component.factory import Factory
-   >>> factory = Factory(SolarPanel, 
+   >>> factory = Factory(SolarPanel,
    ...                   'Solar Panel',
    ...                   'This factory creates a solar panel.')
 
@@ -631,11 +649,9 @@ providing a certain interface:
 .. doctest::
 
    >>> factories = zope.component.getFactoriesFor(IUSSocket)
-   >>> factories = [(name, factory.__class__) for name, factory in factories]
-   >>> factories.sort()
-   >>> factories #doctest: +NORMALIZE_WHITESPACE
-   [(u'Generator', <class 'zope.component.factory.Factory'>), 
-      (u'SolarPanel', <class 'zope.component.factory.Factory'>)]
+   >>> factories = sorted([(name, factory.__class__) for name, factory in factories])
+   >>> [(str(name), kind) for name, kind in factories]
+   [('Generator', <class 'zope.component.factory.Factory'>), ('SolarPanel', <class 'zope.component.factory.Factory'>)]
 
 
 Site Managers

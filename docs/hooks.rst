@@ -14,7 +14,7 @@ As long as we haven't set a site, none is being considered current:
 .. doctest::
 
    >>> from zope.component.hooks import getSite
-   >>> print getSite()
+   >>> print(getSite())
    None
 
 We can also ask for the current component registry (aka site manager
@@ -71,7 +71,7 @@ Finally we can unset the site and the global component registry is used again:
 .. doctest::
 
    >>> setSite()
-   >>> print getSite()
+   >>> print(getSite())
    None
    >>> getSiteManager()
    <BaseGlobalComponents base>
@@ -86,12 +86,12 @@ useful when writing tests:
 .. doctest::
 
    >>> import zope.component.hooks
-   >>> print getSite()
+   >>> print(getSite())
    None
    >>> with zope.component.hooks.site(site2):
    ...     getSite() is site2
    True
-   >>> print getSite()
+   >>> print(getSite())
    None
 
 The site is properly restored even if the body of the with statement
@@ -99,7 +99,7 @@ raises an exception:
 
 .. doctest::
 
-   >>> print getSite()
+   >>> print(getSite())
    None
    >>> with zope.component.hooks.site(site2):
    ...    getSite() is site2
@@ -107,6 +107,5 @@ raises an exception:
    Traceback (most recent call last):
       ...
    ValueError: An error in the body
-   >>> print getSite()
+   >>> print(getSite())
    None
-

@@ -21,16 +21,16 @@ own. We do this simply by subclassing:
    >>> class OurLayer(LayerBase):
    ...     def setUp(self):
    ...         super(OurLayer, self).setUp()
-   ...         print "setUp called"
+   ...         print("setUp called")
    ...     def tearDown(self):
    ...         super(OurLayer, self).tearDown()
-   ...         print "tearDown called"
+   ...         print("tearDown called")
    ...     def testSetUp(self):
    ...         super(OurLayer, self).testSetUp()
-   ...         print "testSetUp called"
+   ...         print("testSetUp called")
    ...     def testTearDown(self):
    ...         super(OurLayer, self).testTearDown()
-   ...         print "testTearDown called"
+   ...         print("testTearDown called")
 
 Note that if we wanted to ensure that the methods of the superclass
 were called we have to use super(). In this case we actually wouldn't
@@ -54,7 +54,7 @@ Now we run some tests with this layer:
    ...    layer = layer
    ...
    ...    def testFoo(self):
-   ...        print "testFoo"
+   ...        print("testFoo")
    >>> suite = unittest.TestSuite()
    >>> suite.addTest(unittest.makeSuite(TestCase))
    >>> from zope.testrunner.runner import Runner
@@ -108,4 +108,3 @@ Since the ZCML sets up an adapter, we expect the tests to pass:
      Ran 1 tests with 0 failures, 0 errors and 0 skipped in ... seconds.
    Tearing down left over layers:
      Tear down zope.component.testfiles.ZCMLFileLayer in ... seconds.
-

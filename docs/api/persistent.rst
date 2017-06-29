@@ -167,11 +167,11 @@ We want to make sure that we see updates corrextly.
     >>> import persistent
     >>> import transaction
     >>> from zope.interface import Interface
-    >>> from zope.interface import implements
+    >>> from zope.interface import implementer
     >>> class IFoo(Interface):
     ...     pass
-    >>> class Foo(persistent.Persistent):
-    ...     implements(IFoo)
+    >>> @implementer(IFoo)
+    ... class Foo(persistent.Persistent):
     ...     name = ''
     ...     def __init__(self, name=''):
     ...         self.name = name

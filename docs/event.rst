@@ -76,9 +76,10 @@ First create an object class:
    >>> class IUseless(zope.interface.Interface):
    ...     """Useless object"""
 
-   >>> class UselessObject(object):
+   >>> @zope.interface.implementer(IUseless)
+   ... class UselessObject(object):
    ...     """Useless object"""
-   ...     zope.interface.implements(IUseless)
+
 
 Then create an event class:
 
@@ -87,9 +88,9 @@ Then create an event class:
    >>> class IObjectThrownEvent(zope.component.interfaces.IObjectEvent):
    ...     """An object has been thrown away"""
 
-   >>> class ObjectThrownEvent(zope.component.interfaces.ObjectEvent):
+   >>> @zope.interface.implementer(IObjectThrownEvent)
+   ... class ObjectThrownEvent(zope.component.interfaces.ObjectEvent):
    ...     """An object has been thrown away"""
-   ...     zope.interface.implements(IObjectThrownEvent)
 
 Create an object and an event:
 
