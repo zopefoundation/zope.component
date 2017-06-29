@@ -15,6 +15,7 @@
 """
 import unittest
 
+from zope.component.tests import fails_if_called
 
 class HookableTests(unittest.TestCase):
 
@@ -24,30 +25,25 @@ class HookableTests(unittest.TestCase):
 
     def test_ctor_simple(self):
         from zope.component.hookable import hookable
-        def foo():
-            pass
+        foo = fails_if_called(self)
         hooked = hookable(foo)
         self.assertTrue(hooked.original is foo)
         self.assertTrue(hooked.implementation is foo)
 
     def test_ctor_extra_arg(self):
         from zope.component.hookable import hookable
-        def foo():
-            pass
+        foo = fails_if_called(self)
         self.assertRaises(TypeError, hookable, foo, foo)
 
     def test_ctor_extra_arg_miss(self):
         from zope.component.hookable import hookable
-        def foo():
-            pass
+        foo = fails_if_called(self)
         self.assertRaises(TypeError, hookable, foo, nonesuch=foo)
 
     def test_sethook(self):
         from zope.component.hookable import hookable
-        def foo():
-            pass
-        def bar():
-            pass
+        foo = fails_if_called(self)
+        bar = fails_if_called(self)
         hooked = hookable(foo)
         hooked.sethook(bar)
         self.assertTrue(hooked.original is foo)
@@ -55,10 +51,8 @@ class HookableTests(unittest.TestCase):
 
     def test_reset(self):
         from zope.component.hookable import hookable
-        def foo():
-            pass
-        def bar():
-            pass
+        foo = fails_if_called(self)
+        bar = fails_if_called(self)
         hooked = hookable(foo)
         hooked.sethook(bar)
         hooked.reset()
@@ -67,63 +61,33 @@ class HookableTests(unittest.TestCase):
 
     def test_cant_assign_original(self):
         from zope.component.hookable import hookable
-        def foo():
-            pass
-        def bar():
-            pass
+        foo = fails_if_called(self)
+        bar = fails_if_called(self)
         hooked = hookable(foo)
-        try:
+        with self.assertRaises((TypeError, AttributeError)):
             hooked.original = bar
-        except TypeError:
-            pass
-        except AttributeError:
-            pass
-        else:
-            self.fail('Assigned original')
 
     def test_cant_delete_original(self):
         from zope.component.hookable import hookable
-        def foo():
-            pass
+        foo = fails_if_called(self)
         hooked = hookable(foo)
-        try:
+        with self.assertRaises((TypeError, AttributeError)):
             del hooked.original
-        except TypeError:
-            pass
-        except AttributeError:
-            pass
-        else:
-            self.fail('Deleted original')
 
     def test_cant_assign_implementation(self):
         from zope.component.hookable import hookable
-        def foo():
-            pass
-        def bar():
-            pass
+        foo = fails_if_called(self)
+        bar = fails_if_called(self)
         hooked = hookable(foo)
-        try:
+        with self.assertRaises((TypeError, AttributeError)):
             hooked.implementation = bar
-        except TypeError:
-            pass
-        except AttributeError:
-            pass
-        else:
-            self.fail('Assigned implementation')
 
     def test_cant_delete_implementation(self):
         from zope.component.hookable import hookable
-        def foo():
-            pass
+        foo = fails_if_called(self)
         hooked = hookable(foo)
-        try:
+        with self.assertRaises((TypeError, AttributeError)):
             del hooked.implementation
-        except TypeError:
-            pass
-        except AttributeError:
-            pass
-        else:
-            self.fail('Deleted implementation')
 
     def test_ctor___call__(self):
         from zope.component.hookable import hookable
@@ -133,9 +97,3 @@ class HookableTests(unittest.TestCase):
         hooked = hookable(foo)
         hooked('one', 'two', bar='baz')
         self.assertEqual(_called, [(('one', 'two'), {'bar': 'baz'})])
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(HookableTests),
-    ))

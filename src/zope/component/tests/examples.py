@@ -53,9 +53,6 @@ class ISI(Interface):
 class ISII(Interface):
     pass
 
-def noop(*args):
-    pass
-
 class U(object):
 
     def __init__(self, name):
@@ -120,11 +117,6 @@ class Comp(object):
         self.context = context
 
 comp = Comp(1)
-
-@implementer(I3)
-class Comp2(object):
-    def __init__(self, context):
-        self.context = context
 
 
 class ConformsToIComponentLookup(object):

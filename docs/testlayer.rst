@@ -76,6 +76,11 @@ ZCMLLayer
 
 We now want a layer that loads up some ZCML from a file. The default
 is ``ftesting.zcml``, but here we'll load a test ``testlayer.zcml``.
+We can also choose to provide extra ZCML features that are used `to
+conditionally control processing of certain directives
+<http://zopeconfiguration.readthedocs.io/en/latest/narr.html#making-specific-directives-conditional>`_
+(here we use "devmode", a common condition for controlling development
+options like debugging output).
 
 .. doctest::
 
@@ -83,17 +88,21 @@ is ``ftesting.zcml``, but here we'll load a test ``testlayer.zcml``.
    >>> import zope.component.testfiles
    >>> zcml_file_layer = ZCMLFileLayer(
    ...     zope.component.testfiles,
-   ...     'testlayer.zcml')
+   ...     'testlayer.zcml',
+   ...     features=["devmode"])
 
    >>> class TestCase(unittest.TestCase):
    ...    layer = zcml_file_layer
    ...
    ...    def testFoo(self):
+   ...        # The feature was registered
+   ...        self.assertTrue(self.layer.context.hasFeature('devmode'))
    ...        # we should now have the adapter registered
    ...        from zope import component
    ...        from zope.component.testfiles import components
-   ...        self.assert_(isinstance(
-   ...            components.IApp2(components.content), components.Comp2))
+   ...        self.assertIsInstance(
+   ...            components.IApp2(components.content), components.Comp2)
+
 
 Since the ZCML sets up an adapter, we expect the tests to pass:
 

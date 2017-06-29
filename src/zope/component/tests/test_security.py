@@ -15,7 +15,10 @@
 """
 import unittest
 
+from zope.component.tests import skipIfNoSecurity
+from zope.component.tests import fails_if_called
 
+@skipIfNoSecurity
 class PermissionProxyTests(unittest.TestCase):
 
     def _getTargetClass(self):
@@ -38,7 +41,7 @@ class PermissionProxyTests(unittest.TestCase):
         proxy = self._makeOne(foo)
         self.assertEqual(providedBy(proxy), providedBy(foo))
 
-
+@skipIfNoSecurity
 class Test__checker(unittest.TestCase):
 
     def _callFUT(self, *args, **kw):
@@ -55,12 +58,12 @@ class Test__checker(unittest.TestCase):
         from zope.interface import Interface
         class IFoo(Interface):
             def bar(self):
-                pass
+                "bar"
             def baz(self):
-                pass
+                "baz"
         class ISpam(Interface):
             def qux(self):
-                pass
+                "qux"
         checker = self._callFUT(object(), 'testing', (IFoo, ISpam), ())
         self.assertEqual(checker.get_permissions,
                         {'bar': 'testing', 'baz': 'testing', 'qux': 'testing'})
@@ -72,7 +75,7 @@ class Test__checker(unittest.TestCase):
                         {'foo': 'testing', 'bar': 'testing'})
         self.assertFalse(checker.set_permissions)
 
-
+@skipIfNoSecurity
 class Test_proxify(unittest.TestCase):
 
     def _callFUT(self, *args, **kw):
@@ -81,8 +84,7 @@ class Test_proxify(unittest.TestCase):
 
     def _makeContext(self):
         class _Context(object):
-            def bar(self):
-                pass
+            bar = fails_if_called(self)
         return _Context()
 
     def test_no_checker_no_provides(self):
@@ -93,7 +95,7 @@ class Test_proxify(unittest.TestCase):
         from zope.interface import Interface
         class IFoo(Interface):
             def bar(self):
-                pass
+                "bar"
         ctx = self._makeContext()
         self.assertRaises(ValueError, self._callFUT, ctx, provides=IFoo)
 
@@ -103,7 +105,7 @@ class Test_proxify(unittest.TestCase):
         from zope.proxy import getProxiedObject
         class IFoo(Interface):
             def bar(self):
-                pass
+                "bar"
         ctx = self._makeContext()
         proxy = self._callFUT(ctx, provides=IFoo, permission='zope.Public')
         self.assertTrue(getProxiedObject(proxy) is ctx)
@@ -116,7 +118,7 @@ class Test_proxify(unittest.TestCase):
         from zope.proxy import getProxiedObject
         class IFoo(Interface):
             def bar(self):
-                pass
+                "bar"
         ctx = self._makeContext()
         proxy = self._callFUT(ctx, provides=IFoo, permission='testing')
         self.assertTrue(getProxiedObject(proxy) is ctx)
@@ -132,7 +134,7 @@ class Test_proxify(unittest.TestCase):
         self.assertTrue(getProxiedObject(proxy) is ctx)
         self.assertTrue(proxy.__Security_checker__ is _CHECKER)
 
-
+@skipIfNoSecurity
 class Test_protectedFactory(unittest.TestCase):
 
     def _callFUT(self, *args, **kw):
@@ -144,10 +146,9 @@ class Test_protectedFactory(unittest.TestCase):
         from zope.security.checker import CheckerPublic
         class IFoo(Interface):
             def bar(self):
-                pass
+                "bar"
         class _Factory(object):
-            def bar(self):
-                pass
+            bar = fails_if_called(self)
         protected = self._callFUT(_Factory, IFoo, 'zope.Public')
         self.assertTrue(protected.factory is _Factory)
         foo = protected()
@@ -159,17 +160,16 @@ class Test_protectedFactory(unittest.TestCase):
         from zope.security.proxy import getTestProxyItems
         class IFoo(Interface):
             def bar(self):
-                pass
+                "bar"
         class _Factory(object):
             __slots__ = ('one',)
-            def bar(self):
-                pass
+            bar = fails_if_called(self)
         protected = self._callFUT(_Factory, IFoo, 'testing')
         self.assertTrue(protected.factory is _Factory)
         foo = protected()
         self.assertEqual(getTestProxyItems(foo), [('bar', 'testing')])
 
-
+@skipIfNoSecurity
 class Test_securityAdapterFactory(unittest.TestCase):
 
     def _callFUT(self, *args, **kw):
@@ -237,13 +237,3 @@ class Test_securityAdapterFactory(unittest.TestCase):
             pass
         proxy = self._callFUT(_Factory, 'testing', True, True)
         self.assertTrue(isinstance(proxy, LocatingTrustedAdapterFactory))
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(PermissionProxyTests),
-        unittest.makeSuite(Test__checker),
-        unittest.makeSuite(Test_proxify),
-        unittest.makeSuite(Test_protectedFactory),
-        unittest.makeSuite(Test_securityAdapterFactory),
-    ))

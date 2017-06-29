@@ -7,10 +7,16 @@
 
 .. image:: https://travis-ci.org/zopefoundation/zope.component.png?branch=master
         :target: https://travis-ci.org/zopefoundation/zope.component
+        :alt: Build Status
 
 .. image:: https://readthedocs.org/projects/zopecomponent/badge/?version=latest
         :target: http://zopecomponent.readthedocs.org/en/latest/
         :alt: Documentation Status
+
+.. image:: https://coveralls.io/repos/github/zopefoundation/zope.component/badge.svg?branch=master
+        :target: https://coveralls.io/github/zopefoundation/zope.component?branch=master
+        :alt: Coverage Status
+
 
 .. note::
 

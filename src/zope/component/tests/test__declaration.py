@@ -76,26 +76,13 @@ class Test_adapter(unittest.TestCase):
 
 class Test_adapts(unittest.TestCase):
 
-    def _run_generated_code(self, code, globs, locs,
-                            fails_under_py3k=True,
-                           ):
+    def _run_generated_code(self, code, globs, locs):
         import warnings
-        #from zope.component._compat import PYTHON3
-        PYTHON3 = False
         with warnings.catch_warnings(record=True) as log:
             warnings.resetwarnings()
-            if not PYTHON3:
-                exec(code, globs, locs)
-                self.assertEqual(len(log), 0) # no longer warn
-                return True
-            else:
-                try:
-                    exec(code, globs, locs)
-                except TypeError:
-                    return False
-                else:
-                    if fails_under_py3k:
-                        self.fail("Didn't raise TypeError")
+            exec(code, globs, locs)
+            self.assertEqual(len(log), 0) # no longer warn
+            return True
 
     def test_instances_not_affected(self):
         from zope.component._declaration import adapts
@@ -119,12 +106,12 @@ class Test_adapts(unittest.TestCase):
             'def foo():',
             '    adapts(IFoo)'
             ])
-        if self._run_generated_code(CODE, globs, locs, False):
-            foo = locs['foo']
-            with warnings.catch_warnings(record=True) as log:
-                warnings.resetwarnings()
-                self.assertRaises(TypeError, foo)
-                self.assertEqual(len(log), 0) # no longer warn
+        self._run_generated_code(CODE, globs, locs)
+        foo = locs['foo']
+        with warnings.catch_warnings(record=True) as log:
+            warnings.resetwarnings()
+            self.assertRaises(TypeError, foo)
+            self.assertEqual(len(log), 0) # no longer warn
 
     def test_called_twice_from_class(self):
         import warnings
@@ -163,10 +150,10 @@ class Test_adapts(unittest.TestCase):
             'class Foo(object):',
             '    adapts(IFoo)',
             ])
-        if self._run_generated_code(CODE, globs, locs):
-            Foo = locs['Foo']
-            spec = Foo.__component_adapts__
-            self.assertEqual(list(spec), [IFoo])
+        self._run_generated_code(CODE, globs, locs)
+        Foo = locs['Foo']
+        spec = Foo.__component_adapts__
+        self.assertEqual(list(spec), [IFoo])
 
 
 class Test_adaptedBy(unittest.TestCase):
@@ -211,11 +198,3 @@ class Test_adaptedBy(unittest.TestCase):
         baz = Baz()
         baz.__component_adapts__ = (IFoo, IBar)
         self.assertEqual(self._callFUT(baz), (IFoo, IBar))
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_adapter),
-        unittest.makeSuite(Test_adapts),
-        unittest.makeSuite(Test_adaptedBy),
-    ))

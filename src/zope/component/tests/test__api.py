@@ -15,6 +15,7 @@
 """
 import unittest
 
+from zope.component.tests import fails_if_called
 
 class Test_getSiteManager(unittest.TestCase):
 
@@ -88,8 +89,7 @@ class Test_getAdapterInContext(unittest.TestCase):
             pass
         @implementer(IFoo)
         class Global(object):
-            def __init__(self, context):
-                self.context = context
+            __init__ = fails_if_called(self)
         @implementer(IFoo)
         class Local(object):
             def __init__(self, context):
@@ -120,43 +120,38 @@ class Test_queryAdapterInContext(unittest.TestCase):
 
     def test_miss(self):
         from zope.interface import Interface
-        from zope.component import queryAdapterInContext
+
         class IFoo(Interface):
             pass
         self.assertEqual(
-            queryAdapterInContext(object(), IFoo, context=None), None)
+            self._callFUT(object(), IFoo, context=None), None)
 
     def test_w_object_conforming(self):
         from zope.interface import Interface
-        from zope.component import queryAdapterInContext
         class IFoo(Interface):
             pass
         _adapted = object()
         class Foo(object):
-            def __conform__(self, iface, default=None):
-                if iface is IFoo:
-                    return _adapted
-                return default
+            def __conform__(self, iface, default=None, _test=self):
+                _test.assertIs(iface, IFoo)
+                return _adapted
+
         self.assertTrue(
-                queryAdapterInContext(Foo(), IFoo, context=None) is _adapted)
+                self._callFUT(Foo(), IFoo, context=None) is _adapted)
 
     def test___conform___raises_TypeError_via_class(self):
         from zope.interface import Interface
-        from zope.component import queryAdapterInContext
+
         class IFoo(Interface):
             pass
         _adapted = object()
         class Foo(object):
-            def __conform__(self, iface, default=None):
-                if iface is IFoo:
-                    return _adapted
-                return default
+            __conform__ = fails_if_called(self, arguments=False)
         # call via class, triggering TypeError
-        self.assertEqual(queryAdapterInContext(Foo, IFoo, context=None), None)
+        self.assertEqual(self._callFUT(Foo, IFoo, context=None), None)
 
     def test___conform___raises_TypeError_via_inst(self):
         from zope.interface import Interface
-        from zope.component import queryAdapterInContext
         class IFoo(Interface):
             pass
         _adapted = object()
@@ -164,20 +159,20 @@ class Test_queryAdapterInContext(unittest.TestCase):
             def __conform__(self, iface, default=None):
                 raise TypeError
         self.assertRaises(TypeError,
-                         queryAdapterInContext, Foo(), IFoo, context=None)
+                          self._callFUT, Foo(), IFoo, context=None)
 
     def test_w_object_implementing(self):
         from zope.interface import Interface
         from zope.interface import implementer
-        from zope.component import queryAdapterInContext
+
         class IFoo(Interface):
             pass
         @implementer(IFoo)
         class Foo(object):
               pass
         foo = Foo()
-        self.assertTrue(
-                queryAdapterInContext(foo, IFoo, context=None) is foo)
+        self.assertIs(
+                self._callFUT(foo, IFoo, context=None), foo)
 
 
 class Test_getAdapter(unittest.TestCase):
@@ -338,8 +333,7 @@ class Test_queryAdapter(unittest.TestCase):
             pass
         @implementer(IFoo)
         class Global(object):
-            def __init__(self, context):
-                self.context = context
+            __init__ = fails_if_called(self)
         @implementer(IFoo)
         class Local(object):
             def __init__(self, context):
@@ -570,8 +564,7 @@ class Test_queryMultiAdapter(unittest.TestCase):
             pass
         @implementer(IFoo)
         class Global(object):
-            def __init__(self, first, second):
-                self.first, self.second = first, second
+            __init__ = fails_if_called(self)
         @implementer(IFoo)
         class Local(object):
             def __init__(self, first, second):
@@ -1057,10 +1050,11 @@ class Test_createObject(unittest.TestCase):
         class Context(object):
             def __conform__(self, iface):
                 return self
-            def queryUtility(self, iface, name, default):
-                if iface is IFactory and name == 'test':
-                    return _factory
-                return default
+            def queryUtility(self, iface, name, default, _test=self):
+                _test.assertIs(iface, IFactory)
+                _test.assertEqual(name, 'test')
+                return _factory
+
         context = Context()
         self.assertTrue(self._callFUT('test', context=context) is _object)
         self.assertEqual(_factory_called, [((), {})])
@@ -1089,10 +1083,11 @@ class Test_getFactoryInterfaces(unittest.TestCase):
         class Context(object):
             def __conform__(self, iface):
                 return self
-            def queryUtility(self, iface, name, default):
-                if iface is IFactory and name == 'test':
-                    return _Factory()
-                return default
+            def queryUtility(self, iface, name, default, _test=self):
+                _test.assertIs(iface, IFactory)
+                _test.assertEqual(name, 'test')
+                return _Factory()
+
         context = Context()
         self.assertEqual(self._callFUT('test', context=context), [IFoo])
 
@@ -1177,28 +1172,3 @@ def _makeMyUtility(name, sm):
             self.sitemanager = sm
 
     return MyUtility(name, sm)
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_getSiteManager),
-        unittest.makeSuite(Test_getAdapterInContext),
-        unittest.makeSuite(Test_queryAdapterInContext),
-        unittest.makeSuite(Test_getAdapter),
-        unittest.makeSuite(Test_queryAdapter),
-        unittest.makeSuite(Test_getMultiAdapter),
-        unittest.makeSuite(Test_queryMultiAdapter),
-        unittest.makeSuite(Test_getAdapters),
-        unittest.makeSuite(Test_subscribers),
-        unittest.makeSuite(Test_handle),
-        unittest.makeSuite(Test_getUtility),
-        unittest.makeSuite(Test_queryUtility),
-        unittest.makeSuite(Test_getUtilitiesFor),
-        unittest.makeSuite(Test_getAllUtilitiesRegisteredFor),
-        unittest.makeSuite(Test_getNextUtility),
-        unittest.makeSuite(Test_queryNextUtility),
-        unittest.makeSuite(Test_createObject),
-        unittest.makeSuite(Test_getFactoryInterfaces),
-        unittest.makeSuite(Test_getFactoriesFor),
-    ))
-

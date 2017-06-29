@@ -16,6 +16,14 @@
 import unittest
 
 
+def skipIfNoPersistent(testfunc):
+    try:
+        import persistent
+    except ImportError:
+        return unittest.skip("persistent not installed")(testfunc)
+    return testfunc
+
+@skipIfNoPersistent
 class PersistentAdapterRegistryTests(unittest.TestCase):
 
     def _getTargetClass(self):
@@ -123,7 +131,7 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         self.assertEqual(registry.__bases__, bases)
         self.assertEqual(registry.ro, [registry] + list(bases))
 
-
+@skipIfNoPersistent
 class PersistentComponentsTests(unittest.TestCase):
 
     def _getTargetClass(self):
@@ -156,9 +164,3 @@ def _makeOctets(s):
     if sys.version_info < (3,):
         return bytes(s)
     return bytes(s, 'ascii') #pragma NO COVERAGE
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(PersistentAdapterRegistryTests),
-        unittest.makeSuite(PersistentComponentsTests),
-    ))

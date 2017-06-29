@@ -17,7 +17,7 @@ import os
 from zope.configuration import xmlconfig, config
 try:
     from zope.testing.cleanup import cleanUp
-except ImportError:
+except ImportError: # pragma: no cover
     def cleanUp():
         pass
 
@@ -62,7 +62,7 @@ class LayerBase(object):
         self.__name__ = name
         self.__module__ = package.__name__
         self.package = package
-        
+
     def setUp(self):
         pass
 

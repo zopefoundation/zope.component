@@ -74,6 +74,7 @@ setup(
         + '\n' +
         read('CHANGES.rst')
     ),
+    keywords="interface component coupling loose utility adapter",
     packages=find_packages('src'),
     package_dir={'': 'src'},
     classifiers=[
