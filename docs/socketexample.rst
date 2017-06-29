@@ -569,8 +569,8 @@ need this method.
 
 .. doctest::
 
-   >>> utils = list(zope.component.getAllUtilitiesRegisteredFor(IUSSocket))
-   >>> utils.sort(key=lambda x: type(x).__name__)
+   >>> utils = sorted(list(zope.component.getAllUtilitiesRegisteredFor(IUSSocket)),
+   ...                key=lambda x: type(x).__name__)
    >>> utils
    [<instance of Generator>, <instance of Solar Panel>]
 
