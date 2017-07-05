@@ -15,6 +15,8 @@
 """
 import unittest
 
+from zope.component.tests import fails_if_called
+
 class Test_getGlobalSiteManager(unittest.TestCase):
 
     def _callFUT(self):
@@ -68,7 +70,12 @@ class Test_provideUtility(unittest.TestCase):
         foo = Foo()
         self._callFUT(foo)
         gsm = getGlobalSiteManager()
-        self.assertTrue(gsm.getUtility(IFoo, '') is foo)
+        self.assertIs(gsm.getUtility(IFoo, ''), foo)
+
+        # We can clean it up using the fallback and it will be gone
+        from zope.component.testing import _PlacelessSetupFallback
+        _PlacelessSetupFallback().cleanUp()
+        self.assertIsNone(gsm.queryUtility(IFoo, ''))
 
     def test_named_w_provides(self):
         from zope.interface import Interface
@@ -212,9 +219,8 @@ class Test_provideHandler(unittest.TestCase):
         @implementer(IFoo)
         class Foo(object):
             pass
-        @adapter(IFoo)
-        def _handler(context):
-            assert 0, "DON'T GO HERE"
+        _handler = adapter(IFoo)(fails_if_called(self))
+
         self._callFUT(_handler)
         gsm = getGlobalSiteManager()
         regs = list(gsm.registeredHandlers())
@@ -229,8 +235,7 @@ class Test_provideHandler(unittest.TestCase):
         from zope.component.globalregistry import getGlobalSiteManager
         class IFoo(Interface):
             pass
-        def _handler(context):
-            assert 0, "DON'T GO HERE"
+        _handler = fails_if_called(self)
         self._callFUT(_handler, (IFoo,))
         gsm = getGlobalSiteManager()
         regs = list(gsm.registeredHandlers())
@@ -239,13 +244,3 @@ class Test_provideHandler(unittest.TestCase):
         self.assertEqual(list(hr.required), [IFoo])
         self.assertEqual(hr.name, '')
         self.assertTrue(hr.factory is _handler)
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_getGlobalSiteManager),
-        unittest.makeSuite(Test_provideUtility),
-        unittest.makeSuite(Test_provideAdapter),
-        unittest.makeSuite(Test_provideSubscriptionAdapter),
-        unittest.makeSuite(Test_provideHandler),
-    ))

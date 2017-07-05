@@ -10,6 +10,13 @@ Changes
 
 - Drop support for "setup.py test".
 
+- Code coverage reports are now `produced and hosted by coveralls.io
+  <https://coveralls.io/github/zopefoundation/zope.component>`_, and
+  PRs must keep them at 100%.
+
+- Internal test code in ``zope.component.testfiles`` has been adjusted
+  and in some cases removed.
+
 4.3.0 (2016-08-26)
 ------------------
 

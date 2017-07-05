@@ -15,6 +15,7 @@
 """
 import unittest
 
+from zope.component.tests import fails_if_called
 
 class Test_dispatchUtilityRegistrationEvent(unittest.TestCase):
 
@@ -48,8 +49,7 @@ class Test_dispatchAdapterRegistrationEvent(unittest.TestCase):
     def test_it(self):
         from zope.component import registry
         class _Registration(object):
-            def factory(self, *args, **kw):
-                pass
+            factory = fails_if_called(self)
         _registration = _Registration()
         _EVENT = object()
         _handled = []
@@ -72,8 +72,7 @@ class Test_dispatchSubscriptionAdapterRegistrationEvent(unittest.TestCase):
     def test_it(self):
         from zope.component import registry
         class _Registration(object):
-            def factory(self, *args, **kw):
-                pass
+            factory = fails_if_called(self)
         _registration = _Registration()
         _EVENT = object()
         _handled = []
@@ -95,8 +94,7 @@ class Test_dispatchHandlerRegistrationEvent(unittest.TestCase):
     def test_it(self):
         from zope.component import registry
         class _Registration(object):
-            def handler(self, *args, **kw):
-                pass
+            handler = fails_if_called(self)
         _registration = _Registration()
         _EVENT = object()
         _handled = []
@@ -121,11 +119,3 @@ class _Monkey(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         for key, value in self.to_restore.items():
             setattr(self.module, key, value)
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_dispatchUtilityRegistrationEvent),
-        unittest.makeSuite(Test_dispatchAdapterRegistrationEvent),
-        unittest.makeSuite(Test_dispatchSubscriptionAdapterRegistrationEvent),
-        unittest.makeSuite(Test_dispatchHandlerRegistrationEvent),
-    ))

@@ -53,10 +53,6 @@ class Comp2(object):
     def __init__(self, context):
         self.context = context
 
-class Comp3(object):
-    def __init__(self, context):
-        self.context = context
-
 @adapter(IContent)
 @implementer(IApp)
 @named('app')

@@ -15,6 +15,7 @@
 """
 import unittest
 
+from zope.component.tests import fails_if_called
 
 class FactoryTests(unittest.TestCase):
 
@@ -24,7 +25,7 @@ class FactoryTests(unittest.TestCase):
 
     def _makeOne(self, callable=None, *args, **kw):
         if callable is None:
-            callable = _test_callable
+            callable = fails_if_called(self)
         return self._getTargetClass()(callable, *args, **kw)
 
     def test_class_conforms_to_IFactory(self):
@@ -38,14 +39,15 @@ class FactoryTests(unittest.TestCase):
         verifyObject(IFactory, self._makeOne())
 
     def test_ctor_defaults(self):
-        factory = self._makeOne()
-        self.assertEqual(factory._callable, _test_callable)
+        func = fails_if_called(self)
+        factory = self._makeOne(func)
+        self.assertEqual(factory._callable, func)
         self.assertEqual(factory.title, '')
         self.assertEqual(factory.description, '')
         self.assertEqual(factory._interfaces, None)
 
     def test_ctor_expclit(self):
-        factory = self._makeOne(_test_callable, 'TITLE', 'DESCRIPTION')
+        factory = self._makeOne(fails_if_called(self), 'TITLE', 'DESCRIPTION')
         self.assertEqual(factory.title, 'TITLE')
         self.assertEqual(factory.description, 'DESCRIPTION')
 
@@ -82,9 +84,9 @@ class FactoryTests(unittest.TestCase):
             pass
         class IBaz(Interface):
             pass
-        @implementer(IBaz)
-        def _callable():
-            pass
+        _callable = fails_if_called(self)
+        _callable.__name__ = '_callable'
+        _callable = implementer(IBaz)(_callable)
         factory = self._makeOne(_callable, interfaces=(IFoo, IBar))
         spec = factory.getInterfaces()
         self.assertEqual(spec.__name__, '_callable')
@@ -95,17 +97,7 @@ class FactoryTests(unittest.TestCase):
         from zope.interface import implementer
         class IBaz(Interface):
             pass
-        @implementer(IBaz)
-        def _callable():
-            pass
+        _callable = implementer(IBaz)(fails_if_called(self))
         factory = self._makeOne(_callable)
         spec = factory.getInterfaces()
         self.assertEqual(list(spec), [IBaz])
-
-def _test_callable(*args, **kw):
-    pass
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(FactoryTests),
-    ))
