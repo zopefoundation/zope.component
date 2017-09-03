@@ -4,8 +4,7 @@ Changes
 4.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Remove obsolete call of searchInterface from interfaceToName
 
 4.4.0 (2017-07-25)
 ------------------

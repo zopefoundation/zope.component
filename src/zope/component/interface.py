@@ -21,6 +21,7 @@ from zope.component.interfaces import ComponentLookupError
 from zope.component._api import queryUtility
 from zope.component._compat import CLASS_TYPES
 
+
 def provideInterface(id, interface, iface_type=None, info=''):
     """ Mark 'interface' as a named utilty providing 'iface_type'.
     """
@@ -79,7 +80,7 @@ def searchInterfaceUtilities(context, search_string=None, base=None):
     if search_string:
         search_string = search_string.lower()
         iface_utilities = [iface_util for iface_util in iface_utilities
-                           if (getInterfaceAllDocs(iface_util[1]).\
+                           if (getInterfaceAllDocs(iface_util[1]).
                                find(search_string) >= 0)]
     if base:
         res = [iface_util for iface_util in iface_utilities
@@ -90,7 +91,7 @@ def searchInterfaceUtilities(context, search_string=None, base=None):
 
 
 def getInterfaceAllDocs(interface):
-    iface_id = '%s.%s' %(interface.__module__, interface.__name__)
+    iface_id = '%s.%s' % (interface.__module__, interface.__name__)
     docs = [str(iface_id).lower(),
             str(interface.__doc__).lower()]
 
@@ -108,21 +109,8 @@ def nameToInterface(context, id):
     iface = getInterface(context, id)
     return iface
 
+
 def interfaceToName(context, interface):
     if interface is None:
         return 'None'
-    # XXX this search is pointless:  we are always going to return the
-    #     same value whether or not we find anything.
-    items = searchInterface(context, base=interface)
-    ids = [('%s.%s' %(iface.__module__, iface.__name__))
-           for iface in items
-           if iface == interface]
-
-    if not ids:
-        # Do not fail badly, instead resort to the standard
-        # way of getting the interface name, cause not all interfaces
-        # may be registered as utilities.
-        return interface.__module__ + '.' + interface.__name__
-
-    assert len(ids) == 1, "Ambiguous interface names: %s" % ids
-    return ids[0]
+    return '%s.%s' % (interface.__module__, interface.__name__)
