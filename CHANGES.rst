@@ -4,7 +4,9 @@ Changes
 4.4.1 (unreleased)
 ------------------
 
-- Remove obsolete call of searchInterface from interfaceToName
+- Remove obsolete call of ``searchInterface`` from
+  ``interfaceToName``. See https://github.com/zopefoundation/zope.component/issues/32
+
 
 4.4.0 (2017-07-25)
 ------------------
