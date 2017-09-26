@@ -1,7 +1,7 @@
 Changes
 =======
 
-4.4.1 (unreleased)
+4.4.1 (2017-09-26)
 ------------------
 
 - Remove obsolete call of ``searchInterface`` from
