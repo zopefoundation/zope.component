@@ -17,7 +17,6 @@ import sys
 import types
 
 from zope.hookable import hookable
-
 from zope.interface import Interface
 from zope.interface import implementedBy
 from zope.interface import providedBy

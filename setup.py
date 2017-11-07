@@ -105,7 +105,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     extras_require={
-        'hook': HOOK_REQUIRES, # BWC
+        'hook': HOOK_REQUIRES,  # BBB
         'persistentregistry': PERSISTENTREGISTRY_REQUIRES,
         'security': SECURITY_REQUIRES,
         'zcml': ZCML_REQUIRES,

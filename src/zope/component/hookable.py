@@ -15,4 +15,4 @@
 This module is deprecated. Prefer to use zope.hookable.hookable.
 """
 from zope.hookable import hookable
-hookable = hookable # BWC
+hookable = hookable # BBB
