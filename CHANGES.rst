@@ -4,7 +4,9 @@ Changes
 4.4.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Always install ``zope.hookable`` as a dependency (the ``hook``
+  extra is now empty). ``zope.hookable`` respects the PURE_PYTHON
+  environment variable, and has an optional C extension.
 
 
 4.4.1 (2017-09-26)

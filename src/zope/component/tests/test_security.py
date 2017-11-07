@@ -11,7 +11,8 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Pure-Python hookable tests
+"""
+Tests for zope.component.security
 """
 import unittest
 

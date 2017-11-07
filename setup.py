@@ -23,7 +23,6 @@ import os
 from setuptools import setup, find_packages
 
 HOOK_REQUIRES = [
-    'zope.hookable',
 ]
 
 PERSISTENTREGISTRY_REQUIRES = [
@@ -99,13 +98,14 @@ setup(
     tests_require=TESTS_REQUIRE,
     install_requires=[
         'setuptools',
-        'zope.interface>=4.1.0',
+        'zope.interface >= 4.1.0',
         'zope.event',
+        'zope.hookable >= 4.2.0',
     ],
     include_package_data=True,
     zip_safe=False,
     extras_require={
-        'hook': HOOK_REQUIRES,
+        'hook': HOOK_REQUIRES, # BWC
         'persistentregistry': PERSISTENTREGISTRY_REQUIRES,
         'security': SECURITY_REQUIRES,
         'zcml': ZCML_REQUIRES,
