@@ -17,12 +17,10 @@ import sys
 
 from zope.hookable import hookable
 from zope.interface import Interface
-
-from zope.component.interfaces import IFactory
 from zope.interface.interfaces import ComponentLookupError
 from zope.interface.interfaces import IComponentLookup
 
-
+from zope.component.interfaces import IFactory
 
 # getSiteManager() returns a component registry.  Although the term
 # "site manager" is deprecated in favor of "component registry",
