@@ -15,9 +15,9 @@
 """
 from zope.interface import Attribute
 from zope.interface import Interface
-from zope.interface import implements
 
-# BBB 2011-09-09, import interfaces from zope.interface 
+
+# BBB 2011-09-09, import interfaces from zope.interface
 from zope.interface.interfaces import ComponentLookupError
 from zope.interface.interfaces import Invalid
 from zope.interface.interfaces import IObjectEvent
@@ -85,15 +85,15 @@ class IComponentArchitecture(Interface):
 
     def queryNextUtility(context, interface, name='', default=None):
         """Query for the next available utility.
-    
+
         Find the next available utility providing `interface` and having the
         specified name. If no utility was found, return the specified `default`
         value.
         """
-    
+
     def getNextUtility(context, interface, name=''):
         """Get the next available utility.
-    
+
         If no utility was found, a `ComponentLookupError` is raised.
         """
 
@@ -432,4 +432,3 @@ class IFactory(Interface):
         created by this factory will implement. If the callable's Implements
         instance cannot be created, an empty Implements instance is returned.
         """
-

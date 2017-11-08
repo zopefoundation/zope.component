@@ -14,22 +14,14 @@
 """Zope 3 Component Architecture
 """
 import sys
-import types
 
 from zope.hookable import hookable
 from zope.interface import Interface
-from zope.interface import implementedBy
-from zope.interface import providedBy
 
-from zope.component.interfaces import IComponentArchitecture
-from zope.component.interfaces import IComponentRegistrationConvenience
 from zope.component.interfaces import IFactory
 from zope.component.interfaces import ComponentLookupError
 from zope.component.interfaces import IComponentLookup
 from zope.component._compat import _BLANK
-from zope.component._declaration import adaptedBy
-from zope.component._declaration import adapter
-from zope.component._declaration import adapts
 
 
 
@@ -204,8 +196,8 @@ def getNextUtility(context, interface, name=''):
     util = queryNextUtility(context, interface, name, _marker)
     if util is _marker:
         raise zope.component.interfaces.ComponentLookupError(
-              "No more utilities for %s, '%s' have been found." % (
-                  interface, name))
+            "No more utilities for %s, '%s' have been found." % (
+                interface, name))
     return util
 
 
