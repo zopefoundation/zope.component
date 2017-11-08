@@ -16,6 +16,7 @@
 import sys
 import types
 
+from zope.hookable import hookable
 from zope.interface import Interface
 from zope.interface import implementedBy
 from zope.interface import providedBy
@@ -30,12 +31,7 @@ from zope.component._declaration import adaptedBy
 from zope.component._declaration import adapter
 from zope.component._declaration import adapts
 
-# Use the C implementation in zope.hookable, if available;  fall back
-# to our Python version if not.
-try:
-    from zope.hookable import hookable
-except ImportError: #pragma NO COVER
-    from zope.component.hookable import hookable
+
 
 # getSiteManager() returns a component registry.  Although the term
 # "site manager" is deprecated in favor of "component registry",

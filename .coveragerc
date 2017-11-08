@@ -1,8 +1,10 @@
 [run]
 source = zope.component
 omit =
-    src/zope/component/standalonetests.py
     # Runs in a subprocess
+    src/zope/component/standalonetests.py
+    # Not used
+    src/zope/component/hookable.py
 
 [report]
 exclude_lines =

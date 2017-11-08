@@ -11,23 +11,8 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-""" This module supplies a pure-Python version of zope.hookable.hookable.
 """
-class hookable(object):
-    __slots__ = ('__original', '__implementation')
-
-    original = property(lambda self: self.__original,)
-    implementation = property(lambda self: self.__implementation,)
-
-    def __init__(self, implementation):
-        self.__original = self.__implementation = implementation
-
-    def sethook(self, newimplementation):
-        old, self.__implementation = self.__implementation, newimplementation
-        return old
-
-    def reset(self):
-        self.__implementation = self.__original
-
-    def __call__(self, *args, **kw):
-        return self.__implementation(*args, **kw)
+This module is deprecated. Prefer to use zope.hookable.hookable.
+"""
+from zope.hookable import hookable
+hookable = hookable # BBB
