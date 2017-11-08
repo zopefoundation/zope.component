@@ -83,7 +83,7 @@ class Test_getInterface(unittest.TestCase):
         return getInterface(*args, **kw)
 
     def test_miss(self):
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         self.assertRaises(ComponentLookupError,
                           self._callFUT, object(), 'nonesuch')
 
@@ -298,7 +298,7 @@ class Test_getInterfaceAllDocs(unittest.TestCase):
             def baz(self):
                 """BAZ"""
         self.assertEqual(self._callFUT(Foo),
-                         'zope.component.tests.test_interface.foo\n' + 
+                         'zope.component.tests.test_interface.foo\n' +
                          'docstring')
 
     def test_w_interface_no_members(self):
@@ -306,7 +306,7 @@ class Test_getInterfaceAllDocs(unittest.TestCase):
         class IFoo(Interface):
             """DOCSTRING"""
         self.assertEqual(self._callFUT(IFoo),
-                         'zope.component.tests.test_interface.ifoo\n' + 
+                         'zope.component.tests.test_interface.ifoo\n' +
                          'docstring')
 
     def test_w_interface_w_members(self):
@@ -319,7 +319,7 @@ class Test_getInterfaceAllDocs(unittest.TestCase):
                 """BAZ"""
         self.assertEqual(self._callFUT(IFoo),
                          'zope.component.tests.test_interface.ifoo\n' +
-                         'docstring\n' + 
+                         'docstring\n' +
                          'do bar\n' +
                          'baz')
 
@@ -336,7 +336,7 @@ class Test_nameToInterface(unittest.TestCase):
         self.assertTrue(self._callFUT(object(), 'None') is None)
 
     def test_miss(self):
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         self.assertRaises(ComponentLookupError,
                           self._callFUT, object(), 'nonesuch')
 
@@ -394,4 +394,3 @@ def test_suite():
         unittest.makeSuite(Test_nameToInterface),
         unittest.makeSuite(Test_interfaceToName),
     ))
-

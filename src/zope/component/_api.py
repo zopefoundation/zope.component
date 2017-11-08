@@ -19,9 +19,8 @@ from zope.hookable import hookable
 from zope.interface import Interface
 
 from zope.component.interfaces import IFactory
-from zope.component.interfaces import ComponentLookupError
-from zope.component.interfaces import IComponentLookup
-from zope.component._compat import _BLANK
+from zope.interface.interfaces import ComponentLookupError
+from zope.interface.interfaces import IComponentLookup
 
 
 
@@ -81,26 +80,26 @@ def queryAdapterInContext(object, interface, context, default=None):
 
     return getSiteManager(context).queryAdapter(object, interface, '', default)
 
-def getAdapter(object, interface=Interface, name=_BLANK, context=None):
+def getAdapter(object, interface=Interface, name=u'', context=None):
     adapter = queryAdapter(object, interface, name, None, context)
     if adapter is None:
         raise ComponentLookupError(object, interface, name)
     return adapter
 
-def queryAdapter(object, interface=Interface, name=_BLANK, default=None,
+def queryAdapter(object, interface=Interface, name=u'', default=None,
                  context=None):
     if context is None:
         return adapter_hook(interface, object, name, default)
     return getSiteManager(context).queryAdapter(object, interface, name,
                                                 default)
 
-def getMultiAdapter(objects, interface=Interface, name=_BLANK, context=None):
+def getMultiAdapter(objects, interface=Interface, name=u'', context=None):
     adapter = queryMultiAdapter(objects, interface, name, context=context)
     if adapter is None:
         raise ComponentLookupError(objects, interface, name)
     return adapter
 
-def queryMultiAdapter(objects, interface=Interface, name=_BLANK, default=None,
+def queryMultiAdapter(objects, interface=Interface, name=u'', default=None,
                       context=None):
     try:
         sitemanager = getSiteManager(context)
@@ -195,7 +194,7 @@ def getNextUtility(context, interface, name=''):
     """
     util = queryNextUtility(context, interface, name, _marker)
     if util is _marker:
-        raise zope.component.interfaces.ComponentLookupError(
+        raise ComponentLookupError(
             "No more utilities for %s, '%s' have been found." % (
                 interface, name))
     return util

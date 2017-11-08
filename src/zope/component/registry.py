@@ -13,24 +13,31 @@
 ##############################################################################
 """Basic components support
 """
-# BBB, import component-related from zope.interface
-from zope.interface.registry import Components
-from zope.interface.registry import _getUtilityProvided
-from zope.interface.registry import _getAdapterProvided
-from zope.interface.registry import _getAdapterRequired
-from zope.interface.registry import UtilityRegistration
-from zope.interface.registry import AdapterRegistration
-from zope.interface.registry import SubscriptionRegistration
-from zope.interface.registry import HandlerRegistration
 
 from zope.component._api import handle
 from zope.component._declaration import adapter
 
-from zope.component.interfaces import IAdapterRegistration
-from zope.component.interfaces import IHandlerRegistration
-from zope.component.interfaces import IRegistrationEvent
-from zope.component.interfaces import ISubscriptionAdapterRegistration
-from zope.component.interfaces import IUtilityRegistration
+from zope.interface.interfaces import IAdapterRegistration
+from zope.interface.interfaces import IHandlerRegistration
+from zope.interface.interfaces import IRegistrationEvent
+from zope.interface.interfaces import ISubscriptionAdapterRegistration
+from zope.interface.interfaces import IUtilityRegistration
+
+# BBB, import component-related from zope.interface
+import zope.deferredimport
+zope.deferredimport.deprecatedFrom(
+    "Import from zope.interface.registry",
+    "zope.interface.registry",
+    'Components',
+    '_getUtilityProvided',
+    '_getAdapterProvided',
+    '_getAdapterRequired',
+    'UtilityRegistration',
+    'AdapterRegistration',
+    'SubscriptionRegistration',
+    'HandlerRegistration',
+)
+
 
 @adapter(IUtilityRegistration, IRegistrationEvent)
 def dispatchUtilityRegistrationEvent(registration, event):

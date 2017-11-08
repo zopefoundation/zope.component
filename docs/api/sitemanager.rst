@@ -7,7 +7,7 @@ Site Manager APIs
 
    .. doctest::
 
-      >>> from zope.component.interfaces import IComponentLookup
+      >>> from zope.interface.interfaces import IComponentLookup
       >>> from zope.component.globalregistry import base
       >>> from zope.component import getGlobalSiteManager
       >>> gsm = getGlobalSiteManager()
@@ -37,7 +37,7 @@ Site Manager APIs
    .. doctest::
 
      >>> from zope.component import getSiteManager
-     >>> from zope.component.interfaces import IComponentLookup
+     >>> from zope.interface.interfaces import IComponentLookup
      >>> IComponentLookup.providedBy(getSiteManager())
      True
 
@@ -85,4 +85,3 @@ Site Manager APIs
      ...
      ComponentLookupError: ('Could not adapt', <instance Ob>,
      <InterfaceClass zope...interfaces.IComponentLookup>)
-

@@ -14,5 +14,5 @@
 """
 This module is deprecated. Prefer to use zope.hookable.hookable.
 """
-from zope.hookable import hookable
-hookable = hookable # BBB
+import zope.deprecation
+zope.deprecation.moved("zope.hookable", "4.5")

@@ -85,11 +85,11 @@ Then create an event class:
 
 .. doctest::
 
-   >>> class IObjectThrownEvent(zope.component.interfaces.IObjectEvent):
+   >>> class IObjectThrownEvent(zope.interface.interfaces.IObjectEvent):
    ...     """An object has been thrown away"""
 
    >>> @zope.interface.implementer(IObjectThrownEvent)
-   ... class ObjectThrownEvent(zope.component.interfaces.ObjectEvent):
+   ... class ObjectThrownEvent(zope.interface.interfaces.ObjectEvent):
    ...     """An object has been thrown away"""
 
 Create an object and an event:

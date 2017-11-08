@@ -200,7 +200,7 @@ Now we create two utilities and insert them in our folder hierarchy:
 
 .. doctest::
 
-   >>> from zope.component.interfaces import IComponentLookup
+   >>> from zope.interface.interfaces import IComponentLookup
    >>> util1 = MyUtility('one', sm1)
    >>> sm1.registerUtility(util1, IMyUtility, 'myutil')
    >>> IComponentLookup(util1) is sm1

@@ -25,7 +25,7 @@ class Test_getGlobalSiteManager(unittest.TestCase):
 
     def test_gsm_is_IComponentLookup(self):
         from zope.component.globalregistry import base
-        from zope.component.interfaces import IComponentLookup
+        from zope.interface.interfaces import IComponentLookup
         gsm = self._callFUT()
         self.assertTrue(gsm is base)
         self.assertTrue(IComponentLookup.providedBy(gsm))

@@ -98,9 +98,11 @@ setup(
     tests_require=TESTS_REQUIRE,
     install_requires=[
         'setuptools',
-        'zope.interface >= 4.1.0',
+        'zope.deferredimport >= 4.2.1',
+        'zope.deprecation >= 4.3.0',
         'zope.event',
         'zope.hookable >= 4.2.0',
+        'zope.interface >= 4.1.0',
     ],
     include_package_data=True,
     zip_safe=False,

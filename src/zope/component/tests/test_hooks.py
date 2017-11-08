@@ -196,7 +196,7 @@ class Test_getSiteManager(unittest.TestCase):
         from zope.interface import Interface
         from zope.component import hooks
         from zope.component.globalregistry import getGlobalSiteManager
-        from zope.component.interfaces import IComponentLookup
+        from zope.interface.interfaces import IComponentLookup
         class _Lookup(object):
             def __init__(self, context):
                 self.context = context
@@ -243,7 +243,7 @@ class Test_adapter_hook(unittest.TestCase):
         from zope.interface import Interface
         from zope.component import hooks
         from zope.component.globalregistry import getGlobalSiteManager
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         gsm = getGlobalSiteManager()

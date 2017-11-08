@@ -17,7 +17,7 @@ from zope.interface import alsoProvides
 from zope.interface.interfaces import IInterface
 
 from zope.component.globalregistry import getGlobalSiteManager
-from zope.component.interfaces import ComponentLookupError
+from zope.interface.interfaces import ComponentLookupError
 from zope.component._api import queryUtility
 from zope.component._compat import CLASS_TYPES
 

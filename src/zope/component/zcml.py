@@ -28,7 +28,6 @@ from zope.schema import TextLine
 from zope.component._api import getSiteManager
 from zope.component._declaration import adaptedBy, getName
 from zope.component.interface import provideInterface
-from zope.component._compat import _BLANK
 
 try:
     from zope.security.zcml import Permission
@@ -327,14 +326,14 @@ def subscriber(_context, for_=None, factory=None, handler=None, provides=None,
             discriminator = None,
             callable = _handler,
             args = ('registerHandler',
-                    handler, for_, _BLANK, _context.info),
+                    handler, for_, u'', _context.info),
             )
     else:
         _context.action(
             discriminator = None,
             callable = _handler,
             args = ('registerSubscriptionAdapter',
-                    factory, for_, provides, _BLANK, _context.info),
+                    factory, for_, provides, u'', _context.info),
             )
 
     if provides is not None:
@@ -492,7 +491,7 @@ class IBasicResourceInformation(Interface):
         title=_("The name of the resource."),
         description=_("The name shows up in URLs/paths. For example 'foo'."),
         required=True,
-        default=_BLANK,
+        default=u'',
         )
 
     provides = GlobalInterface(
@@ -594,7 +593,7 @@ def view(_context, factory, type, name, for_,
                     args = ('', iface)
                     )
 
-    
+
 class IResourceDirective(IBasicComponentInformation,
                          IBasicResourceInformation):
     """Register a resource"""

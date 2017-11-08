@@ -19,9 +19,9 @@ from zope.interface import moduleProvides
 from zope.interface import named
 from zope.interface import providedBy
 
-from zope.component.interfaces import ComponentLookupError
+from zope.interface.interfaces import ComponentLookupError
 from zope.component.interfaces import IComponentArchitecture
-from zope.component.interfaces import IComponentLookup
+from zope.interface.interfaces import IComponentLookup
 from zope.component.interfaces import IComponentRegistrationConvenience
 from zope.component.interfaces import IFactory
 
