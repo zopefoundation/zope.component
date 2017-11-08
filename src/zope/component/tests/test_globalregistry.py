@@ -25,7 +25,7 @@ class Test_getGlobalSiteManager(unittest.TestCase):
 
     def test_gsm_is_IComponentLookup(self):
         from zope.component.globalregistry import base
-        from zope.component.interfaces import IComponentLookup
+        from zope.interface.interfaces import IComponentLookup
         gsm = self._callFUT()
         self.assertTrue(gsm is base)
         self.assertTrue(IComponentLookup.providedBy(gsm))
@@ -102,7 +102,7 @@ class Test_provideAdapter(unittest.TestCase):
         from zope.interface import Interface
         from zope.interface import implementer
         from zope.component.globalregistry import getGlobalSiteManager
-        from zope.component._api import adapter
+        from zope.component._declaration import adapter
         class IFoo(Interface):
             pass
         class IBar(Interface):
@@ -156,7 +156,7 @@ class Test_provideSubscriptionAdapter(unittest.TestCase):
         from zope.interface import Interface
         from zope.interface import implementer
         from zope.component.globalregistry import getGlobalSiteManager
-        from zope.component._api import adapter
+        from zope.component._declaration import adapter
         class IFoo(Interface):
             pass
         class IBar(Interface):
@@ -213,7 +213,7 @@ class Test_provideHandler(unittest.TestCase):
         from zope.interface import implementer
         from zope.interface import providedBy
         from zope.component.globalregistry import getGlobalSiteManager
-        from zope.component._api import adapter
+        from zope.component._declaration import adapter
         class IFoo(Interface):
             pass
         @implementer(IFoo)

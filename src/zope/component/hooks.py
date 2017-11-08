@@ -25,8 +25,8 @@ except ImportError: #pragma NO COVER
         return x
 
 from zope.component.globalregistry import getGlobalSiteManager
-from zope.component.interfaces import ComponentLookupError
-from zope.component.interfaces import IComponentLookup
+from zope.interface.interfaces import ComponentLookupError
+from zope.interface.interfaces import IComponentLookup
 
 
 class read_property(object):

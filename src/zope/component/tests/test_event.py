@@ -38,7 +38,7 @@ class Test_objectEventNotify(unittest.TestCase):
         from zope.interface import Interface
         from zope.interface import implementer
         from zope.component.globalregistry import getGlobalSiteManager
-        from zope.component.interfaces import IObjectEvent
+        from zope.interface.interfaces import IObjectEvent
         from zope.component.event import objectEventNotify
         _adapted = []
         def _adapter(context, event):
@@ -63,4 +63,3 @@ def test_suite():
         unittest.makeSuite(Test_dispatch),
         unittest.makeSuite(Test_objectEventNotify),
     ))
-

@@ -15,30 +15,33 @@
 """
 from zope.interface import Attribute
 from zope.interface import Interface
-from zope.interface import implements
 
-# BBB 2011-09-09, import interfaces from zope.interface 
-from zope.interface.interfaces import ComponentLookupError
-from zope.interface.interfaces import Invalid
-from zope.interface.interfaces import IObjectEvent
-from zope.interface.interfaces import ObjectEvent
-from zope.interface.interfaces import IComponentLookup
-from zope.interface.interfaces import IRegistration
-from zope.interface.interfaces import IUtilityRegistration
-from zope.interface.interfaces import _IBaseAdapterRegistration
-from zope.interface.interfaces import IAdapterRegistration
-from zope.interface.interfaces import ISubscriptionAdapterRegistration
-from zope.interface.interfaces import IHandlerRegistration
-from zope.interface.interfaces import IRegistrationEvent
-from zope.interface.interfaces import RegistrationEvent
-from zope.interface.interfaces import IRegistered
-from zope.interface.interfaces import Registered
-from zope.interface.interfaces import IUnregistered
-from zope.interface.interfaces import Unregistered
-from zope.interface.interfaces import IComponentRegistry
-from zope.interface.interfaces import IComponents
 
-from zope.component._compat import _BLANK
+# BBB 2011-09-09, import interfaces from zope.interface
+import zope.deferredimport
+zope.deferredimport.deprecatedFrom(
+    "Import from zope.interface.interfaces",
+    "zope.interface.interfaces",
+    'ComponentLookupError',
+    'Invalid',
+    'IObjectEvent',
+    'ObjectEvent',
+    'IComponentLookup',
+    'IRegistration',
+    'IUtilityRegistration',
+    '_IBaseAdapterRegistration',
+    'IAdapterRegistration',
+    'ISubscriptionAdapterRegistration',
+    'IHandlerRegistration',
+    'IRegistrationEvent',
+    'RegistrationEvent',
+    'IRegistered',
+    'Registered',
+    'IUnregistered',
+    'Unregistered',
+    'IComponentRegistry',
+    'IComponents',
+)
 
 
 class IComponentArchitecture(Interface):
@@ -85,15 +88,15 @@ class IComponentArchitecture(Interface):
 
     def queryNextUtility(context, interface, name='', default=None):
         """Query for the next available utility.
-    
+
         Find the next available utility providing `interface` and having the
         specified name. If no utility was found, return the specified `default`
         value.
         """
-    
+
     def getNextUtility(context, interface, name=''):
         """Get the next available utility.
-    
+
         If no utility was found, a `ComponentLookupError` is raised.
         """
 
@@ -115,7 +118,7 @@ class IComponentArchitecture(Interface):
     # Adapter API
 
     def getAdapter(object,
-                   interface=Interface, name=_BLANK,
+                   interface=Interface, name=u'',
                    context=None):
         """Get a named adapter to an interface for an object
 
@@ -170,7 +173,7 @@ class IComponentArchitecture(Interface):
         named adapter methods with an empty string for a name.
         """
 
-    def queryAdapter(object, interface=Interface, name=_BLANK,
+    def queryAdapter(object, interface=Interface, name=u'',
                      default=None, context=None):
         """Look for a named adapter to an interface for an object
 
@@ -207,7 +210,7 @@ class IComponentArchitecture(Interface):
         """
 
     def queryMultiAdapter(objects,
-                          interface=Interface, name=_BLANK,
+                          interface=Interface, name=u'',
                           default=None,
                           context=None):
         """Look for a multi-adapter to an interface for objects
@@ -319,7 +322,7 @@ class IComponentRegistrationConvenience(Interface):
     activity.
     """
 
-    def provideUtility(component, provides=None, name=_BLANK):
+    def provideUtility(component, provides=None, name=u''):
         """Register a utility globally
 
         A utility is registered to provide an interface with a
@@ -335,7 +338,7 @@ class IComponentRegistrationConvenience(Interface):
 
         """
 
-    def provideAdapter(factory, adapts=None, provides=None, name=_BLANK):
+    def provideAdapter(factory, adapts=None, provides=None, name=u''):
         """Register an adapter globally
 
         An adapter is registered to provide an interface with a name
@@ -432,4 +435,3 @@ class IFactory(Interface):
         created by this factory will implement. If the callable's Implements
         instance cannot be created, an empty Implements instance is returned.
         """
-

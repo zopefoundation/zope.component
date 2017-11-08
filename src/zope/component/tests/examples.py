@@ -127,7 +127,7 @@ class ConformsToIComponentLookup(object):
 
     def __conform__(self, interface):
         """This method is specified by the adapter PEP to do the adaptation."""
-        from zope.component.interfaces import IComponentLookup
+        from zope.interface.interfaces import IComponentLookup
         if interface is IComponentLookup:
             return self.sitemanager
 

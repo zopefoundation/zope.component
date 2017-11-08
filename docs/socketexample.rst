@@ -673,10 +673,10 @@ always get the global site manager using the API:
    >>> from zope.component import globalSiteManager
    >>> gsm is globalSiteManager
    True
-   >>> from zope.component.interfaces import IComponentLookup
+   >>> from zope.interface.interfaces import IComponentLookup
    >>> IComponentLookup.providedBy(gsm)
    True
-   >>> from zope.component.interfaces import IComponents
+   >>> from zope.interface.interfaces import IComponents
    >>> IComponents.providedBy(gsm)
    True
 

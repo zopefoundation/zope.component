@@ -32,5 +32,3 @@ else: #pragma NO COVER
 
     PYTHON3 = True
     PYTHON2 = False
-
-_BLANK = u''

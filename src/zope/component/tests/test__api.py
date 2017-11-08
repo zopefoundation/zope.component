@@ -26,7 +26,7 @@ class Test_getSiteManager(unittest.TestCase):
         return getSiteManager(*args, **kw)
 
     def test_sm_is_IComponentLookup(self):
-        from zope.component.interfaces import IComponentLookup
+        from zope.interface.interfaces import IComponentLookup
         sm = self._callFUT()
         self.assertTrue(IComponentLookup.providedBy(sm))
 
@@ -46,13 +46,13 @@ class Test_getSiteManager(unittest.TestCase):
         self.assertTrue(self._callFUT(context) is sitemanager)
 
     def test_getSiteManager_w_invalid_context_no_adapter(self):
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         self.assertRaises(ComponentLookupError, self._callFUT, object())
 
     def test_getSiteManager_w_invalid_context_w_adapter(self):
         from zope.interface import Interface
         from zope.component.globalregistry import getGlobalSiteManager
-        from zope.component.interfaces import IComponentLookup
+        from zope.interface.interfaces import IComponentLookup
         gsm = getGlobalSiteManager()
         sm = object()
         def _adapt(x):
@@ -71,7 +71,7 @@ class Test_getAdapterInContext(unittest.TestCase):
 
     def test_miss(self):
         from zope.interface import Interface
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -185,7 +185,7 @@ class Test_getAdapter(unittest.TestCase):
 
     def test_anonymous_nonesuch(self):
         from zope.interface import Interface
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -193,7 +193,7 @@ class Test_getAdapter(unittest.TestCase):
 
     def test_named_nonesuch(self):
         from zope.interface import Interface
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -364,7 +364,7 @@ class Test_getMultiAdapter(unittest.TestCase):
 
     def test_anonymous_nonesuch(self):
         from zope.interface import Interface
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -372,7 +372,7 @@ class Test_getMultiAdapter(unittest.TestCase):
 
     def test_named_nonesuch(self):
         from zope.interface import Interface
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -586,7 +586,7 @@ class Test_queryMultiAdapter(unittest.TestCase):
     def test_wo_sitemanager(self):
         from zope.interface import Interface
         from zope.interface import implementer
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         class IBar(Interface):
@@ -645,7 +645,7 @@ class Test_getAdapters(unittest.TestCase):
     def test_wo_sitemanager(self):
         from zope.interface import Interface
         from zope.interface import implementer
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         class IBar(Interface):
@@ -704,7 +704,7 @@ class Test_subscribers(unittest.TestCase):
 
     def test_wo_sitemanager(self):
         from zope.interface import Interface
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         class Context(object):
@@ -761,14 +761,14 @@ class Test_getUtility(unittest.TestCase):
 
     def test_anonymous_nonesuch(self):
         from zope.interface import Interface
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError, self._callFUT, IFoo)
 
     def test_named_nonesuch(self):
         from zope.interface import Interface
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -964,7 +964,7 @@ class Test_getNextUtility(unittest.TestCase):
 
     def test_nested(self):
         from zope.component import getGlobalSiteManager
-        from zope.component.interfaces import IComponentLookup
+        from zope.interface.interfaces import IComponentLookup
         from zope.interface.registry import Components
         gsm = getGlobalSiteManager()
         gutil = _makeMyUtility('global', gsm)
@@ -1019,7 +1019,7 @@ class Test_queryNextUtility(unittest.TestCase):
 
     def test_wo_sitemanager(self):
         from zope.interface import Interface
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         class IFoo(Interface):
             pass
         class Context(object):
@@ -1037,7 +1037,7 @@ class Test_createObject(unittest.TestCase):
         return createObject(*args, **kw)
 
     def test_miss(self):
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         self.assertRaises(ComponentLookupError, self._callFUT, 'nonesuch')
 
     def test_hit(self):
@@ -1069,7 +1069,7 @@ class Test_getFactoryInterfaces(unittest.TestCase):
         return getFactoryInterfaces(*args, **kw)
 
     def test_miss(self):
-        from zope.component.interfaces import ComponentLookupError
+        from zope.interface.interfaces import ComponentLookupError
         self.assertRaises(ComponentLookupError, self._callFUT, 'nonesuch')
 
     def test_hit(self):
