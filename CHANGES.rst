@@ -4,9 +4,12 @@ Changes
 4.4.2 (unreleased)
 ------------------
 
+- Add support for Python 3.7.
+
 - Always install ``zope.hookable`` as a dependency (the ``hook``
   extra is now empty). ``zope.hookable`` respects the PURE_PYTHON
   environment variable, and has an optional C extension.
+
 - Make accessing names that have been moved to ``zope.interface``
   produce a ``DeprecationWarning``.
 
