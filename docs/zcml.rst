@@ -139,9 +139,8 @@ Of course, if no factory is provided at all, we will get an error:
    ...       />''')
    Traceback (most recent call last):
       ...
-   ZopeXMLConfigurationError: File "<string>", line 4.2-8.8
-         ValueError: No factory specified
-
+   ComponentConfigurationError: No factory specified
+       File "<string>", line 4.2-8.8
 
 Declaring ``for``, ``provides`` and ``name`` in Python
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -311,8 +310,8 @@ Chained factories are not supported for multi-adapters, though:
    ...       />''')
    Traceback (most recent call last):
       ...
-   ZopeXMLConfigurationError: File "<string>", line 4.2-11.8
-         ValueError: Can't use multiple factories and multiple for
+   ComponentConfigurationError: Can't use multiple factories and multiple for
+       File "<string>", line 4.2-11.8
 
 And neither for null-adapters:
 
@@ -328,8 +327,8 @@ And neither for null-adapters:
    ...       />''')
    Traceback (most recent call last):
       ...
-   ZopeXMLConfigurationError: File "<string>", line 4.2-9.8
-         ValueError: Can't use multiple factories and multiple for
+   ComponentConfigurationError: Can't use multiple factories and multiple for
+       File "<string>", line 4.2-9.8
 
 Protected adapters
 ~~~~~~~~~~~~~~~~~~
