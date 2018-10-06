@@ -14,5 +14,6 @@
 """
 This module is deprecated. Prefer to use zope.hookable.hookable.
 """
+# pragma: no cover
 import zope.deprecation
 zope.deprecation.moved("zope.hookable", "4.5")

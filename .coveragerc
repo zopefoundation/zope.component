@@ -5,6 +5,7 @@ omit =
     src/zope/component/standalonetests.py
     # Not used
     src/zope/component/hookable.py
+    src/zope/component/eventtesting.py
 
 [report]
 exclude_lines =

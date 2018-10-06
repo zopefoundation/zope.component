@@ -13,6 +13,7 @@
 ##############################################################################
 """Placeless Test Setup
 """
+
 from zope.component import provideHandler
 from zope.component.event import objectEventNotify
 from zope.component.registry import dispatchUtilityRegistrationEvent
@@ -22,12 +23,12 @@ from zope.component.registry import (
 from zope.component.registry import dispatchHandlerRegistrationEvent
 try:
     from zope.testing.cleanup import addCleanUp
-except ImportError: #pragma NO COVER
+except ImportError:
     def addCleanUp(x):
         pass
 
 events = []
-def getEvents(event_type=None, filter=None): #pragma NO COVER going aaway
+def getEvents(event_type=None, filter=None):
     r = []
     for event in events:
         if event_type is not None and not event_type.providedBy(event):
@@ -38,11 +39,11 @@ def getEvents(event_type=None, filter=None): #pragma NO COVER going aaway
 
     return r
 
-def clearEvents(): #pragma NO COVER going aaway
+def clearEvents():
     del events[:]
 addCleanUp(clearEvents)
 
-class PlacelessSetup: #pragma NO COVER going aaway
+class PlacelessSetup:
 
     def setUp(self):
         provideHandler(objectEventNotify)
@@ -52,5 +53,5 @@ class PlacelessSetup: #pragma NO COVER going aaway
         provideHandler(dispatchHandlerRegistrationEvent)
         provideHandler(events.append, (None,))
 
-def setUp(test=None): #pragma NO COVER going aaway
+def setUp(test=None):
     PlacelessSetup().setUp()
