@@ -131,13 +131,9 @@ class Test_adapts(unittest.TestCase):
             ])
         with warnings.catch_warnings(record=True) as log:
             warnings.resetwarnings()
-            try:
+            with self.assertRaises(TypeError):
                 exec(CODE, globs, locs)
-            except TypeError:
-                if not PYTHON3:
-                    self.assertEqual(len(log), 0) # no longer warn
-            else:
-                self.fail("Didn't raise TypeError")
+            self.assertEqual(len(log), 0) # no longer warn
 
     def test_called_once_from_class(self):
         from zope.component._declaration import adapts

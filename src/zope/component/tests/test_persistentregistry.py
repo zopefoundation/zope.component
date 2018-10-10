@@ -19,7 +19,7 @@ import unittest
 def skipIfNoPersistent(testfunc):
     try:
         import persistent
-    except ImportError:
+    except ImportError: # pragma: no cover
         return unittest.skip("persistent not installed")(testfunc)
     return testfunc
 
@@ -40,13 +40,13 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
             def __init__(self, jar):
                 self._jar = jar
                 self._mru = []
-            def mru(self, oid):
-                self._mru.append(oid)
+                # mru(oid) is only called in pure-Python runs
+                self.mru = self._mru.append
             def new_ghost(self, oid, obj):
                 obj._p_jar = self._jar
                 obj._p_oid = oid
             def update_object_size_estimation(self, oid, size):
-                return
+                "This is only called in pure-Python runs"
 
         return _Cache(jar)
 
@@ -160,7 +160,4 @@ class PersistentComponentsTests(unittest.TestCase):
                                    PersistentList))
 
 def _makeOctets(s):
-    import sys
-    if sys.version_info < (3,):
-        return bytes(s)
-    return bytes(s, 'ascii') #pragma NO COVERAGE
+    return bytes(s) if bytes is str else bytes(s, 'ascii')

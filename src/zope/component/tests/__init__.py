@@ -3,7 +3,7 @@ import unittest
 def skipIfNoSecurity(testfunc):
     try:
         import zope.security
-    except ImportError:
+    except ImportError: # pragma: no cover
         return unittest.skip("zope.security not installed")(testfunc)
     return testfunc
 
