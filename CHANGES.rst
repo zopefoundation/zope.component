@@ -4,7 +4,7 @@ Changes
 4.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fix tests on Python 2 following changes in ZODB 5.5.0.
 
 
 4.5 (2018-10-10)

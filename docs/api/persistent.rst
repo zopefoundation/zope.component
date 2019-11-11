@@ -16,8 +16,8 @@ managers and database connections to work with.
 
 .. doctest::
 
-    >>> import ZODB.tests.util
-    >>> db = ZODB.tests.util.DB()
+    >>> import ZODB.MappingStorage
+    >>> db = ZODB.MappingStorage.DB()
     >>> import transaction
     >>> t1 = transaction.TransactionManager()
     >>> c1 = db.open(transaction_manager=t1)
@@ -126,8 +126,8 @@ Subscription to Events in Persistent Registries
 
 .. doctest::
 
-    >>> import ZODB.tests.util
-    >>> db = ZODB.tests.util.DB()
+    >>> import ZODB.MappingStorage
+    >>> db = ZODB.MappingStorage.DB()
     >>> import transaction
     >>> t1 = transaction.TransactionManager()
     >>> c1 = db.open(transaction_manager=t1)
@@ -183,8 +183,8 @@ We want to make sure that we see updates corrextly.
     >>> len(base._v_subregistries)
     0
 
-    >>> import ZODB.tests.util
-    >>> db = ZODB.tests.util.DB()
+    >>> import ZODB.MappingStorage
+    >>> db = ZODB.MappingStorage.DB()
     >>> tm1 = transaction.TransactionManager()
     >>> c1 = db.open(transaction_manager=tm1)
     >>> from zope.component.persistentregistry import PersistentAdapterRegistry
