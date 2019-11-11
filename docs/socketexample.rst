@@ -4,7 +4,7 @@ The Zope 3 Component Architecture (Socket Example)
 The component architecture provides an application framework that provides its
 functionality through loosely-connected components. A *component* can be any
 Python object and has a particular purpose associated with it. Thus, in a
-component-based applications you have many small component in contrast to
+component-based applications you have many small components in contrast to
 classical object-oriented development, where you have a few big objects.
 
 Components communicate via specific APIs, which are formally defined by
