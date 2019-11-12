@@ -4,6 +4,10 @@ Changes
 4.6 (unreleased)
 ----------------
 
+- Add support for Python 3.8.
+
+- Drop support for Python 3.4.
+
 - Fix tests on Python 2 following changes in ZODB 5.5.0.
 
 
@@ -18,6 +22,7 @@ Changes
 
 - Make accessing names that have been moved to ``zope.interface``
   produce a ``DeprecationWarning``.
+
 
 4.4.1 (2017-09-26)
 ------------------
@@ -42,6 +47,7 @@ Changes
 - Internal test code in ``zope.component.testfiles`` has been adjusted
   and in some cases removed.
 
+
 4.3.0 (2016-08-26)
 ------------------
 
@@ -52,15 +58,18 @@ Changes
 
 - Add support for Python 3.5.
 
+
 4.2.2 (2015-06-04)
 ------------------
 
 - Fix test cases for PyPy and PyPy3.
 
+
 4.2.1 (2014-03-19)
 ------------------
 
 - Add support for Python 3.4.
+
 
 4.2.0 (2014-02-05)
 ------------------
@@ -73,6 +82,7 @@ Changes
 - Implement ability to specify adapter and utility names in Python. Use
   the ``@zope.component.named(name)`` decorator to specify the name.
 
+
 4.1.0 (2013-02-28)
 ------------------
 
@@ -84,15 +94,18 @@ Changes
 
 - Fix new failing tests.
 
+
 4.0.2 (2012-12-31)
 ------------------
 
 - Flesh out PyPI Trove classifiers.
 
+
 4.0.1 (2012-11-21)
 ------------------
 
 - Add support for Python 3.3.
+
 
 4.0.0 (2012-07-02)
 ------------------
@@ -121,16 +134,19 @@ Changes
 - Add ``setup.py dev`` alias (runs ``setup.py develop`` plus installs
   ``nose`` and ``coverage``).
 
+
 3.12.1 (2012-04-02)
 -------------------
 
 - Wrap ``with site(foo)`` in try/finally (LP768151).
+
 
 3.12.0 (2011-11-16)
 -------------------
 
 - Add convenience function zope.component.hooks.site (a contextmanager),
   so one can write ``with site(foo): ...``.
+
 
 3.11.0 (2011-09-22)
 -------------------
@@ -156,6 +172,7 @@ Changes
 
 - Depend on ``zope.interface`` >= 3.8.0.
 
+
 3.10.0 (2010-09-25)
 -------------------
 
@@ -168,15 +185,18 @@ Changes
 
 - Add a basic test for the ``configure.zcml`` file provided.
 
+
 3.9.5 (2010-07-09)
 ------------------
 
 - Fix test requirements specification.
 
+
 3.9.4 (2010-04-30)
 ------------------
 
 - Prefer the standard library ``doctest`` to the one from ``zope.testing``.
+
 
 3.9.3 (2010-03-08)
 ------------------
@@ -187,6 +207,7 @@ Changes
   method before the load of a ZCML file to register the components in a
   custom registry.
 
+
 3.9.2 (2010-01-22)
 ------------------
 
@@ -194,11 +215,13 @@ Changes
   ``CheckerPublic`` to ``securityAdapterFactory`` wrongly wrapped the factory
   into a ``LocatingUntrustedAdapterFactory``.
 
+
 3.9.1 (2010-01-21)
 ------------------
 
 - Modify the tests to avoid allowing the tested testrunner to be influenced
   by options of the outer testrunner, such a the ``-v`` option.
+
 
 3.9.0 (2010-01-21)
 ------------------
@@ -206,6 +229,7 @@ Changes
 - Add testlayer support. It is now possible to load a ZCML file within
   tests more easily. See ``src/zope/component/testlayer.py`` and
   ``src/zope/component/testlayer.txt``.
+
 
 3.8.0 (2009-11-16)
 ------------------
@@ -221,6 +245,7 @@ Changes
 
 - Move the ``zope.site.hooks`` functionality to ``zope.component.hooks`` as it
   isn't actually dealing with ``zope.site``'s concept of a site.
+
 
 3.7.1 (2009-07-24)
 ------------------
@@ -243,6 +268,7 @@ Changes
     negative consequence of this is that the utility is held in memory
     or in the database even though it isn't used.
 
+
 3.7.0 (2009-05-21)
 ------------------
 
@@ -250,6 +276,7 @@ Changes
 
 - Add ``zope:view`` and ``zope:resource`` implementations into
   ``zope.component.zcml`` (dependency loaded with ``zope.component [zcml]``).
+
 
 3.6.0 (2009-03-12)
 ------------------
@@ -287,12 +314,14 @@ Changes
 - Change package's mailing list address to zope-dev at zope.org, because
   zope3-dev at zope.org is now retired.
 
+
 3.5.1 (2008-07-25)
 ------------------
 
 - Fix bug introduced in 3.5.0: ``<utility factory="...">`` no longer supported
   interfaces declared in Python and always wanted an explicit
   ``provides="..."`` attribute. https://bugs.launchpad.net/zope3/+bug/251865
+
 
 3.5.0 (2008-07-25)
 ------------------
@@ -305,10 +334,12 @@ Changes
   efficient retrieval of already registered utilities. This avoids looping over
   all utilities when registering a new one.
 
+
 3.4.0 (2007-09-29)
 ------------------
 
 No further changes since 3.4.0a1.
+
 
 3.4.0a1 (2007-04-22)
 --------------------
@@ -319,15 +350,18 @@ Corresponds to ``zope.component`` from Zope 3.4.0a1.
   more.  See http://wiki.zope.org/zope3/LocalComponentManagementSimplification
   for the proposal describing the changes.
 
+
 3.2.0.2 (2006-04-15)
 --------------------
 
 - Fix packaging bug:  ``package_dir`` must be a *relative* path.
 
+
 3.2.0.1 (2006-04-14)
 --------------------
 
 - Packaging change: suppress inclusion of ``setup.cfg`` in ``sdist`` builds.
+
 
 3.2.0 (2006-01-05)
 ------------------
@@ -347,6 +381,7 @@ of the Zope 3.2.0 release.
 - Deprecated ``contextdependent`` package:  site managers are now looked up
   via a thread global, set during URL traversal.  The ``context`` argument
   is now always optional, and should no longer be passed.
+
 
 3.0.0 (2004-11-07)
 ------------------

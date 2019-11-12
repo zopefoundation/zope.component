@@ -1,32 +1,19 @@
 language: python
-sudo: false
-matrix:
-  include:
-    - python: 2.7
-      env: MINIMAL=1
+
 python:
   - 2.7
-  - 3.4
   - 3.5
   - 3.6
+  - 3.7
+  - 3.8
   - pypy
   - pypy3
 
-matrix:
+jobs:
   include:
-    - python: "3.7"
-      dist: xenial
-      sudo: true
-
-script:
-  - coverage run -m zope.testrunner --test-path=src
-  - if [[ -z "$MINIMAL" ]]; then sphinx-build                      -b html    -d docs/_build/doctrees docs docs/_build/html; fi
-  - if [[ -z "$MINIMAL" ]]; then coverage run -a `which sphinx-build` -b doctest -d docs/_build/doctrees docs docs/_build/doctest; fi
-
-after_success:
-  - coveralls
-notifications:
-  email: false
+    - name: "Python: 2.7, minimal set of dependencies"
+      python: 2.7
+      env: MINIMAL=1
 
 install:
   - pip install -U pip setuptools
@@ -34,8 +21,17 @@ install:
   - if [[ -n "$MINIMAL" ]]; then pip install -U -e ".[mintests]"; fi
   - if [[ -z "$MINIMAL" ]]; then pip install -U -e ".[test,docs]"; fi
 
+script:
+  - coverage run -m zope.testrunner --test-path=src
+  - if [[ -z "$MINIMAL" ]]; then sphinx-build              -b html    -d docs/_build/doctrees docs docs/_build/html; fi
+  - if [[ -z "$MINIMAL" ]]; then coverage run -a -m sphinx -b doctest -d docs/_build/doctrees docs docs/_build/doctest; fi
+
+after_success:
+  - coveralls
+
+notifications:
+  email: false
 
 cache: pip
-
 before_cache:
   - rm -f $HOME/.cache/pip/log/debug.log
