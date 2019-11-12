@@ -1,7 +1,7 @@
 Changes
 =======
 
-4.6 (unreleased)
+4.6 (2019-11-12)
 ----------------
 
 - Add support for Python 3.8.
