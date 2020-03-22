@@ -244,3 +244,31 @@ class Test_provideHandler(unittest.TestCase):
         self.assertEqual(list(hr.required), [IFoo])
         self.assertEqual(hr.name, '')
         self.assertTrue(hr.factory is _handler)
+
+
+class TestBaseGlobalComponents(unittest.TestCase):
+
+    from zope.component.testing import setUp, tearDown
+
+    def _getTargetClass(self):
+        from zope.component.globalregistry import BaseGlobalComponents
+        return BaseGlobalComponents
+
+    def _getTargetInterfaces(self):
+        from zope.interface.interfaces import IComponentLookup
+        from zope.interface.interfaces import IComponents
+        from zope.interface.interfaces import IComponentRegistry
+        return [IComponents, IComponentLookup, IComponentRegistry]
+
+    def _makeOne(self):
+        return self._getTargetClass()()
+
+    def test_verifyInstance(self):
+        from zope.interface.verify import verifyObject
+        for iface in self._getTargetInterfaces():
+            verifyObject(iface, self._makeOne())
+
+    def test_verifyClass(self):
+        from zope.interface.verify import verifyClass
+        for iface in self._getTargetInterfaces():
+            verifyClass(iface, self._getTargetClass())
