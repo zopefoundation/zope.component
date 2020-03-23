@@ -2,7 +2,7 @@
  Changes
 =========
 
-4.6.1 (unreleased)
+4.6.1 (2020-03-23)
 ==================
 
 - Ensure the resolution order of ``BaseGlobalComponents`` is
