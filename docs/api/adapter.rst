@@ -6,6 +6,8 @@ Adapter Registration APIs
    from zope.component.testing import setUp
    setUp()
 
+.. autofunction:: zope.component.provideUtility
+
 Conforming Adapter Lookup
 -------------------------
 

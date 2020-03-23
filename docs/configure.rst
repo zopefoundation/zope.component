@@ -1,5 +1,6 @@
-Package configuration
-=====================
+=======================
+ Package configuration
+=======================
 
 .. testsetup::
 

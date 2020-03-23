@@ -87,6 +87,12 @@ def getSite():
 
 @contextlib.contextmanager
 def site(site):
+    """
+    site(site) -> None
+
+    Context manager that sets *site* as the current site for the
+    duration of the ``with`` body.
+    """
     old_site = getSite()
     setSite(site)
     try:

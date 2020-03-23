@@ -3,7 +3,7 @@ Zope Component Architecture
 
 .. currentmodule:: zope.component
 
-This package, together with `zope.interface`, provides facilities for
+This package, together with :mod:`zope.interface`, provides facilities for
 defining, registering and looking up components.  There are two basic
 kinds of components: adapters and utilities.
 

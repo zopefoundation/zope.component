@@ -55,18 +55,19 @@ class IComponentArchitecture(Interface):
         """Return the global site manager.
 
         This function should never fail and always return an object that
-        provides `IGlobalSiteManager`.
+        provides `zope.interface.interfaces.IComponents`.
         """
 
     def getSiteManager(context=None):
         """Get the nearest site manager in the given context.
 
-        If `context` is `None`, return the global site manager.
+        If *context* is `None`, return the global site manager.
 
-        If the `context` is not `None`, it is expected that an adapter
-        from the `context` to `IComponentLookup` can be found. If no
-        adapter is found, a `ComponentLookupError` is raised.
-
+        If the *context* is not `None`, it is expected that an adapter
+        from the *context* to
+        :mod:`zope.interface.interfaces.IComponentLookup` can be
+        found. If no adapter is found, a
+        `~zope.interface.interfaces.ComponentLookupError` is raised.
         """
 
     # Utility API
@@ -75,29 +76,29 @@ class IComponentArchitecture(Interface):
         """Get the utility that provides interface
 
         Returns the nearest utility to the context that implements the
-        specified interface.  If one is not found, raises
-        ComponentLookupError.
+        specified interface. If one is not found, raises
+        `~zope.interface.interfaces.ComponentLookupError`.
         """
 
     def queryUtility(interface, name='', default=None, context=None):
-        """Look for the utility that provides interface
+        """Look for the utility that provides *interface*
 
-        Returns the nearest utility to the context that implements
-        the specified interface.  If one is not found, returns default.
+        Returns the nearest utility to the *context* that implements the
+        specified interface. If one is not found, returns *default*.
         """
 
     def queryNextUtility(context, interface, name='', default=None):
         """Query for the next available utility.
 
-        Find the next available utility providing `interface` and having the
-        specified name. If no utility was found, return the specified `default`
+        Find the next available utility providing *interface* and having the
+        specified name. If no utility was found, return the specified *default*
         value.
         """
 
     def getNextUtility(context, interface, name=''):
         """Get the next available utility.
 
-        If no utility was found, a `ComponentLookupError` is raised.
+        If no utility was found, a `~zope.interface.interfaces.ComponentLookupError` is raised.
         """
 
     def getUtilitiesFor(interface, context=None):
@@ -123,32 +124,25 @@ class IComponentArchitecture(Interface):
         """Get a named adapter to an interface for an object
 
         Returns an adapter that can adapt object to interface.  If a matching
-        adapter cannot be found, raises ComponentLookupError.
-
-        If context is None, an application-defined policy is used to choose
-        an appropriate service manager from which to get an 'Adapters' service.
-
-        If 'context' is not None, context is adapted to IServiceService,
-        and this adapter's 'Adapters' service is used.
+        adapter cannot be found, raises `~zope.interface.interfaces.ComponentLookupError`.
         """
 
     def getAdapterInContext(object, interface, context):
         """Get a special adapter to an interface for an object
 
-        NOTE: This method should only be used if a custom context
-        needs to be provided to provide custom component
-        lookup. Otherwise, call the interface, as in::
+        .. note::
+            This method should only be used if a custom context
+            needs to be provided to provide custom component
+            lookup. Otherwise, call the interface, as in::
 
-           interface(object)
+               interface(object)
 
-        Returns an adapter that can adapt object to interface.  If a matching
-        adapter cannot be found, raises ComponentLookupError.
+        Returns an adapter that can adapt object to interface. If a
+        matching adapter cannot be found, raises
+        `~zope.interface.interfaces.ComponentLookupError`.
 
-        Context is adapted to IServiceService, and this adapter's
-        'Adapters' service is used.
-
-        If the object has a __conform__ method, this method will be
-        called with the requested interface.  If the method returns a
+        If the object has a ``__conform__`` method, this method will be
+        called with the requested interface. If the method returns a
         non-None value, that value will be returned. Otherwise, if the
         object already implements the interface, the object will be
         returned.
@@ -157,16 +151,11 @@ class IComponentArchitecture(Interface):
     def getMultiAdapter(objects,
                         interface=Interface, name='',
                         context=None):
-        """Look for a multi-adapter to an interface for an objects
+        """Look for a multi-adapter to an *interface* for an *objects*
 
-        Returns a multi-adapter that can adapt objects to interface.  If a
-        matching adapter cannot be found, raises ComponentLookupError.
-
-        If context is None, an application-defined policy is used to choose
-        an appropriate service manager from which to get an 'Adapters' service.
-
-        If 'context' is not None, context is adapted to IServiceService,
-        and this adapter's 'Adapters' service is used.
+        Returns a multi-adapter that can adapt *objects* to *interface*.
+        If a matching adapter cannot be found, raises
+        `~zope.interface.interfaces.ComponentLookupError`.
 
         The name consisting of an empty string is reserved for unnamed
         adapters. The unnamed adapter methods will often call the
@@ -177,33 +166,27 @@ class IComponentArchitecture(Interface):
                      default=None, context=None):
         """Look for a named adapter to an interface for an object
 
-        Returns an adapter that can adapt object to interface.  If a matching
-        adapter cannot be found, returns the default.
-
-        If context is None, an application-defined policy is used to choose
-        an appropriate service manager from which to get an 'Adapters' service.
-
-        If 'context' is not None, context is adapted to IServiceService,
-        and this adapter's 'Adapters' service is used.
+        Returns an adapter that can adapt object to interface. If a
+        matching adapter cannot be found, returns the default.
         """
 
     def queryAdapterInContext(object, interface, context, default=None):
-        """Look for a special adapter to an interface for an object
+        """
+        Look for a special adapter to an interface for an object
 
-        NOTE: This method should only be used if a custom context
-        needs to be provided to provide custom component
-        lookup. Otherwise, call the interface, as in::
+        .. note::
 
-           interface(object, default)
+            This method should only be used if a custom context
+            needs to be provided to provide custom component lookup.
+            Otherwise, call the interface, as in::
 
-        Returns an adapter that can adapt object to interface.  If a matching
-        adapter cannot be found, returns the default.
+                interface(object, default)
 
-        Context is adapted to IServiceService, and this adapter's
-        'Adapters' service is used.
+        Returns an adapter that can adapt object to interface. If a
+        matching adapter cannot be found, returns the default.
 
-        If the object has a __conform__ method, this method will be
-        called with the requested interface.  If the method returns a
+        If the object has a ``__conform__`` method, this method will be
+        called with the requested interface. If the method returns a
         non-None value, that value will be returned. Otherwise, if the
         object already implements the interface, the object will be
         returned.
@@ -218,29 +201,18 @@ class IComponentArchitecture(Interface):
         Returns a multi-adapter that can adapt objects to interface.  If a
         matching adapter cannot be found, returns the default.
 
-        If context is None, an application-defined policy is used to choose
-        an appropriate service manager from which to get an 'Adapters' service.
-
-        If 'context' is not None, context is adapted to IServiceService,
-        and this adapter's 'Adapters' service is used.
-
         The name consisting of an empty string is reserved for unnamed
         adapters. The unnamed adapter methods will often call the
         named adapter methods with an empty string for a name.
         """
 
     def getAdapters(objects, provided, context=None):
-        """Look for all matching adapters to a provided interface for objects
+        """
+        Look for all matching adapters to a provided interface for
+        objects
 
-        Return a list of adapters that match. If an adapter is named, only the
-        most specific adapter of a given name is returned.
-
-        If context is None, an application-defined policy is used to choose
-        an appropriate service manager from which to get an 'Adapters'
-        service.
-
-        If 'context' is not None, context is adapted to IServiceService,
-        and this adapter's 'Adapters' service is used.
+        Return a list of adapters that match. If an adapter is named,
+        only the most specific adapter of a given name is returned.
         """
 
     def subscribers(required, provided, context=None):
@@ -249,27 +221,19 @@ class IComponentArchitecture(Interface):
         Subscribers are returned that provide the provided interface
         and that depend on and are computed from the sequence of
         required objects.
-
-        If context is None, an application-defined policy is used to choose
-        an appropriate service manager from which to get an 'Adapters'
-        service.
-
-        If 'context' is not None, context is adapted to IServiceService,
-        and this adapter's 'Adapters' service is used.
         """
 
     def handle(*objects):
         """Call all of the handlers for the given objects
 
         Handlers are subscription adapter factories that don't produce
-        anything.  They do all of their work when called.  Handlers
-        are typically used to handle events.
-
+        anything. They do all of their work when called. Handlers are
+        typically used to handle events.
         """
 
-
     def adapts(*interfaces):
-        """Declare that a class adapts the given interfaces.
+        """
+        Declare that a class adapts the given interfaces.
 
         This function can only be used in a class definition.
 
@@ -282,12 +246,13 @@ class IComponentArchitecture(Interface):
         """Create an object using a factory
 
         Finds the named factory in the current site and calls it with
-        the given arguments.  If a matching factory cannot be found
-        raises ComponentLookupError.  Returns the created object.
+        the given arguments. If a matching factory cannot be found
+        raises `~zope.interface.interfaces.ComponentLookupError`.
+        Returns the created object.
 
         A context keyword argument can be provided to cause the
         factory to be looked up in a location other than the current
-        site.  (Of course, this means that it is impossible to pass a
+        site. (Of course, this means that it is impossible to pass a
         keyword argument named "context" to the factory.
         """
 
@@ -316,10 +281,11 @@ class IRegistry(Interface):
 class IComponentRegistrationConvenience(Interface):
     """API for registering components.
 
-    CAUTION: This API should only be used from test or
-    application-setup code. This api shouldn't be used by regular
-    library modules, as component registration is a configuration
-    activity.
+    .. caution::
+        This API should only be used from test or
+        application-setup code. This api shouldn't be used by regular
+        library modules, as component registration is a configuration
+        activity.
     """
 
     def provideUtility(component, provides=None, name=u''):
@@ -330,12 +296,6 @@ class IComponentRegistrationConvenience(Interface):
         provides argument can be omitted and the provided interface
         will be used. (In this case, provides argument can still be
         provided to provide a less specific interface.)
-
-        CAUTION: This API should only be used from test or
-        application-setup code. This API shouldn't be used by regular
-        library modules, as component registration is a configuration
-        activity.
-
         """
 
     def provideAdapter(factory, adapts=None, provides=None, name=u''):
@@ -351,11 +311,6 @@ class IComponentRegistrationConvenience(Interface):
         If the factory has an adapts declaration, then the adapts
         argument can be omitted and the declaration will be used.  (An
         adapts argument can be provided to override the declaration.)
-
-        CAUTION: This API should only be used from test or
-        application-setup code. This API shouldn't be used by regular
-        library modules, as component registration is a configuration
-        activity.
         """
 
     def provideSubscriptionAdapter(factory, adapts=None, provides=None):
@@ -371,11 +326,6 @@ class IComponentRegistrationConvenience(Interface):
         If the factory has an adapts declaration, then the adapts
         argument can be omitted and the declaration will be used.  (An
         adapts argument can be provided to override the declaration.)
-
-        CAUTION: This API should only be used from test or
-        application-setup code. This API shouldn't be used by regular
-        library modules, as component registration is a configuration
-        activity.
         """
 
     def provideHandler(handler, adapts=None):
@@ -388,11 +338,6 @@ class IComponentRegistrationConvenience(Interface):
         If the handler has an adapts declaration, then the adapts
         argument can be omitted and the declaration will be used.  (An
         adapts argument can be provided to override the declaration.)
-
-        CAUTION: This API should only be used from test or
-        application-setup code. This API shouldn't be used by regular
-        library modules, as component registration is a configuration
-        activity.
         """
 
 

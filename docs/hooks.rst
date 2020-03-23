@@ -1,13 +1,17 @@
-==============================
-The current component registry
-==============================
+==========================================================
+ ``zope.component.hooks``: The current component registry
+==========================================================
+
+.. currentmodule:: zope.component.hooks
 
 There can be any number of component registries in an application. One of them
 is the global component registry, and there is also the concept of a currently
 used component registry. Component registries other than the global one are
-associated with objects called sites. The ``zope.component.hooks`` module
+associated with objects called sites. The :mod:`zope.component.hooks` module
 provides an API to set and access the current site as well as manipulate the
 adapter hook associated with it.
+
+.. autofunction:: getSite
 
 As long as we haven't set a site, none is being considered current:
 
@@ -20,6 +24,8 @@ As long as we haven't set a site, none is being considered current:
 We can also ask for the current component registry (aka site manager
 historically); it will return the global one if no current site is set:
 
+.. autofunction:: getSiteManager
+
 .. doctest::
 
    >>> from zope.component.hooks import getSiteManager
@@ -28,7 +34,9 @@ historically); it will return the global one if no current site is set:
 
 Let's set a site now. A site has to be an object that provides the
 ``getSiteManager`` method, which is specified by
-``zope.component.interfaces.IPossibleSite``:
+`zope.component.interfaces.IPossibleSite`:
+
+.. autofunction:: setSite
 
 .. doctest::
 
@@ -82,6 +90,8 @@ Context manager
 
 There also is a context manager for setting the site, which is especially
 useful when writing tests:
+
+.. autofunction:: site
 
 .. doctest::
 

@@ -1,15 +1,16 @@
-Changes
-=======
+=========
+ Changes
+=========
 
 4.6.1 (unreleased)
-------------------
+==================
 
 - Ensure the resolution order of ``BaseGlobalComponents`` is
   consistent. See `issue 45 <https://github.com/zopefoundation/zope.component/issues/45>`_.
 
 
-4.6 (2019-11-12)
-----------------
+4.6.0 (2019-11-12)
+==================
 
 - Add support for Python 3.8.
 
@@ -18,8 +19,8 @@ Changes
 - Fix tests on Python 2 following changes in ZODB 5.5.0.
 
 
-4.5 (2018-10-10)
-----------------
+4.5.0 (2018-10-10)
+==================
 
 - Add support for Python 3.7.
 
@@ -32,14 +33,14 @@ Changes
 
 
 4.4.1 (2017-09-26)
-------------------
+==================
 
 - Remove obsolete call of ``searchInterface`` from
   ``interfaceToName``. See https://github.com/zopefoundation/zope.component/issues/32
 
 
 4.4.0 (2017-07-25)
-------------------
+==================
 
 - Add support for Python 3.6.
 
@@ -56,7 +57,7 @@ Changes
 
 
 4.3.0 (2016-08-26)
-------------------
+==================
 
 - When testing ``PURE_PYTHON`` environments under ``tox``, avoid poisoning
   the user's global wheel cache.
@@ -67,19 +68,19 @@ Changes
 
 
 4.2.2 (2015-06-04)
-------------------
+==================
 
 - Fix test cases for PyPy and PyPy3.
 
 
 4.2.1 (2014-03-19)
-------------------
+==================
 
 - Add support for Python 3.4.
 
 
 4.2.0 (2014-02-05)
-------------------
+==================
 
 - Update ``boostrap.py`` to version 2.2.
 
@@ -91,7 +92,7 @@ Changes
 
 
 4.1.0 (2013-02-28)
-------------------
+==================
 
 - Change "ZODB3" depdendency to "persistent".
 
@@ -103,19 +104,19 @@ Changes
 
 
 4.0.2 (2012-12-31)
-------------------
+==================
 
 - Flesh out PyPI Trove classifiers.
 
 
 4.0.1 (2012-11-21)
-------------------
+==================
 
 - Add support for Python 3.3.
 
 
 4.0.0 (2012-07-02)
-------------------
+==================
 
 - Add PyPy and Python 3.2 support:
 
@@ -143,20 +144,20 @@ Changes
 
 
 3.12.1 (2012-04-02)
--------------------
+===================
 
 - Wrap ``with site(foo)`` in try/finally (LP768151).
 
 
 3.12.0 (2011-11-16)
--------------------
+===================
 
 - Add convenience function zope.component.hooks.site (a contextmanager),
   so one can write ``with site(foo): ...``.
 
 
 3.11.0 (2011-09-22)
--------------------
+===================
 
 - Move code from ``zope.component.registry`` which implements a basic
   nonperistent component registry to ``zope.interface.registry``.  This code
@@ -181,7 +182,7 @@ Changes
 
 
 3.10.0 (2010-09-25)
--------------------
+===================
 
 - Remove the ``docs`` extra and the ``sphinxdoc`` recipe.
 
@@ -194,19 +195,19 @@ Changes
 
 
 3.9.5 (2010-07-09)
-------------------
+==================
 
 - Fix test requirements specification.
 
 
 3.9.4 (2010-04-30)
-------------------
+==================
 
 - Prefer the standard library ``doctest`` to the one from ``zope.testing``.
 
 
 3.9.3 (2010-03-08)
-------------------
+==================
 
 - The ZCML directives provided by ``zope.component`` now register the
   components in the registry returned by ``getSiteManager`` instead of the
@@ -216,7 +217,7 @@ Changes
 
 
 3.9.2 (2010-01-22)
-------------------
+==================
 
 - Fix a bug introduced by recent refactoring, where passing
   ``CheckerPublic`` to ``securityAdapterFactory`` wrongly wrapped the factory
@@ -224,14 +225,14 @@ Changes
 
 
 3.9.1 (2010-01-21)
-------------------
+==================
 
 - Modify the tests to avoid allowing the tested testrunner to be influenced
   by options of the outer testrunner, such a the ``-v`` option.
 
 
 3.9.0 (2010-01-21)
-------------------
+==================
 
 - Add testlayer support. It is now possible to load a ZCML file within
   tests more easily. See ``src/zope/component/testlayer.py`` and
@@ -239,7 +240,7 @@ Changes
 
 
 3.8.0 (2009-11-16)
-------------------
+==================
 
 - Remove the dependencies on ``zope.proxy`` and ``zope.security`` from the
   zcml extra: ``zope.component`` no longer has a hard dependency on them;
@@ -255,7 +256,7 @@ Changes
 
 
 3.7.1 (2009-07-24)
-------------------
+==================
 
 - Fix a problem, where ``queryNextUtility`` could fail if the context could
   not be adapted to a ``IComponentLookup``.
@@ -277,7 +278,7 @@ Changes
 
 
 3.7.0 (2009-05-21)
-------------------
+==================
 
 - Ensure that ``HookableTests`` are run by the testrunner.
 
@@ -286,7 +287,7 @@ Changes
 
 
 3.6.0 (2009-03-12)
-------------------
+==================
 
 - IMPORTANT: the interfaces that were defined in the
   ``zope.component.bbb.interfaces`` and deprecated for years are
@@ -323,7 +324,7 @@ Changes
 
 
 3.5.1 (2008-07-25)
-------------------
+==================
 
 - Fix bug introduced in 3.5.0: ``<utility factory="...">`` no longer supported
   interfaces declared in Python and always wanted an explicit
@@ -331,7 +332,7 @@ Changes
 
 
 3.5.0 (2008-07-25)
-------------------
+==================
 
 - Support registration of utilities via factories through the component
   registry and return factory information in the registration information.
@@ -343,13 +344,13 @@ Changes
 
 
 3.4.0 (2007-09-29)
-------------------
+==================
 
 No further changes since 3.4.0a1.
 
 
 3.4.0a1 (2007-04-22)
---------------------
+====================
 
 Corresponds to ``zope.component`` from Zope 3.4.0a1.
 
@@ -359,19 +360,19 @@ Corresponds to ``zope.component`` from Zope 3.4.0a1.
 
 
 3.2.0.2 (2006-04-15)
---------------------
+====================
 
 - Fix packaging bug:  ``package_dir`` must be a *relative* path.
 
 
 3.2.0.1 (2006-04-14)
---------------------
+====================
 
 - Packaging change: suppress inclusion of ``setup.cfg`` in ``sdist`` builds.
 
 
 3.2.0 (2006-01-05)
-------------------
+==================
 
 Corresponds to the verison of the ``zope.component`` package shipped as part
 of the Zope 3.2.0 release.
@@ -391,7 +392,7 @@ of the Zope 3.2.0 release.
 
 
 3.0.0 (2004-11-07)
-------------------
+==================
 
 Corresponds to the verison of the ``zope.component`` package shipped as part of
 the Zope X3.0.0 release.

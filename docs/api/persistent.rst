@@ -1,13 +1,17 @@
-Persistent Registries
-=====================
+=======================
+ Persistent Registries
+=======================
 
 .. testsetup::
 
    from zope.component.testing import setUp
    setUp()
 
+
+.. automodule:: zope.component.persistentregistry
+
 Conforming Adapter Lookup
--------------------------
+=========================
 Here, we'll demonstrate that changes work even when data are stored in
 a database and when accessed from multiple connections.
 
@@ -122,7 +126,7 @@ connections.
     >>> db.close()
 
 Subscription to Events in Persistent Registries
------------------------------------------------
+===============================================
 
 .. doctest::
 
@@ -158,7 +162,7 @@ Subscription to Events in Persistent Registries
     >>> t2.abort()
 
 Adapter Registrations after Serialization / Deserialization
------------------------------------------------------------
+===========================================================
 
 We want to make sure that we see updates corrextly.
 

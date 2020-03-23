@@ -1,16 +1,21 @@
-Layers
-======
+===========================================
+ ``zope.component.testlayer``: Test Layers
+===========================================
 
-zope.component.testlayer defines two things:
+.. currentmodule:: zope.component.testlayer
 
-* a LayerBase that makes it easier and saner to use zope.testing's
+``zope.component.testlayer`` defines two things:
+
+* a `LayerBase` that makes it easier and saner to use zope.testing's
   test layers.
 
-* a ZCMLLayer which lets you implement a layer that loads up some
+* a `ZCMLFileLayer` which lets you implement a layer that loads up some
   ZCML.
 
 LayerBase
----------
+=========
+
+.. autoclass:: LayerBase
 
 We check whether our LayerBase can be used to create layers of our
 own. We do this simply by subclassing:
@@ -71,8 +76,10 @@ Now we run some tests with this layer:
      Tear down zope.component.OurLayer tearDown called
    in ... seconds.
 
-ZCMLLayer
----------
+ZCMLFileLayer
+=============
+
+.. autoclass:: ZCMLFileLayer
 
 We now want a layer that loads up some ZCML from a file. The default
 is ``ftesting.zcml``, but here we'll load a test ``testlayer.zcml``.

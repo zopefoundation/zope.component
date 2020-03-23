@@ -1,9 +1,11 @@
-Factories
-=========
+=======================================================
+ ``zope.component.factory``: Object Creation Factories
+=======================================================
 
+See :mod:`zope.component.factory` for API documentation.
 
 The Factory Class
------------------
+=================
 
 .. doctest::
 
@@ -28,7 +30,7 @@ The Factory Class
    >>> factory3 = Factory(lambda x: x, 'Func', 'Function', (IFunction,))
 
 Calling a Factory
-~~~~~~~~~~~~~~~~~
+-----------------
 
 Here we test whether the factory correctly creates the objects and
 including the correct handling of constructor elements.
@@ -68,7 +70,7 @@ Since we passed in a couple positional and a keyword argument
 
 
 Title and Description
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 .. doctest::
 
@@ -87,7 +89,7 @@ Title and Description
 
 
 Provided Interfaces
-~~~~~~~~~~~~~~~~~~~
+-------------------
 
 .. doctest::
 
@@ -107,7 +109,7 @@ Provided Interfaces
 
 
 The Component Architecture Factory API
---------------------------------------
+======================================
 
 .. doctest::
 
@@ -119,7 +121,7 @@ The Component Architecture Factory API
    >>> gsm.registerUtility(factory, IFactory, 'klass')
 
 Creating an Object
-~~~~~~~~~~~~~~~~~~
+------------------
 
 .. doctest::
 
@@ -132,7 +134,7 @@ Creating an Object
    {'foo': 3}
 
 Accessing Provided Interfaces
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------
 
 .. doctest::
 
@@ -143,7 +145,7 @@ Accessing Provided Interfaces
    True
 
 List of All Factories
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 .. doctest::
 

@@ -11,7 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Persistent component managers
+"""Persistent component managers.
 """
 from persistent import Persistent
 from persistent.mapping import PersistentMapping
@@ -20,7 +20,9 @@ from zope.interface.adapter import VerifyingAdapterRegistry
 from zope.interface.registry import Components
 
 class PersistentAdapterRegistry(VerifyingAdapterRegistry, Persistent):
-
+    """
+    An adapter registry that is also a persistent object.
+    """
     def changed(self, originally_changed):
         if originally_changed is self:
             self._p_changed = True
@@ -39,9 +41,14 @@ class PersistentAdapterRegistry(VerifyingAdapterRegistry, Persistent):
         self._createLookup()
         self.__bases__ = bases
         self._v_lookup.changed(self)
-        
-        
+
+
 class PersistentComponents(Components):
+    """
+    A component implementation that uses `PersistentAdapterRegistry`.
+
+    Note that this object itself is *not* `Persistent`.
+    """
 
     def _init_registries(self):
         self.adapters = PersistentAdapterRegistry()

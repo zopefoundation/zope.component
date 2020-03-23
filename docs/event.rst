@@ -1,9 +1,12 @@
-Events
-======
+==============================================
+ ``zope.component.events``: Event dispatching
+==============================================
+
+.. currentmodule:: zope.component.event
 
 The Component Architecture provides a way to dispatch events to event
-handlers.  Event handlers are registered as *subscribers*
-a.k.a. *handlers*.
+handlers using :func:`zope.event.notify`. Event handlers are
+registered as *subscribers* a.k.a. *handlers*.
 
 Before we can start we need to import ``zope.component.event`` to make
 the dispatching effective:
@@ -63,11 +66,18 @@ called accordingly:
 
 
 Object events
--------------
+=============
 
 
 The ``objectEventNotify`` function is a subscriber to dispatch
 ObjectEvents to interested adapters.
+
+.. autofunction:: objectEventNotify
+
+   .. note:: This function is automatically registered as a
+             subscriber for
+             :class:`zope.interface.interfaces.IObjectEvent`
+             when the ZCML configuration for this package is loaded.
 
 First create an object class:
 

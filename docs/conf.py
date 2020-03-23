@@ -45,6 +45,9 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
+    'sphinx.ext.extlinks',
+    'sphinx.ext.intersphinx',
+
     'repoze.sphinx.autointerface',
 ]
 
@@ -88,7 +91,7 @@ release = rqmt.version
 exclude_patterns = ['_build']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
-#default_role = None
+default_role = "obj"
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 #add_function_parentheses = True
@@ -259,10 +262,22 @@ texinfo_documents = [
 # If false, no module index is generated.
 #texinfo_domain_indices = True
 
+# Sphinx 1.8+ prefers this to `autodoc_default_flags`. It's documented that
+# either True or None mean the same thing as just setting the flag, but
+# only None works in 1.8 (True works in 2.0)
+autodoc_default_options = {
+    'members': None,
+    'show-inheritance': None,
+}
+autodoc_member_order = 'groupwise'
+autoclass_content = 'both'
+
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
 intersphinx_mapping = {
-    'https://docs.python.org/': None,
-    'https://zopeinterface.readthedocs.io/': None,
-    'https://zopesecurity.readthedocs.io/': None,
+    'https://docs.python.org/3/': None,
+    'https://zopeinterface.readthedocs.io/en/latest/': None,
+    'https://zopesecurity.readthedocs.io/en/latest/': None,
+    'https://zopeevent.readthedocs.io/en/latest/': None,
+    'https://persistent.readthedocs.io/en/latest/': None,
 }
