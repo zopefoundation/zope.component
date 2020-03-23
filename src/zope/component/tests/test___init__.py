@@ -82,11 +82,3 @@ class Test_Interface_call(unittest.TestCase):
         adapted = IFoo(ctx)
         self.assertTrue(adapted.__class__ is Baz)
         self.assertTrue(adapted.context is ctx)
-
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_package),
-        unittest.makeSuite(Test_Interface_call),
-    ))

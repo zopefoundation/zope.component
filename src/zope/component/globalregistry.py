@@ -37,7 +37,7 @@ class GlobalAdapterRegistry(AdapterRegistry):
     def __reduce__(self):
         return GAR, (self.__parent__, self.__name__)
 
-@implementer(IComponentLookup)
+
 class BaseGlobalComponents(Components):
 
     def _init_registries(self):

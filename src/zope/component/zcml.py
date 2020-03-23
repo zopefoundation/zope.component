@@ -26,16 +26,18 @@ from zope.interface import providedBy
 from zope.schema import TextLine
 
 from zope.component._api import getSiteManager
+from zope.component._compat import ZOPE_SECURITY_NOT_AVAILABLE_EX
 from zope.component._declaration import adaptedBy, getName
 from zope.component.interface import provideInterface
 
 try:
     from zope.security.zcml import Permission
-except ImportError: #pragma NO COVER
+except ZOPE_SECURITY_NOT_AVAILABLE_EX: # pragma: no cover
     def _no_security(*args, **kw):
-        raise ConfigurationError("security proxied components are not "
+        raise ConfigurationError(
+            "security proxied components are not "
             "supported because zope.security is not available")
-    _checker = proxify = protectedFactory = security =_no_security
+    _checker = proxify = protectedFactory = security = _no_security
     Permission = TextLine
 else:
     from zope.component.security import _checker
@@ -104,9 +106,9 @@ class IAdapterDirective(Interface):
         description=_("This should be a list of interfaces or classes"),
         required=False,
         value_type=GlobalObject(
-          missing_value=object(),
-          ),
-        )
+            missing_value=object(),
+        ),
+    )
 
     permission = Permission(
         title=_("Permission"),

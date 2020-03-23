@@ -55,11 +55,3 @@ class Test_objectEventNotify(unittest.TestCase):
         event = _ObjectEvent(context)
         objectEventNotify(event)
         self.assertEqual(_adapted, [(context, event)])
-
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_dispatch),
-        unittest.makeSuite(Test_objectEventNotify),
-    ))

@@ -4,7 +4,8 @@ Changes
 4.6.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Ensure the resolution order of ``BaseGlobalComponents`` is
+  consistent. See `issue 45 <https://github.com/zopefoundation/zope.component/issues/45>`_.
 
 
 4.6 (2019-11-12)
