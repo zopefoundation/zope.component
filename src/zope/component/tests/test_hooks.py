@@ -336,17 +336,3 @@ class _Monkey(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         for key, value in self.to_restore.items():
             setattr(self.module, key, value)
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_read_property),
-        unittest.makeSuite(SiteInfoTests),
-        unittest.makeSuite(Test_setSite),
-        unittest.makeSuite(Test_getSite),
-        unittest.makeSuite(Test_site),
-        unittest.makeSuite(Test_getSiteManager),
-        unittest.makeSuite(Test_adapter_hook),
-        unittest.makeSuite(Test_setHooks),
-        unittest.makeSuite(Test_resetHooks),
-    ))

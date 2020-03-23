@@ -16,13 +16,29 @@
 from zope.interface import providedBy
 from zope.proxy import ProxyBase
 from zope.proxy import getProxiedObject
-from zope.security.adapter import LocatingTrustedAdapterFactory
-from zope.security.adapter import LocatingUntrustedAdapterFactory
-from zope.security.adapter import TrustedAdapterFactory
-from zope.security.checker import Checker
-from zope.security.checker import CheckerPublic
-from zope.security.checker import InterfaceChecker
-from zope.security.proxy import Proxy
+
+from zope.component._compat import ZOPE_SECURITY_NOT_AVAILABLE_EX
+
+try:
+    from zope.security.adapter import LocatingTrustedAdapterFactory
+    from zope.security.adapter import LocatingUntrustedAdapterFactory
+    from zope.security.adapter import TrustedAdapterFactory
+    from zope.security.checker import Checker
+    from zope.security.checker import CheckerPublic
+    from zope.security.checker import InterfaceChecker
+    from zope.security.proxy import Proxy
+except ZOPE_SECURITY_NOT_AVAILABLE_EX: # pragma: no cover
+    def _no_security(*args, **kw):
+        raise TypeError(
+            "security proxied components are not "
+            "supported because zope.security is not available")
+
+    LocatingTrustedAdapterFactory = _no_security
+    LocatingUntrustedAdapterFactory = _no_security
+    TrustedAdapterFactory = _no_security
+    Checker = _no_security
+    CheckerPublic = _no_security
+    InterfaceChecker = _no_security
 
 
 PublicPermission = 'zope.Public'
@@ -42,7 +58,7 @@ def _checker(_context, permission, allowed_interface, allowed_attributes):
     if permission == PublicPermission:
         permission = CheckerPublic
 
-    require={}
+    require = {}
     if allowed_attributes:
         for name in allowed_attributes:
             require[name] = permission
@@ -63,7 +79,7 @@ def proxify(ob, checker=None, provides=None, permission=None):
     if checker is None:
         if provides is None or permission is None:
             raise ValueError('Required arguments: '
-                                'checker or both provides and permissions')
+                             'checker or both provides and permissions')
         if permission == PublicPermission:
             permission = CheckerPublic
         checker = InterfaceChecker(provides, permission)

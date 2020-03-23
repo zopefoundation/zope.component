@@ -18,9 +18,11 @@ __docformat__ = 'restructuredtext'
 import contextlib
 import threading
 
+from zope.component._compat import ZOPE_SECURITY_NOT_AVAILABLE_EX
+
 try:
     from zope.security.proxy import removeSecurityProxy
-except ImportError: #pragma NO COVER
+except ZOPE_SECURITY_NOT_AVAILABLE_EX: # pragma: no cover
     def removeSecurityProxy(x):
         return x
 

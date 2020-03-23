@@ -380,17 +380,3 @@ class Test_interfaceToName(unittest.TestCase):
         gsm.registerUtility(IFoo, IInterface, 'foo')
         self.assertEqual(self._callFUT(object(), IFoo),
                          'zope.component.tests.test_interface.IFoo')
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(Test_provideInterface),
-        unittest.makeSuite(Test_getInterface),
-        unittest.makeSuite(Test_queryInterface),
-        unittest.makeSuite(Test_searchInterface),
-        unittest.makeSuite(Test_searchInterfaceIds),
-        unittest.makeSuite(Test_searchInterfaceUtilities),
-        unittest.makeSuite(Test_getInterfaceAllDocs),
-        unittest.makeSuite(Test_nameToInterface),
-        unittest.makeSuite(Test_interfaceToName),
-    ))
