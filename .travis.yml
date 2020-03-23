@@ -29,7 +29,7 @@ script:
 # Temporary workaround. Pending
 # https://github.com/zopefoundation/zope.security/issues/71
 # avoid zope.testrunner.
-  - coverage run -m unittest -s src
+  - coverage run -m unittest discover -s src
   - if [[ -z "$MINIMAL" ]]; then sphinx-build              -b html    -d docs/_build/doctrees docs docs/_build/html; fi
   - if [[ -z "$MINIMAL" ]]; then coverage run -a -m sphinx -b doctest -d docs/_build/doctrees docs docs/_build/doctest; fi
 
