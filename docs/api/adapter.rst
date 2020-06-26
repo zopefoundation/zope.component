@@ -1,15 +1,24 @@
-Adapter Registration APIs
-=========================
+===========================
+ Adapter Registration APIs
+===========================
+
+This document covers a specific subset of the APIs in :mod:`zope.component`.
+
+.. currentmodule:: zope.component
 
 .. testsetup::
 
    from zope.component.testing import setUp
    setUp()
 
-.. autofunction:: zope.component.provideUtility
+.. autofunction:: zope.component.provideAdapter
+
+.. autofunction:: zope.component.provideHandler
+
+.. autofunction:: zope.component.provideSubscriptionAdapter
 
 Conforming Adapter Lookup
--------------------------
+=========================
 
 .. autofunction:: zope.component.getAdapterInContext
 
@@ -21,7 +30,7 @@ context object to see if it already conforms to the requested interface.
 If so, the object is returned immediately.  Otherwise, the adapter factory
 is looked up in the site manager, and called.
 
-Let's start by creating a component that supports the `__conform__()` method:
+Let's start by creating a component that supports the ``__conform__()`` method:
 
 .. doctest::
 
@@ -39,14 +48,14 @@ We also gave the component a custom representation, so it will be easier
 to use in these tests.
 
 We now have to create a site manager (other than the default global one)
-with which we can register adapters for `I1`.
+with which we can register adapters for ``I1``.
 
 .. doctest::
 
    >>> from zope.component.globalregistry import BaseGlobalComponents
    >>> sitemanager = BaseGlobalComponents()
 
-Now we create a new `context` that knows how to get to our custom site
+Now we create a new ``context`` that knows how to get to our custom site
 manager.
 
 .. doctest::
@@ -111,7 +120,7 @@ registered adapter:
    43
 
 Named Adapter Lookup
---------------------
+====================
 
 .. autofunction:: zope.component.getAdapter
 
@@ -141,7 +150,7 @@ returns the default:
    >>> queryAdapter(ob, I2, '', '<default>')
    '<default>'
 
-The 'requires' argument to `registerAdapter` must be a sequence, rather than
+The 'requires' argument to ``registerAdapter`` must be a sequence, rather than
 a single interface:
 
 .. doctest::
@@ -154,7 +163,7 @@ a single interface:
      ...
    TypeError: the required argument should be a list of interfaces, not a single interface
 
-After register an adapter from `I1` to `I2` with the global site manager:
+After register an adapter from ``I1`` to ``I2`` with the global site manager:
 
 .. doctest::
 
@@ -208,10 +217,10 @@ After registering under that name:
    True
 
 Invoking an Interface to Perform Adapter Lookup
------------------------------------------------
+===============================================
 
 :mod:`zope.component` registers an adapter hook with
-:mod:`zope.interface.interface`, allowing a convenient spelling for
+`zope.interface.interface.adapter_hooks`, allowing a convenient spelling for
 adapter lookup:  just "call" the interface, passing the context:
 
 .. doctest::
@@ -241,10 +250,10 @@ unless we pass a default:
    True
 
 Registering Adapters For Arbitrary Objects
-------------------------------------------
+==========================================
 
 Providing an adapter for None says that your adapter can adapt anything
-to `I2`.
+to ``I2``.
 
 .. doctest::
 
@@ -267,7 +276,7 @@ It can really adapt any arbitrary object:
    True
 
 Looking Up Adapters Using Multiple Objects
-------------------------------------------
+==========================================
 
 .. autofunction:: zope.component.getMultiAdapter
 
@@ -284,7 +293,7 @@ adapted:
 
 As with regular adapters, if an adapter isn't registered for the given
 objects and interface, the :func:`~zope.component.getMultiAdapter` API
-raises `ComponentLookupError`:
+raises `zope.interface.interfaces.ComponentLookupError`:
 
 .. doctest::
 
@@ -342,7 +351,7 @@ Now we can get the adapter:
 
 
 Finding More Than One Adapter
------------------------------
+=============================
 
 .. autofunction:: zope.component.getAdapters
 
@@ -388,17 +397,17 @@ factory returns None, it is as if it wasn't present.
 
 
 Subscription Adapters
----------------------
+=====================
 
 .. autofunction:: zope.component.subscribers
 
 Event handlers
---------------
+==============
 
 .. autofunction:: zope.component.handle
 
 Helpers for Declaring / Testing Adapters
-----------------------------------------
+========================================
 
 .. autofunction:: zope.component.adapter
 

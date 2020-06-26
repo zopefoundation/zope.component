@@ -18,7 +18,13 @@ import sys
 from zope.component._compat import CLASS_TYPES
 
 class adapter(object):
+    """
+    Decorator that declares that the decorated object adapts the given
+    *interfaces*.
 
+    This is commonly used in conjunction with :obj:`zope.interface.implementer`
+    to declare what adapting the *interfaces* will provide.
+    """
     def __init__(self, *interfaces):
         self.interfaces = interfaces
 
@@ -44,6 +50,9 @@ def adapts(*interfaces):
     locals['__component_adapts__'] = _adapts_descr(interfaces)
 
 def adaptedBy(ob):
+    """
+    Return the *interfaces* that *ob* will adapt, as declared by :obj:`adapter`.
+    """
     return getattr(ob, '__component_adapts__', None)
 
 def getName(ob):
