@@ -1,5 +1,8 @@
-Utility Registration APIs
-=========================
+===========================
+ Utility Registration APIs
+===========================
+
+.. autofunction:: zope.component.provideUtility
 
 .. autofunction:: zope.component.getUtility
 
@@ -56,7 +59,7 @@ Now the component is available:
 
 
 Named Utilities
----------------
+===============
 
 Registering a utility without a name does not mean that it is available
 when looking for the utility with a name:
@@ -84,7 +87,7 @@ Registering the utility under the correct name makes it available:
    True
 
 Querying Multiple Utilities
----------------------------
+===========================
 
 .. autofunction:: zope.component.getUtilitiesFor
 
@@ -159,7 +162,7 @@ the utilities.
 
 
 Delegated Utility Lookup
-------------------------
+========================
 
 .. autofunction:: zope.component.getNextUtility
 

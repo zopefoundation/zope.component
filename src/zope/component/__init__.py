@@ -11,7 +11,16 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Zope 3 Component Architecture
+"""
+Zope 3 Component Architecture
+
+This module provides an implementation of
+:class:`~zope.component.interfaces.IComponentArchitecture`, using the
+current :mod:`site <zope.component.hooks>`.
+
+This module also provides an implementation of
+:class:`~zope.component.interfaces.IComponentRegistrationConvenience`
+using the `global site manager <getGlobalSiteManager>`_.
 """
 from zope.interface import Interface
 from zope.interface import implementedBy
@@ -58,4 +67,9 @@ from zope.component._declaration import adapter
 from zope.component._declaration import adapts
 
 moduleProvides(IComponentArchitecture, IComponentRegistrationConvenience)
-__all__ = tuple(IComponentArchitecture)
+__all__ = tuple(IComponentArchitecture) + tuple(IComponentRegistrationConvenience) + (
+    'named',
+    'adapts',
+    'adapter',
+    'adaptedBy',
+)

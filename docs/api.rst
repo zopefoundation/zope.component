@@ -1,10 +1,12 @@
-:mod:`zope.component` API Reference
-===================================
+=====================================
+ ``zope.component`` API Reference
+=====================================
 
 
 .. toctree::
    :maxdepth: 2
 
+   api/module
    api/interfaces
    api/sitemanager
    api/utility
@@ -13,3 +15,4 @@
    api/interface
    api/security
    api/persistent
+   api/hooks

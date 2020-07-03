@@ -74,6 +74,39 @@ If we set another site, that one will be considered current:
    >>> getSiteManager() is site2.registry
    True
 
+However, the default `zope.component.getSiteManager` function isn't
+yet aware of this:
+
+.. doctest::
+
+   >>> from zope.component import getSiteManager as global_getSiteManager
+   >>> global_getSiteManager()
+   <BaseGlobalComponents base>
+
+To integrate that with the notion of the current site, we need to call ``setHooks``:
+
+.. autofunction:: setHooks
+
+.. doctest::
+
+   >>> from zope.component.hooks import setHooks
+   >>> setHooks()
+   >>> getSiteManager() is site2.registry
+   True
+   >>> global_getSiteManager() is site2.registry
+   True
+
+This can be reversed using ``resetHooks``:
+
+.. autofunction:: resetHooks
+
+.. doctest::
+
+   >>> from zope.component.hooks import resetHooks
+   >>> resetHooks()
+   >>> global_getSiteManager()
+   <BaseGlobalComponents base>
+
 Finally we can unset the site and the global component registry is used again:
 
 .. doctest::

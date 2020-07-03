@@ -30,6 +30,14 @@ from zope.component.globalregistry import getGlobalSiteManager
 from zope.interface.interfaces import ComponentLookupError
 from zope.interface.interfaces import IComponentLookup
 
+__all__ = [
+    'setSite',
+    'getSite',
+    'site',
+    'getSiteManager',
+    'setHooks',
+    'resetHooks',
+]
 
 class read_property(object):
     """Descriptor for property-like computed attributes.
@@ -130,11 +138,32 @@ def adapter_hook(interface, object, name='', default=None):
 
 
 def setHooks():
+    """
+    Make `zope.component.getSiteManager` and interface adaptation
+    respect the current site.
+
+    Most applications will want to be sure te call this early in their
+    startup sequence. Test code that uses these APIs should also arrange to
+    call this.
+
+    .. seealso:: :mod:`zope.component.testlayer`
+    """
     from zope.component import _api
     _api.adapter_hook.sethook(adapter_hook)
     _api.getSiteManager.sethook(getSiteManager)
 
 def resetHooks():
+    """
+    Reset `zope.component.getSiteManager` and interface adaptation to
+    their original implementations that are unaware of the current
+    site.
+
+    Use caution when calling this; most code will not need to call
+    this. If code using the global API executes following this, it
+    will most likely use the base global component registry instead of
+    a site-specific registry it was expected. This can lead to
+    failures in adaptation and utility lookup.
+    """
     # Reset hookable functions to original implementation.
     from zope.component import _api
     _api.adapter_hook.reset()

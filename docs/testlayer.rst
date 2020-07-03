@@ -4,6 +4,8 @@
 
 .. currentmodule:: zope.component.testlayer
 
+.. module:: zope.component.testlayer
+
 ``zope.component.testlayer`` defines two things:
 
 * a `LayerBase` that makes it easier and saner to use zope.testing's

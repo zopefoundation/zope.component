@@ -21,12 +21,15 @@ from zope.interface.interfaces import ComponentLookupError
 from zope.interface.interfaces import IComponentLookup
 
 from zope.component.interfaces import IFactory
+from zope.component.interfaces import inherits_arch_docs as inherits_docs
+
 
 # getSiteManager() returns a component registry.  Although the term
 # "site manager" is deprecated in favor of "component registry",
 # the old term is kept around to maintain a stable API.
 base = None
 @hookable
+@inherits_docs
 def getSiteManager(context=None):
     """ See IComponentArchitecture.
     """
@@ -44,13 +47,14 @@ def getSiteManager(context=None):
             raise ComponentLookupError(*error.args)
 
 # Adapter API
-
+@inherits_docs
 def getAdapterInContext(object, interface, context):
     adapter = queryAdapterInContext(object, interface, context)
     if adapter is None:
         raise ComponentLookupError(object, interface)
     return adapter
 
+@inherits_docs
 def queryAdapterInContext(object, interface, context, default=None):
     conform = getattr(object, '__conform__', None)
     if conform is not None:
@@ -78,12 +82,14 @@ def queryAdapterInContext(object, interface, context, default=None):
 
     return getSiteManager(context).queryAdapter(object, interface, '', default)
 
+@inherits_docs
 def getAdapter(object, interface=Interface, name=u'', context=None):
     adapter = queryAdapter(object, interface, name, None, context)
     if adapter is None:
         raise ComponentLookupError(object, interface, name)
     return adapter
 
+@inherits_docs
 def queryAdapter(object, interface=Interface, name=u'', default=None,
                  context=None):
     if context is None:
@@ -91,12 +97,14 @@ def queryAdapter(object, interface=Interface, name=u'', default=None,
     return getSiteManager(context).queryAdapter(object, interface, name,
                                                 default)
 
+@inherits_docs
 def getMultiAdapter(objects, interface=Interface, name=u'', context=None):
     adapter = queryMultiAdapter(objects, interface, name, context=context)
     if adapter is None:
         raise ComponentLookupError(objects, interface, name)
     return adapter
 
+@inherits_docs
 def queryMultiAdapter(objects, interface=Interface, name=u'', default=None,
                       context=None):
     try:
@@ -107,6 +115,7 @@ def queryMultiAdapter(objects, interface=Interface, name=u'', default=None,
 
     return sitemanager.queryMultiAdapter(objects, interface, name, default)
 
+@inherits_docs
 def getAdapters(objects, provided, context=None):
     try:
         sitemanager = getSiteManager(context)
@@ -115,6 +124,7 @@ def getAdapters(objects, provided, context=None):
         return []
     return sitemanager.getAdapters(objects, provided)
 
+@inherits_docs
 def subscribers(objects, interface, context=None):
     try:
         sitemanager = getSiteManager(context)
@@ -123,6 +133,7 @@ def subscribers(objects, interface, context=None):
         return []
     return sitemanager.subscribers(objects, interface)
 
+@inherits_docs
 def handle(*objects):
     getSiteManager(None).subscribers(objects, None)
 
@@ -146,26 +157,29 @@ zope.interface.interface.adapter_hooks.append(adapter_hook)
 
 
 # Utility API
-
+@inherits_docs
 def getUtility(interface, name='', context=None):
     utility = queryUtility(interface, name, context=context)
     if utility is not None:
         return utility
     raise ComponentLookupError(interface, name)
 
+@inherits_docs
 def queryUtility(interface, name='', default=None, context=None):
     return getSiteManager(context).queryUtility(interface, name, default)
 
+@inherits_docs
 def getUtilitiesFor(interface, context=None):
     return getSiteManager(context).getUtilitiesFor(interface)
 
-
+@inherits_docs
 def getAllUtilitiesRegisteredFor(interface, context=None):
     return getSiteManager(context).getAllUtilitiesRegisteredFor(interface)
 
 
 _marker = object()
 
+@inherits_docs
 def queryNextUtility(context, interface, name='', default=None):
     """Query for the next available utility.
 
@@ -184,7 +198,7 @@ def queryNextUtility(context, interface, name='', default=None):
             return util
     return default
 
-
+@inherits_docs
 def getNextUtility(context, interface, name=''):
     """Get the next available utility.
 
@@ -200,6 +214,7 @@ def getNextUtility(context, interface, name=''):
 
 # Factories
 
+@inherits_docs
 def createObject(__factory_name, *args, **kwargs):
     """Invoke the named factory and return the result.
 
@@ -208,6 +223,7 @@ def createObject(__factory_name, *args, **kwargs):
     context = kwargs.pop('context', None)
     return getUtility(IFactory, __factory_name, context)(*args, **kwargs)
 
+@inherits_docs
 def getFactoryInterfaces(name, context=None):
     """Return the interface provided by the named factory's objects
 
@@ -215,6 +231,7 @@ def getFactoryInterfaces(name, context=None):
     """
     return getUtility(IFactory, name, context).getInterfaces()
 
+@inherits_docs
 def getFactoriesFor(interface, context=None):
     """Return info on all factories implementing the given interface.
     """
