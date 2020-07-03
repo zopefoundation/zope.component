@@ -4,6 +4,11 @@
 Contents:
 
 .. toctree::
+   :maxdepth: 1
+
+   changelog
+
+.. toctree::
    :maxdepth: 2
 
    narr
