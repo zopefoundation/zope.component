@@ -5,7 +5,8 @@
 4.6.2 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Improve the documentation, both published and in docstrings. See `PR
+  49 <https://github.com/zopefoundation/zope.component/pull/49>`_.
 
 
 4.6.1 (2020-03-23)
