@@ -2,7 +2,7 @@
  Changes
 =========
 
-4.6.2 (unreleased)
+4.6.2 (2020-07-03)
 ==================
 
 - Improve the documentation, both published and in docstrings. See `PR
