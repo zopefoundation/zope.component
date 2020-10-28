@@ -5,8 +5,8 @@
     :target: https://pypi.python.org/pypi/zope.component/
     :alt: Latest Version
 
-.. image:: https://travis-ci.org/zopefoundation/zope.component.svg?branch=master
-        :target: https://travis-ci.org/zopefoundation/zope.component
+.. image:: https://travis-ci.com/zopefoundation/zope.component.svg?branch=master
+        :target: https://travis-ci.com/zopefoundation/zope.component
         :alt: Build Status
 
 .. image:: https://readthedocs.org/projects/zopecomponent/badge/?version=latest
