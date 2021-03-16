@@ -26,6 +26,24 @@
   before. See `issue 9
   <https://github.com/zopefoundation/zope.component/issues/9>`_.
 
+- Make ``PersistentAdapterRegistry`` use persistent objects
+  (``PersistentMapping`` and ``PersistentList``) for its internal data
+  structures instead of plain dicts and lists. This helps make it
+  scalable to larger registry sizes.
+
+  To take advantage of this, you need zope.interface 5.3 or later
+  (earlier versions continue to work, but do not allow this
+  optimization).
+
+  New registries (and their primary user, ``PersistentComponents`` and
+  zope.site's ``LocalSiteManager``) take full advantage of this
+  automatically. For existing persistent registries to take advantage
+  of this, you must call their ``rebuild()`` method and commit the
+  transaction.
+
+  See `issue 51 <https://github.com/zopefoundation/zope.component/issues/51>`_.
+
+
 4.6.2 (2020-07-03)
 ==================
 
