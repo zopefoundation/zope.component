@@ -15,3 +15,7 @@ coverage.xml
 dist/
 .eggs/
 htmlcov/
+lib/
+lib64
+pyvenv.cfg
+default.profraw
