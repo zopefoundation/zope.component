@@ -5,7 +5,8 @@
 4.6.3 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Respect permission value for utility factory registrations
+  (`#54 <https://github.com/zopefoundation/zope.component/issues/54>`_)
 
 
 4.6.2 (2020-07-03)
