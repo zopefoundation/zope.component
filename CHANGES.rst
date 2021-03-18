@@ -2,11 +2,13 @@
  Changes
 =========
 
-4.6.3 (unreleased)
+4.7.0 (unreleased)
 ==================
 
 - Respect permission value for utility factory registrations
   (`#54 <https://github.com/zopefoundation/zope.component/issues/54>`_)
+
+- Add support for Python 3.9
 
 
 4.6.2 (2020-07-03)

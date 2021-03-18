@@ -1,19 +1,12 @@
 include *.rst
 include *.txt
-
-recursive-include docs *
-recursive-include src *
-
-global-exclude *.dll
-global-exclude *.pyc
-global-exclude *.pyo
-global-exclude *.so
-global-exclude coverage.xml
-
-include *.py
-include .travis.yml
 include buildout.cfg
 include tox.ini
-include .coveragerc
 
-prune docs/_build
+recursive-include docs *.bat
+recursive-include docs *.py
+recursive-include docs *.rst
+recursive-include docs Makefile
+
+recursive-include src *.py
+recursive-include src *.zcml
