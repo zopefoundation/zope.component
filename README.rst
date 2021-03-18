@@ -1,3 +1,7 @@
+================
+ zope.component
+================
+
 .. image:: https://github.com/zopefoundation/zope.component/actions/workflows/tests.yml/badge.svg
         :target: https://github.com/zopefoundation/zope.component/actions/workflows/tests.yml
         :alt: Unit test status
@@ -17,9 +21,6 @@
 .. image:: https://readthedocs.org/projects/zopecomponent/badge/?version=latest
         :target: http://zopecomponent.readthedocs.org/en/latest/
         :alt: Documentation Status
-
-zope.component
-==============
 
 .. note::
 
