@@ -109,7 +109,7 @@ setup(
         'setuptools',
         'zope.event',
         'zope.hookable >= 4.2.0',
-        'zope.interface >= 4.1.0',
+        'zope.interface >= 5.3.0a1',
     ],
     include_package_data=True,
     zip_safe=False,

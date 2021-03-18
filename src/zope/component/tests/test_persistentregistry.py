@@ -15,6 +15,7 @@
 """
 import unittest
 
+from zope.interface.tests.test_adapter import CustomTypesBaseAdapterRegistryTests
 
 def skipIfNoPersistent(testfunc):
     try:
@@ -101,12 +102,13 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         bases = (globalSiteManager.adapters, globalSiteManager.utilities)
         registry, jar, OID = self._makeOneWithJar(bases=bases)
         state = registry.__getstate__()
-        self.assertEqual(state['__bases__'], bases)
-        self.assertEqual(state['_generation'], 1)
-        self.assertEqual(state['_provided'], {})
-        self.assertEqual(state['_adapters'], [])
-        self.assertEqual(state['_subscribers'], [])
-        self.assertFalse('ro' in state)
+        self.assertEqual(state.pop('__bases__'), bases)
+        self.assertEqual(state.pop('_generation'), 1)
+        self.assertEqual(state.pop('_provided'), {})
+        self.assertEqual(state.pop('_adapters'), [])
+        self.assertEqual(state.pop('_subscribers'), [])
+        self.assertNotIn('ro', state)
+        self.assertEqual(state, {})
 
     def test___getstate___skips_delegated_names(self):
         registry, jar, OID = self._makeOneWithJar()
@@ -130,6 +132,14 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         registry.__setstate__(state)
         self.assertEqual(registry.__bases__, bases)
         self.assertEqual(registry.ro, [registry] + list(bases))
+
+    def test__addValueToLeaf_existing_is_tuple_converts(self):
+        from persistent.list import PersistentList
+        registry = self._makeOne()
+        result = registry._addValueToLeaf(('a',), 'b')
+        self.assertIsInstance(result, PersistentList)
+        self.assertEqual(result, ['a', 'b'])
+
 
 @skipIfNoPersistent
 class PersistentComponentsTests(unittest.TestCase):
@@ -161,3 +171,25 @@ class PersistentComponentsTests(unittest.TestCase):
 
 def _makeOctets(s):
     return bytes(s) if bytes is str else bytes(s, 'ascii')
+
+
+@skipIfNoPersistent
+class PersistentAdapterRegistryCustomTypesTest(CustomTypesBaseAdapterRegistryTests):
+
+    def _getMappingType(self):
+        from persistent.mapping import PersistentMapping
+        return PersistentMapping
+
+    def _getProvidedType(self):
+        return self._getMappingType()
+
+    def _getMutableListType(self):
+        from persistent.list import PersistentList
+        return PersistentList
+
+    def _getLeafSequenceType(self):
+        return self._getMutableListType()
+
+    def _getBaseAdapterRegistry(self):
+        from zope.component.persistentregistry import PersistentAdapterRegistry
+        return PersistentAdapterRegistry
