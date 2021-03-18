@@ -19,6 +19,12 @@
 
 - Add support for Python 3.9
 
+- Fix the ``<subscriber>`` ZCML directive to allow a missing
+  ``provides=`` attribute when a ``factory=`` is given and the Python
+  object has been decorated with ``@implementer`` and implements a
+  single interface. This has been documented, but hasn't worked
+  before. See `issue 9
+  <https://github.com/zopefoundation/zope.component/issues/9>`_.
 
 4.6.2 (2020-07-03)
 ==================

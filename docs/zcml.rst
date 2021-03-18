@@ -690,13 +690,12 @@ subscriber should be registered for:
    >>> clearZCML()
    >>> runSnippet('''
    ...   <subscriber
-   ...       provides="zope.component.testfiles.adapter.IS"
    ...       factory="zope.component.testfiles.adapter.A3"
    ...       />''')
 
    >>> content = Content()
    >>> a2 = A2()
-   >>> subscribers = zope.component.subscribers((content, a1, a2), IS)
+   >>> subscribers = zope.component.subscribers((content, a1, a2), I3)
 
    >>> a3 = subscribers[0]
    >>> a3.__class__ is A3
