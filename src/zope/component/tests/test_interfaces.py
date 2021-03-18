@@ -17,37 +17,13 @@ Tests for zope.component.interfaces
 
 import unittest
 
-class TestBackwardsCompat(unittest.TestCase):
+class TestInterfaces(unittest.TestCase):
 
-    def test_interface_warnings(self):
-        from zope.component import interfaces
-        import warnings
-        for name in (
-                'ComponentLookupError',
-                'Invalid',
-                'IObjectEvent',
-                'ObjectEvent',
-                'IComponentLookup',
-                'IRegistration',
-                'IUtilityRegistration',
-                '_IBaseAdapterRegistration',
-                'IAdapterRegistration',
-                'ISubscriptionAdapterRegistration',
-                'IHandlerRegistration',
-                'IRegistrationEvent',
-                'RegistrationEvent',
-                'IRegistered',
-                'Registered',
-                'IUnregistered',
-                'Unregistered',
-                'IComponentRegistry',
-                'IComponents',
-        ):
-            with warnings.catch_warnings(record=True) as log:
-                warnings.simplefilter("always")
-                getattr(interfaces, name)
+    def test_nothing(self):
+        """
+        This exists only so that zope.testrunner doesn't complain this
+        module has no tests.
 
-                self.assertEqual(1, len(log), name)
-                message = str(log[0].message)
-                self.assertIn(name, message)
-                self.assertIn("Import from zope.interface.interfaces", message)
+        Even though this file is empty, we want to keep it around for ease
+        of browsing the history.
+        """

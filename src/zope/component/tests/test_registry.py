@@ -105,36 +105,11 @@ class Test_dispatchHandlerRegistrationEvent(unittest.TestCase):
         self.assertEqual(_handled, [(_registration.handler, _EVENT)])
 
 
-class TestBackwardsCompat(unittest.TestCase):
-
-    def test_interface_warnings(self):
-        from zope.component import registry
-        import warnings
-        for name in (
-                'Components',
-                '_getUtilityProvided',
-                '_getAdapterProvided',
-                '_getAdapterRequired',
-                'UtilityRegistration',
-                'AdapterRegistration',
-                'SubscriptionRegistration',
-                'HandlerRegistration',
-        ):
-            with warnings.catch_warnings(record=True) as log:
-                warnings.simplefilter("always")
-                getattr(registry, name)
-
-                self.assertEqual(1, len(log), name)
-                message = str(log[0].message)
-                self.assertIn(name, message)
-                self.assertIn("Import from zope.interface.registry", message)
-
-
 class _Monkey(object):
     # context-manager for replacing module names in the scope of a test.
     def __init__(self, module, **kw):
         self.module = module
-        self.to_restore = dict([(key, getattr(module, key)) for key in kw])
+        self.to_restore = {key: getattr(module, key) for key in kw}
         for key, value in kw.items():
             setattr(module, key, value)
 
