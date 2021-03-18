@@ -62,8 +62,14 @@ def read(*rnames):
 
 setup(
     name='zope.component',
-    version='4.6.3.dev0',
+    version='4.7.0.dev0',
     url='https://github.com/zopefoundation/zope.component',
+    project_urls={
+        'Documentation': 'https://zopecomponent.readthedocs.io/',
+        'Issue Tracker': ('https://github.com/zopefoundation/'
+                          'zope.component/issues'),
+        'Sources': 'https://github.com/zopefoundation/zope.component',
+    },
     license='ZPL 2.1',
     description='Zope Component Architecture',
     author='Zope Foundation and Contributors',
@@ -90,12 +96,14 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Framework :: Zope :: 3",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     namespace_packages=['zope',],
+    python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*',
     tests_require=TESTS_REQUIRE,
     install_requires=[
         'setuptools',
