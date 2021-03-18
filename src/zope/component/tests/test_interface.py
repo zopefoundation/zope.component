@@ -15,6 +15,7 @@
 """
 import unittest
 
+# pylint:disable=inherit-non-class,blacklisted-name
 
 class Test_provideInterface(unittest.TestCase):
 
@@ -71,7 +72,32 @@ class Test_provideInterface(unittest.TestCase):
         self._callFUT('foo', IFoo)
         self.assertTrue(IInterface.providedBy(IFoo))
         registered = gsm.getUtility(IInterface, name='foo')
-        self.assertTrue(registered is IFoo)
+        self.assertIs(registered, IFoo)
+
+    def test_register_in_current_site(self):
+        from zope.component._api import getSiteManager
+        from zope.component.globalregistry import getGlobalSiteManager
+        from zope.interface.registry import Components
+        from zope.interface import Interface
+        from zope.interface.interfaces import IInterface
+
+        class IFoo(Interface):
+            pass
+
+        site_man = Components()
+        def get(_context=None):
+            return site_man
+        getSiteManager.sethook(get)
+        self.addCleanup(getSiteManager.reset)
+
+        self._callFUT('foo', IFoo)
+
+        self.assertIs(site_man.getUtility(IInterface, name='foo'),
+                      IFoo)
+        self.assertIsNone(
+            getGlobalSiteManager().queryUtility(IInterface, name='foo')
+        )
+
 
 
 class Test_getInterface(unittest.TestCase):
@@ -170,6 +196,41 @@ class Test_searchInterface(unittest.TestCase):
         gsm.registerUtility(IFoo, IInterface, 'foo')
         gsm.registerUtility(IBar, IInterface, 'bar')
         self.assertEqual(self._callFUT(object(), base=IBase), [IFoo])
+
+    def test_hit_in_current_site(self):
+        from zope.component._api import getSiteManager
+        from zope.component.globalregistry import getGlobalSiteManager
+        from zope.interface.registry import Components
+        from zope.interface import Interface
+        from zope.interface.interfaces import IInterface
+
+        class ILocal(Interface):
+            pass
+
+        class IGlobal(Interface):
+            pass
+
+        gsm = getGlobalSiteManager()
+        site_man = Components(bases=(gsm,))
+        def get(_context=None):
+            return site_man
+        getSiteManager.sethook(get)
+        self.addCleanup(getSiteManager.reset)
+
+
+        gsm.registerUtility(IGlobal, IInterface, 'foo')
+        site_man.registerUtility(ILocal, IInterface, 'bar')
+
+        result = self._callFUT(None)
+        self.assertEqual(len(result), 2)
+        self.assertIn(ILocal, result)
+        self.assertIn(IGlobal, result)
+
+        getSiteManager.reset()
+
+        result = self._callFUT(None)
+        self.assertEqual(len(result), 1)
+        self.assertIn(IGlobal, result)
 
 
 class Test_searchInterfaceIds(unittest.TestCase):
