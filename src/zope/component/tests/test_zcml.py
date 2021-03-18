@@ -598,6 +598,29 @@ class Test_subscriber(unittest.TestCase):
         self.assertEqual(action['discriminator'], None)
         self.assertEqual(action['args'], ('', Interface))
 
+    def test_no_for__no_provides_subscriber_adapts_subscriber_implements(self):
+        from zope.interface import Interface
+        from zope.interface import implementer
+        from zope.component._declaration import adapter
+        from zope.component.zcml import handler
+        class IFoo(Interface):
+            pass
+        @adapter(Interface)
+        @implementer(IFoo)
+        class _Factory(object):
+            def __init__(self, context):
+                self.context = context
+        _cfg_ctx = _makeConfigContext()
+        self._callFUT(_cfg_ctx, factory=_Factory)
+        self.assertEqual(len(_cfg_ctx._actions), 3)
+        self.assertEqual(_cfg_ctx._actions[0][0], ())
+        # Register the subscriber
+        action = _cfg_ctx._actions[0][1]
+        self.assertEqual(action['callable'], handler)
+        self.assertIsNone(action['discriminator'])
+        self.assertEqual(action['args'],
+                         ('registerSubscriptionAdapter', _Factory, (Interface,), IFoo,
+                          '', 'TESTING'))
 
 class Test_utility(unittest.TestCase):
 
