@@ -31,11 +31,9 @@
   structures instead of plain dicts and lists. This helps make it
   scalable to larger registry sizes.
 
-  To take advantage of this, you need zope.interface 5.3 or later
-  (earlier versions continue to work, but do not allow this
-  optimization).
+  This requires zope.interface 5.3.0a1 or later.
 
-  New registries (and their primary user, ``PersistentComponents`` and
+  New registries (and their primary users, ``PersistentComponents`` and
   zope.site's ``LocalSiteManager``) take full advantage of this
   automatically. For existing persistent registries to take advantage
   of this, you must call their ``rebuild()`` method and commit the
