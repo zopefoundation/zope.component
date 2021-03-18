@@ -23,22 +23,6 @@ from zope.interface.interfaces import IRegistrationEvent
 from zope.interface.interfaces import ISubscriptionAdapterRegistration
 from zope.interface.interfaces import IUtilityRegistration
 
-# BBB, import component-related from zope.interface
-import zope.deferredimport
-zope.deferredimport.deprecatedFrom(
-    "Import from zope.interface.registry",
-    "zope.interface.registry",
-    'Components',
-    '_getUtilityProvided',
-    '_getAdapterProvided',
-    '_getAdapterRequired',
-    'UtilityRegistration',
-    'AdapterRegistration',
-    'SubscriptionRegistration',
-    'HandlerRegistration',
-)
-
-
 @adapter(IUtilityRegistration, IRegistrationEvent)
 def dispatchUtilityRegistrationEvent(registration, event):
     handle(registration.component, event)

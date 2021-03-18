@@ -20,33 +20,7 @@ are provided by `zope.component` directly.
 from zope.interface import Attribute
 from zope.interface import Interface
 
-
-# BBB 2011-09-09, import interfaces from zope.interface
-import zope.deferredimport
-zope.deferredimport.deprecatedFrom(
-    "Import from zope.interface.interfaces",
-    "zope.interface.interfaces",
-    'ComponentLookupError',
-    'Invalid',
-    'IObjectEvent',
-    'ObjectEvent',
-    'IComponentLookup',
-    'IRegistration',
-    'IUtilityRegistration',
-    '_IBaseAdapterRegistration',
-    'IAdapterRegistration',
-    'ISubscriptionAdapterRegistration',
-    'IHandlerRegistration',
-    'IRegistrationEvent',
-    'RegistrationEvent',
-    'IRegistered',
-    'Registered',
-    'IUnregistered',
-    'Unregistered',
-    'IComponentRegistry',
-    'IComponents',
-)
-
+# pylint:disable=inherit-non-class,no-self-argument,no-method-argument
 
 class IComponentArchitecture(Interface):
     """The Component Architecture is defined by two key components: Adapters

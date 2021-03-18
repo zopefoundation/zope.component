@@ -5,6 +5,15 @@
 5.0.0 (unreleased)
 ==================
 
+- Remove backwards compatibility imports that were emitting
+  deprecation warnings. This affects certain imports from
+  ``zope.component.interfaces`` (which should be imported from
+  ``zope.interface.interfaces``) as well as certain imports from
+  ``zope.component.registery`` (import from
+  ``zope.interface.registry``), and the entire
+  ``zope.component.hookable`` module. See `issue 59
+  <https://github.com/zopefoundation/zope.component/issues/59>`_.
+
 - Respect permission value for utility factory registrations
   (`#54 <https://github.com/zopefoundation/zope.component/issues/54>`_)
 
