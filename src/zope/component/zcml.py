@@ -392,7 +392,11 @@ def utility(_context, provides=None, component=None, factory=None,
             name = getName(component)
 
     if permission is not None:
-        component = proxify(component, provides=provides, permission=permission)
+        if component:
+            component = proxify(component, provides=provides,
+                                permission=permission)
+        if factory:
+            factory = protectedFactory(factory, provides, permission)
 
     _context.action(
         discriminator = ('utility', provides, name),
