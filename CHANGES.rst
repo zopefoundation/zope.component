@@ -2,7 +2,7 @@
  Changes
 =========
 
-5.0.0 (unreleased)
+5.0.0 (2021-03-19)
 ==================
 
 - Remove backwards compatibility imports that were emitting
