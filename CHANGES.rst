@@ -41,6 +41,14 @@
 
   See `issue 51 <https://github.com/zopefoundation/zope.component/issues/51>`_.
 
+- Fix ``zope.interface.interface.provideInterface`` and the various
+  search and query methods to use the current site manager instead of
+  always using the global site manager. (``provideInterface`` is
+  called implicitly when registering components from ZCML.) The search
+  and query methods continue to return interfaces registered in base
+  site managers.
+
+  See `issue 10 <https://github.com/zopefoundation/zope.component/issues/51>`_.
 
 4.6.2 (2020-07-03)
 ==================

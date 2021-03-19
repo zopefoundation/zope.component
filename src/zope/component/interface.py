@@ -16,14 +16,19 @@
 from zope.interface import alsoProvides
 from zope.interface.interfaces import IInterface
 
-from zope.component.globalregistry import getGlobalSiteManager
 from zope.interface.interfaces import ComponentLookupError
+from zope.component._api import getSiteManager
 from zope.component._api import queryUtility
 from zope.component._compat import CLASS_TYPES
 
 
 def provideInterface(id, interface, iface_type=None, info=''):
-    """ Mark 'interface' as a named utilty providing 'iface_type'.
+    """
+    Mark *interface* as a named utility providing *iface_type*'.
+
+    .. versionchanged:: 5.0.0
+       The named utility is registered in the current site manager.
+       Previously it was always registered in the global site manager.
     """
     if not id:
         id = "%s.%s" % (interface.__module__, interface.__name__)
@@ -40,8 +45,8 @@ def provideInterface(id, interface, iface_type=None, info=''):
     else:
         iface_type = IInterface
 
-    gsm = getGlobalSiteManager()
-    gsm.registerUtility(interface, iface_type, id, info)
+    site_man = getSiteManager()
+    site_man.registerUtility(interface, iface_type, id, info)
 
 
 def getInterface(context, id):
@@ -74,8 +79,8 @@ def searchInterfaceIds(context, search_string=None, base=None):
 
 
 def searchInterfaceUtilities(context, search_string=None, base=None):
-    gsm = getGlobalSiteManager()
-    iface_utilities = gsm.getUtilitiesFor(IInterface)
+    site_man = getSiteManager()
+    iface_utilities = site_man.getUtilitiesFor(IInterface)
 
     if search_string:
         search_string = search_string.lower()
@@ -86,7 +91,7 @@ def searchInterfaceUtilities(context, search_string=None, base=None):
         res = [iface_util for iface_util in iface_utilities
                if iface_util[1].isOrExtends(base)]
     else:
-        res = [iface_util for iface_util in iface_utilities]
+        res = list(iface_utilities)
     return res
 
 
