@@ -2,7 +2,7 @@
  Changes
 =========
 
-5.0.1 (unreleased)
+5.0.1 (2021-07-09)
 ==================
 
 - Fix unregistering utilities on old persistent adapter registries.
