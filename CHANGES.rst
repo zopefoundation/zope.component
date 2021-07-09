@@ -5,7 +5,9 @@
 5.0.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Fix unregistering utilities on old persistent adapter registries.
+  Previously this could raise ``TypeError``. See `issue 62
+  <https://github.com/zopefoundation/zope.component/issues/62>`_.
 
 
 5.0.0 (2021-03-19)

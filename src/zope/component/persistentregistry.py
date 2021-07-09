@@ -23,7 +23,7 @@ class PersistentAdapterRegistry(VerifyingAdapterRegistry, Persistent):
     """
     An adapter registry that is also a persistent object.
 
-    .. versionchanged:: 4.7.0
+    .. versionchanged:: 5.0.0
         Internal data structures are now composed of
         :class:`persistent.mapping.PersistentMapping` and
         :class:`persistent.list.PersistentList`. This helps scale to
@@ -68,6 +68,10 @@ class PersistentAdapterRegistry(VerifyingAdapterRegistry, Persistent):
         return existing_leaf_sequence
 
     def _removeValueFromLeaf(self, existing_leaf_sequence, to_remove):
+        if isinstance(existing_leaf_sequence, tuple):
+            # Converting from old state
+            existing_leaf_sequence = self._leafSequenceType(existing_leaf_sequence)
+
         without_removed = VerifyingAdapterRegistry._removeValueFromLeaf(
             self,
             existing_leaf_sequence,

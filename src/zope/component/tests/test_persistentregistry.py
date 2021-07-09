@@ -136,9 +136,48 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
     def test__addValueToLeaf_existing_is_tuple_converts(self):
         from persistent.list import PersistentList
         registry = self._makeOne()
+        # It converts when the tuple is not empty...
         result = registry._addValueToLeaf(('a',), 'b')
         self.assertIsInstance(result, PersistentList)
         self.assertEqual(result, ['a', 'b'])
+        # ...and when it is empty...
+        result = registry._addValueToLeaf((), 'b')
+        self.assertIsInstance(result, PersistentList)
+        self.assertEqual(result, ['b'])
+        # ...and in fact when it is even missing
+        result = registry._addValueToLeaf(None, 'b')
+        self.assertIsInstance(result, PersistentList)
+        self.assertEqual(result, ['b'])
+
+    def test__removeValueFromLeaf_existing_is_tuple_converts(self):
+        from persistent.list import PersistentList
+        registry = self._makeOne()
+        # It converts when the item is found...
+        result = registry._removeValueFromLeaf(('a', 'b'), 'b')
+        self.assertIsInstance(result, PersistentList)
+        self.assertEqual(result, ['a'])
+        # ...and when it is not found
+        result = registry._removeValueFromLeaf(('a',), 'b')
+        self.assertIsInstance(result, PersistentList)
+        self.assertEqual(result, ['a'])
+
+    def test__addValueFromLeaf_preserves_identity(self):
+        registry = self._makeOne()
+        first = registry._addValueToLeaf(None, 'a')
+        second = registry._addValueToLeaf(first, 'b')
+        self.assertIs(first, second)
+        self.assertEqual(second, ['a', 'b'])
+
+    def test__removeValueFromLeaf_preserves_identity(self):
+        registry = self._makeOne()
+        first = registry._addValueToLeaf(None, 'a')
+        second = registry._addValueToLeaf(first, 'b')
+        third = registry._addValueToLeaf(second, 'c')
+        fourth = registry._removeValueFromLeaf(third, 'c')
+        self.assertIs(first, second)
+        self.assertIs(third, fourth)
+        self.assertIs(first, fourth)
+        self.assertEqual(fourth, ['a', 'b'])
 
 
 @skipIfNoPersistent
