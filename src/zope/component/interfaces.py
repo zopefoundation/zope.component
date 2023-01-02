@@ -364,6 +364,12 @@ class IFactory(Interface):
 
 def _inherits_docs(func, iface):
     doc = iface[func.__name__].__doc__
+
+    if doc is None:
+        # Under PYTHONOPTIMIZE=2, __doc__ is None, so we cannot amend
+        # the docstring.
+        return func
+
     # By adding the ..seealso:: we get a link from our overview page
     # to the specific narrative place where the function is described, because
     # our overview page uses :noindex:
