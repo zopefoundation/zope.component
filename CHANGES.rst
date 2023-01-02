@@ -3,10 +3,10 @@
 =========
 
 
-5.0.2 (unreleased)
+5.1.0 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Add support for Python 3.10 and 3.11.
 
 
 5.0.1 (2021-07-09)
