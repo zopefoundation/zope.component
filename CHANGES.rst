@@ -6,6 +6,10 @@
 5.1.0 (unreleased)
 ==================
 
+- Fix crash when the environment variable `PYTHONOPTIMIZED` is set to `2`
+  and docstrings are set to `None` by the interpreter.
+  (`#67 <https://github.com/zopefoundation/zope.component/issues/67>`_)
+
 - Add support for Python 3.10 and 3.11.
 
 
