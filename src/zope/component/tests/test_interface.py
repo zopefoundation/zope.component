@@ -18,7 +18,7 @@ import unittest
 
 
 DOCSTRINGS_REMOVED = False
-if str(os.environ.get('PYTHONOPTIMIZE')) == '2':
+if os.environ.get('PYTHONOPTIMIZE') == '2':
     DOCSTRINGS_REMOVED = True
 
 # pylint:disable=inherit-non-class,blacklisted-name
