@@ -13,7 +13,13 @@
 ##############################################################################
 """Tests for z.c.interface
 """
+import os
 import unittest
+
+
+DOCSTRINGS_REMOVED = False
+if os.environ.get('PYTHONOPTIMIZE') == '2':
+    DOCSTRINGS_REMOVED = True
 
 # pylint:disable=inherit-non-class,blacklisted-name
 
@@ -346,6 +352,8 @@ class Test_searchInterfaceUtilities(unittest.TestCase):
         self.assertEqual(self._callFUT(object(), base=IFoo), [('foo', IFoo)])
 
 
+@unittest.skipIf(DOCSTRINGS_REMOVED,
+                 'Skipping tests, docstrings are optimized away')
 class Test_getInterfaceAllDocs(unittest.TestCase):
 
     def _callFUT(self, *args, **kw):
