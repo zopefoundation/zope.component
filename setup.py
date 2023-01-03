@@ -62,7 +62,7 @@ def read(*rnames):
 
 setup(
     name='zope.component',
-    version='5.1.0.dev0',
+    version='5.1.0',
     url='https://github.com/zopefoundation/zope.component',
     project_urls={
         'Documentation': 'https://zopecomponent.readthedocs.io/',

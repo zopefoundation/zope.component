@@ -3,7 +3,7 @@
 =========
 
 
-5.1.0 (unreleased)
+5.1.0 (2023-01-03)
 ==================
 
 - Fix crash when the environment variable `PYTHONOPTIMIZED` is set to `2`
