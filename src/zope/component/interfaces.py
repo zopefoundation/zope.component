@@ -367,7 +367,7 @@ def _inherits_docs(func, iface):
 
     # doc can be None if the interpreter drops all docstrings when the
     # environment variable PYTHONOPTIMIZE is set 2.
-    if not doc:
+    if doc is None:
         return func
 
     # By adding the ..seealso:: we get a link from our overview page
