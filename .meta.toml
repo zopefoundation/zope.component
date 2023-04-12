@@ -1,0 +1,58 @@
+# Generated from:
+# https://github.com/zopefoundation/meta/tree/master/config/pure-python
+[meta]
+template = "pure-python"
+commit-id = "fe63cb4c"
+
+[python]
+with-sphinx-doctests = true
+with-docs = true
+with-future-python = false
+with-pypy = true
+with-macos = false
+with-windows = false
+
+[tox]
+use-flake8 = true
+additional-envlist = [
+    "py310-optimized",
+    ]
+testenv-setenv = [
+    "ZOPE_INTERFACE_STRICT_IRO=1",
+    "optimized: PYTHONOPTIMIZE=2",
+    ]
+
+[coverage]
+fail-under = 99
+
+[coverage-run]
+additional-config = [
+    "omit =",
+    "    # Runs in a subprocess:",
+    "    src/zope/component/standalonetests.py",
+    "    # Not used:",
+    "    src/zope/component/eventtesting.py",
+    ]
+
+[flake8]
+additional-config = [
+    "# F401 imported but unused",
+    "per-file-ignores =",
+    "    src/zope/component/__init__.py: F401",
+    ]
+
+[manifest]
+additional-rules = [
+    "recursive-include docs *.bat",
+    "recursive-include src *.zcml",
+    ]
+
+[check-manifest]
+additional-ignores = [
+    "docs/_build/html/_sources/api/*",
+    ]
+
+[github-actions]
+additional-config = [
+    "- [\"3.10\",   \"py310-optimized\"]",
+    ]
