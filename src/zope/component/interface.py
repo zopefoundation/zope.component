@@ -14,9 +14,9 @@
 """Interface utility functions
 """
 from zope.interface import alsoProvides
+from zope.interface.interfaces import ComponentLookupError
 from zope.interface.interfaces import IInterface
 
-from zope.interface.interfaces import ComponentLookupError
 from zope.component._api import getSiteManager
 from zope.component._api import queryUtility
 from zope.component._compat import CLASS_TYPES

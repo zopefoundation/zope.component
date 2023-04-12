@@ -13,9 +13,10 @@
 ##############################################################################
 """Factory object
 """
-from zope.interface import implementer
 from zope.interface import implementedBy
+from zope.interface import implementer
 from zope.interface.declarations import Implements
+
 from zope.component.interfaces import IFactory
 
 
@@ -43,5 +44,5 @@ class Factory(object):
             return spec
         return implementedBy(self._callable)
 
-    def __repr__(self): #pragma NO COVER
+    def __repr__(self):  # pragma: no cover
         return '<%s for %s>' % (self.__class__.__name__, repr(self._callable))

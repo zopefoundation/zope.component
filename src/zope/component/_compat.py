@@ -15,18 +15,19 @@
 import sys
 import types
 
-if sys.version_info[0] < 3: #pragma NO COVER
 
-    import cPickle as _pickle
+if sys.version_info[0] < 3:  # pragma: no cover
+
+    import cPickle as _pickle  # noqa: F401 imported but unused
 
     CLASS_TYPES = (type, types.ClassType)
 
     PYTHON3 = False
     PYTHON2 = True
 
-else: #pragma NO COVER
+else:  # pragma: no cover
 
-    import pickle as _pickle
+    import pickle as _pickle  # noqa: F401 imported but unused
 
     CLASS_TYPES = (type,)
 

@@ -20,10 +20,13 @@ from zope.interface import implementer
 from zope.interface.interfaces import IInterface
 
 from zope.component._declaration import adapter
+from zope.component.globalregistry import GlobalAdapterRegistry
 from zope.component.testfiles.views import IC
+
 
 def write(x):
     sys.stdout.write('%s\n' % x)
+
 
 class ITestType(IInterface):
     pass
@@ -32,26 +35,34 @@ class ITestType(IInterface):
 class I1(Interface):
     pass
 
+
 class I2(Interface):
     pass
+
 
 class I3(Interface):
     pass
 
+
 class I4(Interface):
     pass
+
 
 class IGI(Interface):
     pass
 
+
 class IQI(Interface):
     pass
+
 
 class ISI(Interface):
     pass
 
+
 class ISII(Interface):
     pass
+
 
 class U(object):
 
@@ -61,35 +72,44 @@ class U(object):
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, self.__name__)
 
+
 @implementer(I1)
 class U1(U):
     pass
+
 
 @implementer(I1, I2)
 class U12(U):
     pass
 
+
 @adapter(I1)
 def handle1(x):
     write('handle1 %s' % x)
 
+
 def handle2(*objects):
-    write( 'handle2 ' + repr(objects))
+    write('handle2 ' + repr(objects))
+
 
 @adapter(I1)
 def handle3(x):
-    write( 'handle3 %s' % x)
+    write('handle3 %s' % x)
+
 
 @adapter(I1)
 def handle4(x):
-    write( 'handle4 %s' % x)
+    write('handle4 %s' % x)
+
 
 class GlobalRegistry:
     pass
 
-from zope.component.globalregistry import GlobalAdapterRegistry
+
 base = GlobalAdapterRegistry(GlobalRegistry, 'adapters')
 GlobalRegistry.adapters = base
+
+
 def clear_base():
     base.__init__(GlobalRegistry, 'adapters')
 
@@ -102,19 +122,23 @@ class Ob(object):
 
 ob = Ob()
 
+
 @implementer(I2)
 class Ob2(object):
     def __repr__(self):
         return '<instance Ob2>'
 
+
 @implementer(IC)
 class Ob3(object):
     pass
+
 
 @implementer(I2)
 class Comp(object):
     def __init__(self, context):
         self.context = context
+
 
 comp = Comp(1)
 
@@ -134,6 +158,7 @@ class ConformsToIComponentLookup(object):
 
 def clearZCML(test=None):
     from zope.configuration.xmlconfig import XMLConfig
+
     import zope.component
     from zope.component.testing import setUp
     from zope.component.testing import tearDown

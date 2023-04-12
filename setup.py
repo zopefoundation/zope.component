@@ -20,7 +20,10 @@
 """
 
 import os
-from setuptools import setup, find_packages
+
+from setuptools import find_packages
+from setuptools import setup
+
 
 HOOK_REQUIRES = [
 ]
@@ -59,6 +62,7 @@ TESTS_REQUIRE = (
 def read(*rnames):
     with open(os.path.join(os.path.dirname(__file__), *rnames)) as f:
         return f.read()
+
 
 setup(
     name='zope.component',
@@ -104,7 +108,7 @@ setup(
         "Framework :: Zope :: 3",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    namespace_packages=['zope',],
+    namespace_packages=['zope', ],
     python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*',
     tests_require=TESTS_REQUIRE,
     install_requires=[

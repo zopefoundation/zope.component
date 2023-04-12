@@ -15,7 +15,8 @@
 """
 
 # HACK to make sure basicmost event subscriber is installed
-import zope.component.event
+import zope.component.event  # noqa: F401 imported but unused
+
 
 # we really don't need special setup now:
 class _PlacelessSetupFallback(object):
@@ -25,13 +26,16 @@ class _PlacelessSetupFallback(object):
 
     setUp = tearDown = cleanUp
 
+
 try:
     from zope.testing.cleanup import CleanUp as PlacelessSetup
-except ImportError: # pragma: no cover
+except ImportError:  # pragma: no cover
     PlacelessSetup = _PlacelessSetupFallback
+
 
 def setUp(test=None):
     PlacelessSetup().setUp()
+
 
 def tearDown(test=None):
     PlacelessSetup().tearDown()

@@ -17,15 +17,15 @@ import os
 import unittest
 
 
-DOCSTRINGS_REMOVED = False
-if os.environ.get('PYTHONOPTIMIZE') == '2':
-    DOCSTRINGS_REMOVED = True
+DOCSTRINGS_REMOVED = os.environ.get('PYTHONOPTIMIZE') == '2'
 
 # pylint:disable=inherit-non-class,blacklisted-name
 
+
 class Test_provideInterface(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.interface import provideInterface
@@ -37,6 +37,7 @@ class Test_provideInterface(unittest.TestCase):
     def test_w_iface_type_not_IInterface(self):
         from zope.interface import Interface
         from zope.interface.interface import InterfaceClass
+
         class IFoo(Interface):
             pass
         IBar = InterfaceClass('IBar')
@@ -44,10 +45,13 @@ class Test_provideInterface(unittest.TestCase):
 
     def test_w_class(self):
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IBar(IInterface):
             pass
+
         class Foo(object):
             pass
         self._callFUT('', Foo, IBar)
@@ -57,10 +61,13 @@ class Test_provideInterface(unittest.TestCase):
     def test_wo_name_w_iface_type(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
+
         class IBar(IInterface):
             pass
         self._callFUT('', IFoo, IBar)
@@ -71,8 +78,10 @@ class Test_provideInterface(unittest.TestCase):
     def test_w_name_wo_ifact_type(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
         self._callFUT('foo', IFoo)
@@ -81,16 +90,18 @@ class Test_provideInterface(unittest.TestCase):
         self.assertIs(registered, IFoo)
 
     def test_register_in_current_site(self):
-        from zope.component._api import getSiteManager
-        from zope.component.globalregistry import getGlobalSiteManager
-        from zope.interface.registry import Components
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+        from zope.interface.registry import Components
+
+        from zope.component._api import getSiteManager
+        from zope.component.globalregistry import getGlobalSiteManager
 
         class IFoo(Interface):
             pass
 
         site_man = Components()
+
         def get(_context=None):
             return site_man
         getSiteManager.sethook(get)
@@ -105,10 +116,10 @@ class Test_provideInterface(unittest.TestCase):
         )
 
 
-
 class Test_getInterface(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.interface import getInterface
@@ -122,8 +133,10 @@ class Test_getInterface(unittest.TestCase):
     def test_hit(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -132,7 +145,8 @@ class Test_getInterface(unittest.TestCase):
 
 class Test_queryInterface(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.interface import queryInterface
@@ -146,8 +160,10 @@ class Test_queryInterface(unittest.TestCase):
     def test_hit(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -156,7 +172,8 @@ class Test_queryInterface(unittest.TestCase):
 
 class Test_searchInterface(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.interface import searchInterface
@@ -168,8 +185,10 @@ class Test_searchInterface(unittest.TestCase):
     def test_no_search_string_no_base(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -178,10 +197,13 @@ class Test_searchInterface(unittest.TestCase):
     def test_w_search_string_no_base(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -191,12 +213,16 @@ class Test_searchInterface(unittest.TestCase):
     def test_no_search_string_w_base(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IBase(Interface):
             pass
+
         class IFoo(IBase):
             pass
+
         class IBar(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -204,11 +230,12 @@ class Test_searchInterface(unittest.TestCase):
         self.assertEqual(self._callFUT(object(), base=IBase), [IFoo])
 
     def test_hit_in_current_site(self):
-        from zope.component._api import getSiteManager
-        from zope.component.globalregistry import getGlobalSiteManager
-        from zope.interface.registry import Components
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+        from zope.interface.registry import Components
+
+        from zope.component._api import getSiteManager
+        from zope.component.globalregistry import getGlobalSiteManager
 
         class ILocal(Interface):
             pass
@@ -218,11 +245,11 @@ class Test_searchInterface(unittest.TestCase):
 
         gsm = getGlobalSiteManager()
         site_man = Components(bases=(gsm,))
+
         def get(_context=None):
             return site_man
         getSiteManager.sethook(get)
         self.addCleanup(getSiteManager.reset)
-
 
         gsm.registerUtility(IGlobal, IInterface, 'foo')
         site_man.registerUtility(ILocal, IInterface, 'bar')
@@ -241,7 +268,8 @@ class Test_searchInterface(unittest.TestCase):
 
 class Test_searchInterfaceIds(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.interface import searchInterfaceIds
@@ -253,8 +281,10 @@ class Test_searchInterfaceIds(unittest.TestCase):
     def test_no_search_string_no_base(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -263,10 +293,13 @@ class Test_searchInterfaceIds(unittest.TestCase):
     def test_w_search_string_no_base(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -276,12 +309,16 @@ class Test_searchInterfaceIds(unittest.TestCase):
     def test_no_search_string_w_base(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IBase(Interface):
             pass
+
         class IFoo(IBase):
             pass
+
         class IBar(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -291,7 +328,8 @@ class Test_searchInterfaceIds(unittest.TestCase):
 
 class Test_searchInterfaceUtilities(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.interface import searchInterfaceUtilities
@@ -303,8 +341,10 @@ class Test_searchInterfaceUtilities(unittest.TestCase):
     def test_no_search_string_no_base(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -313,10 +353,13 @@ class Test_searchInterfaceUtilities(unittest.TestCase):
     def test_w_search_string_no_base(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -326,12 +369,16 @@ class Test_searchInterfaceUtilities(unittest.TestCase):
     def test_no_search_string_w_base(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IBase(Interface):
             pass
+
         class IFoo(IBase):
             pass
+
         class IBar(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -341,10 +388,13 @@ class Test_searchInterfaceUtilities(unittest.TestCase):
     def test_no_search_string_w_base_is_same(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -364,6 +414,7 @@ class Test_getInterfaceAllDocs(unittest.TestCase):
         class Foo(object):
             """DOCSTRING"""
             bar = None
+
             def baz(self):
                 """BAZ"""
         self.assertEqual(self._callFUT(Foo),
@@ -372,6 +423,7 @@ class Test_getInterfaceAllDocs(unittest.TestCase):
 
     def test_w_interface_no_members(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             """DOCSTRING"""
         self.assertEqual(self._callFUT(IFoo),
@@ -381,9 +433,11 @@ class Test_getInterfaceAllDocs(unittest.TestCase):
     def test_w_interface_w_members(self):
         from zope.interface import Attribute
         from zope.interface import Interface
+
         class IFoo(Interface):
             """DOCSTRING"""
             bar = Attribute('bar', 'Do bar')
+
             def baz(self):
                 """BAZ"""
         self.assertEqual(self._callFUT(IFoo),
@@ -395,7 +449,8 @@ class Test_getInterfaceAllDocs(unittest.TestCase):
 
 class Test_nameToInterface(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.interface import nameToInterface
@@ -412,8 +467,10 @@ class Test_nameToInterface(unittest.TestCase):
     def test_hit(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
@@ -423,7 +480,8 @@ class Test_nameToInterface(unittest.TestCase):
 
 class Test_interfaceToName(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.interface import interfaceToName
@@ -434,6 +492,7 @@ class Test_interfaceToName(unittest.TestCase):
 
     def test_w_unregistered(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         self.assertEqual(self._callFUT(object(), IFoo),
@@ -442,8 +501,10 @@ class Test_interfaceToName(unittest.TestCase):
     def test_w_registered(self):
         from zope.interface import Interface
         from zope.interface.interfaces import IInterface
+
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
+
         class IFoo(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')

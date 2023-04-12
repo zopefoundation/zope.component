@@ -19,6 +19,7 @@ from zope.proxy import getProxiedObject
 
 from zope.component._compat import ZOPE_SECURITY_NOT_AVAILABLE_EX
 
+
 try:
     from zope.security.adapter import LocatingTrustedAdapterFactory
     from zope.security.adapter import LocatingUntrustedAdapterFactory
@@ -27,7 +28,7 @@ try:
     from zope.security.checker import CheckerPublic
     from zope.security.checker import InterfaceChecker
     from zope.security.proxy import Proxy
-except ZOPE_SECURITY_NOT_AVAILABLE_EX: # pragma: no cover
+except ZOPE_SECURITY_NOT_AVAILABLE_EX:  # pragma: no cover
     def _no_security(*args, **kw):
         raise TypeError(
             "security proxied components are not "
@@ -43,6 +44,7 @@ except ZOPE_SECURITY_NOT_AVAILABLE_EX: # pragma: no cover
 
 PublicPermission = 'zope.Public'
 
+
 class PermissionProxy(ProxyBase):
 
     __slots__ = ('__Security_checker__', )
@@ -50,6 +52,7 @@ class PermissionProxy(ProxyBase):
     def __providedBy__(self):
         return providedBy(getProxiedObject(self))
     __providedBy__ = property(__providedBy__)
+
 
 def _checker(_context, permission, allowed_interface, allowed_attributes):
     if (not allowed_attributes) and (not allowed_interface):
@@ -70,6 +73,7 @@ def _checker(_context, permission, allowed_interface, allowed_attributes):
     checker = Checker(require)
     return checker
 
+
 def proxify(ob, checker=None, provides=None, permission=None):
     """Try to get the object proxied with the `checker`, but not too soon
 
@@ -87,11 +91,13 @@ def proxify(ob, checker=None, provides=None, permission=None):
     ob.__Security_checker__ = checker
     return ob
 
+
 def protectedFactory(original_factory, provides, permission):
     if permission == PublicPermission:
         permission = CheckerPublic
     checker = InterfaceChecker(provides, permission)
     # This has to be named 'factory', aparently, so as not to confuse apidoc :(
+
     def factory(*args):
         ob = original_factory(*args)
         try:
@@ -101,6 +107,7 @@ def protectedFactory(original_factory, provides, permission):
         return ob
     factory.factory = original_factory
     return factory
+
 
 def securityAdapterFactory(factory, permission, locate, trusted):
     if permission == PublicPermission:

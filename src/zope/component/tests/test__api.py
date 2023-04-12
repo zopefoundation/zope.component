@@ -17,9 +17,11 @@ import unittest
 
 from zope.component.tests import fails_if_called
 
+
 class Test_getSiteManager(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component._api import getSiteManager
@@ -51,10 +53,12 @@ class Test_getSiteManager(unittest.TestCase):
 
     def test_getSiteManager_w_invalid_context_w_adapter(self):
         from zope.interface import Interface
-        from zope.component.globalregistry import getGlobalSiteManager
         from zope.interface.interfaces import IComponentLookup
+
+        from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
         sm = object()
+
         def _adapt(x):
             return sm
         gsm.registerAdapter(_adapt, (Interface,), IComponentLookup, '')
@@ -63,7 +67,8 @@ class Test_getSiteManager(unittest.TestCase):
 
 class Test_getAdapterInContext(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import getAdapterInContext
@@ -72,6 +77,7 @@ class Test_getAdapterInContext(unittest.TestCase):
     def test_miss(self):
         from zope.interface import Interface
         from zope.interface.interfaces import ComponentLookupError
+
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -81,22 +87,29 @@ class Test_getAdapterInContext(unittest.TestCase):
         from zope.interface import Interface
         from zope.interface import implementer
         from zope.interface.registry import Components
+
         from zope.component import getGlobalSiteManager
         from zope.component.tests.examples import ConformsToIComponentLookup
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         @implementer(IFoo)
         class Global(object):
             __init__ = fails_if_called(self)
+
         @implementer(IFoo)
         class Local(object):
             def __init__(self, context):
                 self.context = context
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         class Context(ConformsToIComponentLookup):
             def __init__(self, sm):
                 self.sitemanager = sm
@@ -112,7 +125,8 @@ class Test_getAdapterInContext(unittest.TestCase):
 
 class Test_queryAdapterInContext(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import queryAdapterInContext
@@ -128,23 +142,25 @@ class Test_queryAdapterInContext(unittest.TestCase):
 
     def test_w_object_conforming(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         _adapted = object()
+
         class Foo(object):
             def __conform__(self, iface, default=None, _test=self):
                 _test.assertIs(iface, IFoo)
                 return _adapted
 
         self.assertTrue(
-                self._callFUT(Foo(), IFoo, context=None) is _adapted)
+            self._callFUT(Foo(), IFoo, context=None) is _adapted)
 
     def test___conform___raises_TypeError_via_class(self):
         from zope.interface import Interface
 
         class IFoo(Interface):
             pass
-        _adapted = object()
+
         class Foo(object):
             __conform__ = fails_if_called(self, arguments=False)
         # call via class, triggering TypeError
@@ -152,9 +168,10 @@ class Test_queryAdapterInContext(unittest.TestCase):
 
     def test___conform___raises_TypeError_via_inst(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
-        _adapted = object()
+
         class Foo(object):
             def __conform__(self, iface, default=None):
                 raise TypeError
@@ -167,17 +184,19 @@ class Test_queryAdapterInContext(unittest.TestCase):
 
         class IFoo(Interface):
             pass
+
         @implementer(IFoo)
         class Foo(object):
-              pass
+            pass
         foo = Foo()
         self.assertIs(
-                self._callFUT(foo, IFoo, context=None), foo)
+            self._callFUT(foo, IFoo, context=None), foo)
 
 
 class Test_getAdapter(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import getAdapter
@@ -186,6 +205,7 @@ class Test_getAdapter(unittest.TestCase):
     def test_anonymous_nonesuch(self):
         from zope.interface import Interface
         from zope.interface.interfaces import ComponentLookupError
+
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -194,6 +214,7 @@ class Test_getAdapter(unittest.TestCase):
     def test_named_nonesuch(self):
         from zope.interface import Interface
         from zope.interface.interfaces import ComponentLookupError
+
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -202,14 +223,19 @@ class Test_getAdapter(unittest.TestCase):
     def test_anonymous_hit(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IFoo)
         class Baz(object):
             def __init__(self, context):
@@ -223,9 +249,12 @@ class Test_getAdapter(unittest.TestCase):
     def test_anonymous_hit_registered_for_None(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         @implementer(IFoo)
         class Baz(object):
             def __init__(self, context):
@@ -239,14 +268,19 @@ class Test_getAdapter(unittest.TestCase):
     def test_named_hit(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IFoo)
         class Baz(object):
             def __init__(self, context):
@@ -260,7 +294,8 @@ class Test_getAdapter(unittest.TestCase):
 
 class Test_queryAdapter(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import queryAdapter
@@ -268,6 +303,7 @@ class Test_queryAdapter(unittest.TestCase):
 
     def test_anonymous_nonesuch(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         self.assertEqual(self._callFUT(object(), IFoo, '', '<default>'),
@@ -275,6 +311,7 @@ class Test_queryAdapter(unittest.TestCase):
 
     def test_named_nonesuch(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         self.assertEqual(self._callFUT(object(), IFoo, 'bar'), None)
@@ -282,14 +319,19 @@ class Test_queryAdapter(unittest.TestCase):
     def test_anonymous_hit(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IFoo)
         class Baz(object):
             def __init__(self, context):
@@ -303,14 +345,19 @@ class Test_queryAdapter(unittest.TestCase):
     def test_named_hit(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IFoo)
         class Baz(object):
             def __init__(self, context):
@@ -325,22 +372,29 @@ class Test_queryAdapter(unittest.TestCase):
         from zope.interface import Interface
         from zope.interface import implementer
         from zope.interface.registry import Components
+
         from zope.component import getGlobalSiteManager
         from zope.component.tests.examples import ConformsToIComponentLookup
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         @implementer(IFoo)
         class Global(object):
             __init__ = fails_if_called(self)
+
         @implementer(IFoo)
         class Local(object):
             def __init__(self, context):
                 self.context = context
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         class Context(ConformsToIComponentLookup):
             def __init__(self, sm):
                 self.sitemanager = sm
@@ -356,7 +410,8 @@ class Test_queryAdapter(unittest.TestCase):
 
 class Test_getMultiAdapter(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import getMultiAdapter
@@ -365,6 +420,7 @@ class Test_getMultiAdapter(unittest.TestCase):
     def test_anonymous_nonesuch(self):
         from zope.interface import Interface
         from zope.interface.interfaces import ComponentLookupError
+
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -373,6 +429,7 @@ class Test_getMultiAdapter(unittest.TestCase):
     def test_named_nonesuch(self):
         from zope.interface import Interface
         from zope.interface.interfaces import ComponentLookupError
+
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -381,25 +438,32 @@ class Test_getMultiAdapter(unittest.TestCase):
     def test_anonymous_hit(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         class IBaz(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IBaz)
         class Baz(object):
             pass
+
         @implementer(IFoo)
         class FooAdapter(object):
             def __init__(self, first, second):
                 self.first, self.second = first, second
         getGlobalSiteManager().registerAdapter(
-                                FooAdapter, (IBar, IBaz), IFoo, '')
+            FooAdapter, (IBar, IBaz), IFoo, '')
         bar = Bar()
         baz = Baz()
         adapted = self._callFUT((bar, baz), IFoo, '')
@@ -410,22 +474,28 @@ class Test_getMultiAdapter(unittest.TestCase):
     def test_anonymous_hit_registered_for_None(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         class IBaz(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IFoo)
         class FooAdapter(object):
             def __init__(self, first, second):
                 self.first, self.second = first, second
         getGlobalSiteManager().registerAdapter(
-                                FooAdapter, (IBar, None), IFoo, '')
+            FooAdapter, (IBar, None), IFoo, '')
         bar = Bar()
         baz = object()
         adapted = self._callFUT((bar, baz), IFoo, '')
@@ -436,25 +506,32 @@ class Test_getMultiAdapter(unittest.TestCase):
     def test_named_hit(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         class IBaz(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IBaz)
         class Baz(object):
             pass
+
         @implementer(IFoo)
         class FooAdapter(object):
             def __init__(self, first, second):
                 self.first, self.second = first, second
         getGlobalSiteManager().registerAdapter(
-                                    FooAdapter, (IBar, IBaz), IFoo, 'named')
+            FooAdapter, (IBar, IBaz), IFoo, 'named')
         bar = Bar()
         baz = Baz()
         adapted = self._callFUT((bar, baz), IFoo, 'named')
@@ -465,7 +542,8 @@ class Test_getMultiAdapter(unittest.TestCase):
 
 class Test_queryMultiAdapter(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import queryMultiAdapter
@@ -473,14 +551,16 @@ class Test_queryMultiAdapter(unittest.TestCase):
 
     def test_anonymous_nonesuch(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         self.assertEqual(self._callFUT((object(), object()), IFoo, '',
-                                            '<default>'),
+                                       '<default>'),
                          '<default>')
 
     def test_named_nonesuch(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         self.assertEqual(self._callFUT((object(), object()), IFoo, 'bar'),
@@ -489,25 +569,32 @@ class Test_queryMultiAdapter(unittest.TestCase):
     def test_anonymous_hit(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         class IBaz(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IBaz)
         class Baz(object):
             pass
+
         @implementer(IFoo)
         class FooAdapter(object):
             def __init__(self, first, second):
                 self.first, self.second = first, second
         getGlobalSiteManager().registerAdapter(
-                                    FooAdapter, (IBar, IBaz), IFoo, '')
+            FooAdapter, (IBar, IBaz), IFoo, '')
         bar = Bar()
         baz = Baz()
         adapted = self._callFUT((bar, baz), IFoo, '')
@@ -518,25 +605,32 @@ class Test_queryMultiAdapter(unittest.TestCase):
     def test_named_hit(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         class IBaz(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IBaz)
         class Baz(object):
             pass
+
         @implementer(IFoo)
         class FooAdapter(object):
             def __init__(self, first, second):
                 self.first, self.second = first, second
         getGlobalSiteManager().registerAdapter(
-                                    FooAdapter, (IBar, IBaz), IFoo, 'named')
+            FooAdapter, (IBar, IBaz), IFoo, 'named')
         bar = Bar()
         baz = Baz()
         adapted = self._callFUT((bar, baz), IFoo, 'named')
@@ -548,27 +642,36 @@ class Test_queryMultiAdapter(unittest.TestCase):
         from zope.interface import Interface
         from zope.interface import implementer
         from zope.interface.registry import Components
+
         from zope.component import getGlobalSiteManager
         from zope.component.tests.examples import ConformsToIComponentLookup
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         class IBaz(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IBaz)
         class Baz(object):
             pass
+
         @implementer(IFoo)
         class Global(object):
             __init__ = fails_if_called(self)
+
         @implementer(IFoo)
         class Local(object):
             def __init__(self, first, second):
                 self.first, self.second = first, second
+
         class Context(ConformsToIComponentLookup):
             def __init__(self, sm):
                 self.sitemanager = sm
@@ -587,18 +690,24 @@ class Test_queryMultiAdapter(unittest.TestCase):
         from zope.interface import Interface
         from zope.interface import implementer
         from zope.interface.interfaces import ComponentLookupError
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         class IBaz(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IBaz)
         class Baz(object):
             pass
+
         class Context(object):
             def __conform__(self, iface):
                 raise ComponentLookupError
@@ -610,7 +719,8 @@ class Test_queryMultiAdapter(unittest.TestCase):
 
 class Test_getAdapters(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import getAdapters
@@ -618,18 +728,23 @@ class Test_getAdapters(unittest.TestCase):
 
     def test_nonesuch(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         self.assertEqual(list(self._callFUT((object(),), IFoo)), [])
 
     def test_hit(self):
         from zope.interface import Interface
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class BarAdapter(object):
             def __init__(self, context):
                 self.context = context
+
         class BazAdapter(object):
             def __init__(self, context):
                 self.context = context
@@ -646,18 +761,24 @@ class Test_getAdapters(unittest.TestCase):
         from zope.interface import Interface
         from zope.interface import implementer
         from zope.interface.interfaces import ComponentLookupError
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         class IBaz(Interface):
             pass
+
         @implementer(IBar)
         class Bar(object):
             pass
+
         @implementer(IBaz)
         class Baz(object):
             pass
+
         class Context(object):
             def __conform__(self, iface):
                 raise ComponentLookupError
@@ -669,7 +790,8 @@ class Test_getAdapters(unittest.TestCase):
 
 class Test_subscribers(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import subscribers
@@ -677,6 +799,7 @@ class Test_subscribers(unittest.TestCase):
 
     def test_nonesuch(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         subscribers = self._callFUT((object,), IFoo)
@@ -684,12 +807,16 @@ class Test_subscribers(unittest.TestCase):
 
     def test_hit(self):
         from zope.interface import Interface
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class BarAdapter(object):
             def __init__(self, context):
                 self.context = context
+
         class BazAdapter(object):
             def __init__(self, context):
                 self.context = context
@@ -705,8 +832,10 @@ class Test_subscribers(unittest.TestCase):
     def test_wo_sitemanager(self):
         from zope.interface import Interface
         from zope.interface.interfaces import ComponentLookupError
+
         class IFoo(Interface):
             pass
+
         class Context(object):
             def __conform__(self, iface):
                 raise ComponentLookupError
@@ -716,7 +845,8 @@ class Test_subscribers(unittest.TestCase):
 
 class Test_handle(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import handle
@@ -724,24 +854,30 @@ class Test_handle(unittest.TestCase):
 
     def test_nonesuch(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
-        subscribers = self._callFUT((object,), IFoo) #doesn't raise
+        self._callFUT((object,), IFoo)  # doesn't raise
 
     def test_hit(self):
-        from zope.component import getGlobalSiteManager
         from zope.interface import Interface
         from zope.interface import implementer
+
+        from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         @implementer(IFoo)
         class Foo(object):
             pass
         _called = []
+
         def _bar(context):
-                _called.append('_bar')
+            _called.append('_bar')
+
         def _baz(context):
-                _called.append('_baz')
+            _called.append('_baz')
         gsm = getGlobalSiteManager()
         gsm.registerHandler(_bar, (IFoo,))
         gsm.registerHandler(_baz, (IFoo,))
@@ -753,7 +889,8 @@ class Test_handle(unittest.TestCase):
 
 class Test_getUtility(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component._api import getUtility
@@ -762,6 +899,7 @@ class Test_getUtility(unittest.TestCase):
     def test_anonymous_nonesuch(self):
         from zope.interface import Interface
         from zope.interface.interfaces import ComponentLookupError
+
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError, self._callFUT, IFoo)
@@ -769,6 +907,7 @@ class Test_getUtility(unittest.TestCase):
     def test_named_nonesuch(self):
         from zope.interface import Interface
         from zope.interface.interfaces import ComponentLookupError
+
         class IFoo(Interface):
             pass
         self.assertRaises(ComponentLookupError,
@@ -776,7 +915,9 @@ class Test_getUtility(unittest.TestCase):
 
     def test_anonymous_hit(self):
         from zope.interface import Interface
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
         obj = object()
@@ -785,7 +926,9 @@ class Test_getUtility(unittest.TestCase):
 
     def test_named_hit(self):
         from zope.interface import Interface
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
         obj = object()
@@ -794,13 +937,17 @@ class Test_getUtility(unittest.TestCase):
 
     def test_w_conforming_context(self):
         from zope.interface import Interface
+
         from zope.component import getGlobalSiteManager
         from zope.component.tests.examples import ConformsToIComponentLookup
+
         class SM(object):
             def __init__(self, obj):
                 self._obj = obj
+
             def queryUtility(self, interface, name, default):
                 return self._obj
+
         class IFoo(Interface):
             pass
         obj1 = object()
@@ -813,7 +960,8 @@ class Test_getUtility(unittest.TestCase):
 
 class Test_queryUtility(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component._api import queryUtility
@@ -821,12 +969,14 @@ class Test_queryUtility(unittest.TestCase):
 
     def test_anonymous_nonesuch(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         self.assertEqual(self._callFUT(IFoo), None)
 
     def test_anonymous_nonesuch_w_default(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         obj = object()
@@ -834,12 +984,14 @@ class Test_queryUtility(unittest.TestCase):
 
     def test_named_nonesuch(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         self.assertEqual(self._callFUT(IFoo, name='bar'), None)
 
     def test_named_nonesuch_w_default(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         obj = object()
@@ -847,7 +999,9 @@ class Test_queryUtility(unittest.TestCase):
 
     def test_anonymous_hit(self):
         from zope.interface import Interface
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
         obj = object()
@@ -856,7 +1010,9 @@ class Test_queryUtility(unittest.TestCase):
 
     def test_named_hit(self):
         from zope.interface import Interface
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
         obj = object()
@@ -865,13 +1021,17 @@ class Test_queryUtility(unittest.TestCase):
 
     def test_w_conforming_context(self):
         from zope.interface import Interface
+
         from zope.component import getGlobalSiteManager
         from zope.component.tests.examples import ConformsToIComponentLookup
+
         class SM(object):
             def __init__(self, obj):
                 self._obj = obj
+
             def queryUtility(self, interface, name, default):
                 return self._obj
+
         class IFoo(Interface):
             pass
         obj1 = object()
@@ -884,7 +1044,8 @@ class Test_queryUtility(unittest.TestCase):
 
 class Test_getUtilitiesFor(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component._api import getUtilitiesFor
@@ -892,13 +1053,16 @@ class Test_getUtilitiesFor(unittest.TestCase):
 
     def test_nonesuch(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         self.assertEqual(list(self._callFUT(IFoo)), [])
 
     def test_hit(self):
         from zope.interface import Interface
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
         obj = object()
@@ -913,7 +1077,8 @@ class Test_getUtilitiesFor(unittest.TestCase):
 
 class Test_getAllUtilitiesRegisteredFor(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import getAllUtilitiesRegisteredFor
@@ -921,15 +1086,19 @@ class Test_getAllUtilitiesRegisteredFor(unittest.TestCase):
 
     def test_nonesuch(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         self.assertEqual(list(self._callFUT(IFoo)), [])
 
     def test_hit(self):
         from zope.interface import Interface
+
         from zope.component import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(IFoo):
             pass
         obj = object()
@@ -947,7 +1116,8 @@ class Test_getAllUtilitiesRegisteredFor(unittest.TestCase):
 
 class Test_getNextUtility(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import getNextUtility
@@ -963,9 +1133,10 @@ class Test_getNextUtility(unittest.TestCase):
                           self._callFUT, gutil, IMyUtility, 'myutil')
 
     def test_nested(self):
-        from zope.component import getGlobalSiteManager
         from zope.interface.interfaces import IComponentLookup
         from zope.interface.registry import Components
+
+        from zope.component import getGlobalSiteManager
         gsm = getGlobalSiteManager()
         gutil = _makeMyUtility('global', gsm)
         gsm.registerUtility(gutil, IMyUtility, 'myutil')
@@ -983,7 +1154,8 @@ class Test_getNextUtility(unittest.TestCase):
 
 class Test_queryNextUtility(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import queryNextUtility
@@ -997,8 +1169,9 @@ class Test_queryNextUtility(unittest.TestCase):
         self.assertEqual(self._callFUT(gutil, IMyUtility, 'myutil'), None)
 
     def test_nested(self):
-        from zope.component import getGlobalSiteManager
         from zope.interface.registry import Components
+
+        from zope.component import getGlobalSiteManager
         gsm = getGlobalSiteManager()
         gutil = _makeMyUtility('global', gsm)
         gsm.registerUtility(gutil, IMyUtility, 'myutil')
@@ -1014,14 +1187,16 @@ class Test_queryNextUtility(unittest.TestCase):
         sm1.__bases__ = (myregistry,) + sm1.__bases__
         # Both the ``myregistry`` and global utilities should be available:
         self.assertTrue(self._callFUT(sm1, IMyUtility, 'my_custom_util')
-                                            is custom_util)
+                        is custom_util)
         self.assertTrue(self._callFUT(sm1, IMyUtility, 'myutil') is gutil)
 
     def test_wo_sitemanager(self):
         from zope.interface import Interface
         from zope.interface.interfaces import ComponentLookupError
+
         class IFoo(Interface):
             pass
+
         class Context(object):
             def __conform__(self, iface):
                 raise ComponentLookupError
@@ -1030,7 +1205,8 @@ class Test_queryNextUtility(unittest.TestCase):
 
 class Test_createObject(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import createObject
@@ -1044,12 +1220,15 @@ class Test_createObject(unittest.TestCase):
         from zope.component.interfaces import IFactory
         _object = object()
         _factory_called = []
+
         def _factory(*args, **kw):
             _factory_called.append((args, kw))
             return _object
+
         class Context(object):
             def __conform__(self, iface):
                 return self
+
             def queryUtility(self, iface, name, default, _test=self):
                 _test.assertIs(iface, IFactory)
                 _test.assertEqual(name, 'test')
@@ -1062,7 +1241,8 @@ class Test_createObject(unittest.TestCase):
 
 class Test_getFactoryInterfaces(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import getFactoryInterfaces
@@ -1073,16 +1253,21 @@ class Test_getFactoryInterfaces(unittest.TestCase):
         self.assertRaises(ComponentLookupError, self._callFUT, 'nonesuch')
 
     def test_hit(self):
-        from zope.component.interfaces import IFactory
         from zope.interface import Interface
+
+        from zope.component.interfaces import IFactory
+
         class IFoo(Interface):
             pass
+
         class _Factory(object):
             def getInterfaces(self):
                 return [IFoo]
+
         class Context(object):
             def __conform__(self, iface):
                 return self
+
             def queryUtility(self, iface, name, default, _test=self):
                 _test.assertIs(iface, IFactory)
                 _test.assertEqual(name, 'test')
@@ -1094,7 +1279,8 @@ class Test_getFactoryInterfaces(unittest.TestCase):
 
 class Test_getFactoriesFor(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component import getFactoriesFor
@@ -1102,6 +1288,7 @@ class Test_getFactoriesFor(unittest.TestCase):
 
     def test_no_factories_registered(self):
         from zope.interface import Interface
+
         class IFoo(Interface):
             pass
         self.assertEqual(list(self._callFUT(IFoo)), [])
@@ -1110,19 +1297,25 @@ class Test_getFactoriesFor(unittest.TestCase):
         from zope.interface import Interface
         from zope.interface import implementer
         from zope.interface import providedBy
+
         from zope.component.interfaces import IFactory
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         @implementer(IFoo, IBar)
         class _Factory(object):
             def getInterfaces(self):
                 return providedBy(self)
         _factory = _Factory()
+
         class Context(object):
             def __conform__(self, iface):
                 return self
+
             def getUtilitiesFor(self, iface):
                 if iface is IFactory:
                     return [('test', _factory)]
@@ -1133,18 +1326,24 @@ class Test_getFactoriesFor(unittest.TestCase):
 
     def test_w_factory_returning_list_of_interfaces(self):
         from zope.interface import Interface
+
         from zope.component.interfaces import IFactory
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         class _Factory(object):
             def getInterfaces(self):
                 return [IFoo, IBar]
         _factory = _Factory()
+
         class Context(object):
             def __conform__(self, iface):
                 return self
+
             def getUtilitiesFor(self, iface):
                 if iface is IFactory:
                     return [('test', _factory)]
@@ -1155,10 +1354,13 @@ class Test_getFactoriesFor(unittest.TestCase):
 
 
 IMyUtility = None
+
+
 def _makeMyUtility(name, sm):
     global IMyUtility
     from zope.interface import Interface
     from zope.interface import implementer
+
     from zope.component.tests.examples import ConformsToIComponentLookup
 
     if IMyUtility is None:

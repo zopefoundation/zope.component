@@ -27,19 +27,8 @@ from zope.interface import implementedBy
 from zope.interface import moduleProvides
 from zope.interface import named
 from zope.interface import providedBy
-
 from zope.interface.interfaces import ComponentLookupError
-from zope.component.interfaces import IComponentArchitecture
 from zope.interface.interfaces import IComponentLookup
-from zope.component.interfaces import IComponentRegistrationConvenience
-from zope.component.interfaces import IFactory
-
-from zope.component.globalregistry import getGlobalSiteManager
-from zope.component.globalregistry import globalSiteManager
-from zope.component.globalregistry import provideAdapter
-from zope.component.globalregistry import provideHandler
-from zope.component.globalregistry import provideSubscriptionAdapter
-from zope.component.globalregistry import provideUtility
 
 from zope.component._api import adapter_hook
 from zope.component._api import createObject
@@ -50,26 +39,32 @@ from zope.component._api import getAllUtilitiesRegisteredFor
 from zope.component._api import getFactoriesFor
 from zope.component._api import getFactoryInterfaces
 from zope.component._api import getMultiAdapter
+from zope.component._api import getNextUtility
 from zope.component._api import getSiteManager
 from zope.component._api import getUtilitiesFor
 from zope.component._api import getUtility
-from zope.component._api import getNextUtility
 from zope.component._api import handle
 from zope.component._api import queryAdapter
 from zope.component._api import queryAdapterInContext
 from zope.component._api import queryMultiAdapter
-from zope.component._api import queryUtility
 from zope.component._api import queryNextUtility
+from zope.component._api import queryUtility
 from zope.component._api import subscribers
-
 from zope.component._declaration import adaptedBy
 from zope.component._declaration import adapter
 from zope.component._declaration import adapts
+from zope.component.globalregistry import getGlobalSiteManager
+from zope.component.globalregistry import globalSiteManager
+from zope.component.globalregistry import provideAdapter
+from zope.component.globalregistry import provideHandler
+from zope.component.globalregistry import provideSubscriptionAdapter
+from zope.component.globalregistry import provideUtility
+from zope.component.interfaces import IComponentArchitecture
+from zope.component.interfaces import IComponentRegistrationConvenience
+from zope.component.interfaces import IFactory
+
 
 moduleProvides(IComponentArchitecture, IComponentRegistrationConvenience)
-__all__ = tuple(IComponentArchitecture) + tuple(IComponentRegistrationConvenience) + (
-    'named',
-    'adapts',
-    'adapter',
-    'adaptedBy',
-)
+__all__ = tuple(IComponentArchitecture) \
+    + tuple(IComponentRegistrationConvenience) \
+    + ('named', 'adapts', 'adapter', 'adaptedBy', )

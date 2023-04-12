@@ -15,14 +15,17 @@
 """
 import unittest
 
-from zope.interface.tests.test_adapter import CustomTypesBaseAdapterRegistryTests
+from zope.interface.tests.test_adapter import \
+    CustomTypesBaseAdapterRegistryTests
+
 
 def skipIfNoPersistent(testfunc):
     try:
-        import persistent
-    except ImportError: # pragma: no cover
+        import persistent  # noqa: F401 imported but unused
+    except ImportError:  # pragma: no cover
         return unittest.skip("persistent not installed")(testfunc)
     return testfunc
+
 
 @skipIfNoPersistent
 class PersistentAdapterRegistryTests(unittest.TestCase):
@@ -43,9 +46,11 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
                 self._mru = []
                 # mru(oid) is only called in pure-Python runs
                 self.mru = self._mru.append
+
             def new_ghost(self, oid, obj):
                 obj._p_jar = self._jar
                 obj._p_oid = oid
+
             def update_object_size_estimation(self, oid, size):
                 "This is only called in pure-Python runs"
 
@@ -53,16 +58,18 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
 
     def _makeJar(self):
         # Borrowed from persistent.tests.test_pyPersistence.
-        from zope.interface import implementer
         from persistent.interfaces import IPersistentDataManager
+        from zope.interface import implementer
 
         @implementer(IPersistentDataManager)
         class _Jar(object):
             def __init__(self):
                 self._loaded = []
                 self._registered = []
+
             def setstate(self, obj):
                 self._loaded.append(obj._p_oid)
+
             def register(self, obj):
                 self._registered.append(obj._p_oid)
 
@@ -75,7 +82,7 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         OID = _makeOctets('\x01' * 8)
         inst = self._makeOne(**kw)
         jar = self._makeJar()
-        jar._cache.new_ghost(OID, inst) # assigns _p_jar, _p_oid
+        jar._cache.new_ghost(OID, inst)  # assigns _p_jar, _p_oid
         return inst, jar, OID
 
     def test_changed_original_is_not_us(self):
@@ -119,7 +126,7 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         registry, jar, OID = self._makeOneWithJar()
         state = registry.__getstate__()
         self.assertTrue('_v_lookup' in registry.__dict__)
-        registry._p_changed = None # clears volatile '_v_lookup'
+        registry._p_changed = None  # clears volatile '_v_lookup'
         self.assertFalse('_v_lookup' in registry.__dict__)
         registry.__setstate__(state)
         self.assertTrue('_v_lookup' in registry.__dict__)
@@ -191,8 +198,9 @@ class PersistentComponentsTests(unittest.TestCase):
         return self._getTargetClass()(*args, **kw)
 
     def test_ctor_initializes_registries_and_registrations(self):
-        from persistent.mapping import PersistentMapping
         from persistent.list import PersistentList
+        from persistent.mapping import PersistentMapping
+
         from zope.component.persistentregistry import PersistentAdapterRegistry
         registry = self._makeOne()
         self.assertTrue(isinstance(registry.adapters,
@@ -208,12 +216,14 @@ class PersistentComponentsTests(unittest.TestCase):
         self.assertTrue(isinstance(registry._handler_registrations,
                                    PersistentList))
 
+
 def _makeOctets(s):
     return bytes(s) if bytes is str else bytes(s, 'ascii')
 
 
 @skipIfNoPersistent
-class PersistentAdapterRegistryCustomTypesTest(CustomTypesBaseAdapterRegistryTests):
+class PersistentAdapterRegistryCustomTypesTest(
+        CustomTypesBaseAdapterRegistryTests):
 
     def _getMappingType(self):
         from persistent.mapping import PersistentMapping

@@ -13,30 +13,41 @@
 ##############################################################################
 """Components for testing
 """
-from zope.interface import Interface
 from zope.interface import Attribute
+from zope.interface import Interface
 from zope.interface import implementer
+
 from zope.component import adapter
 from zope.component import named
 
+
 class IAppb(Interface):
     a = Attribute('test attribute')
-    def f(): "test func"
+
+    def f():
+        "test func"
+
 
 class IApp(IAppb):
     pass
 
+
 class IApp2(IAppb):
     pass
+
 
 class IApp3(IAppb):
     pass
 
-class IContent(Interface): pass
+
+class IContent(Interface):
+    pass
+
 
 @implementer(IContent)
 class Content(object):
     pass
+
 
 @adapter(IContent)
 @implementer(IApp)
@@ -47,11 +58,15 @@ class Comp(object):
         pass
 
     a = 1
-    def f(): pass
+
+    def f():
+        pass  # pragma: no cover
+
 
 class Comp2(object):
     def __init__(self, context):
         self.context = context
+
 
 @adapter(IContent)
 @implementer(IApp)
@@ -59,6 +74,7 @@ class Comp2(object):
 class Comp4(object):
     def __init__(self, context=None):
         self.context = context
+
 
 comp = Comp()
 comp4 = Comp4()

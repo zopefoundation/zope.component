@@ -20,6 +20,7 @@ are provided by `zope.component` directly.
 from zope.interface import Attribute
 from zope.interface import Interface
 
+
 # pylint:disable=inherit-non-class,no-self-argument,no-method-argument
 
 class IComponentArchitecture(Interface):
@@ -76,7 +77,8 @@ class IComponentArchitecture(Interface):
     def getNextUtility(context, interface, name=''):
         """Get the next available utility.
 
-        If no utility was found, a `~zope.interface.interfaces.ComponentLookupError` is raised.
+        If no utility was found, a
+        `~zope.interface.interfaces.ComponentLookupError` is raised.
         """
 
     def getUtilitiesFor(interface, context=None):
@@ -102,7 +104,8 @@ class IComponentArchitecture(Interface):
         """Get a named adapter to an interface for an object
 
         Returns an adapter that can adapt object to interface.  If a matching
-        adapter cannot be found, raises `~zope.interface.interfaces.ComponentLookupError`.
+        adapter cannot be found, raises
+        `~zope.interface.interfaces.ComponentLookupError`.
         """
 
     def getAdapterInContext(object, interface, context):
@@ -256,6 +259,7 @@ class IRegistry(Interface):
         """Return an iterable of component registrations
         """
 
+
 class IComponentRegistrationConvenience(Interface):
     """API for registering components.
 
@@ -333,8 +337,10 @@ class IPossibleSite(Interface):
         If there isn't a site manager, raise a component lookup.
         """
 
+
 class ISite(IPossibleSite):
     """Marker interface to indicate that we have a site"""
+
 
 class Misused(Exception):
     """A component is being used (registered) for the wrong interface."""
@@ -349,7 +355,6 @@ class IFactory(Interface):
 
     def __call__(*args, **kw):
         """Return an instance of the objects we're a factory for."""
-
 
     def getInterfaces():
         """Get the interfaces implemented by the factory
@@ -368,20 +373,23 @@ def _inherits_docs(func, iface):
     # doc can be None if the interpreter drops all docstrings when the
     # environment variable PYTHONOPTIMIZE is set 2.
     if doc is None:
-        return func
+        return func  # pragma: no cover
 
     # By adding the ..seealso:: we get a link from our overview page
     # to the specific narrative place where the function is described, because
     # our overview page uses :noindex:
     doc += "\n        .. seealso::"
-    doc += "\n           Function `~zope.component.%s` for notes, and " % (func.__name__,)
-    doc += "\n           `~zope.component.interfaces.%s` for the defining interface." % (iface.__name__,)
-    doc += "\n"
+    doc += f"\n           Function `~zope.component.{func.__name__}` for"
+    doc += " notes, and "
+    doc += f"\n           `~zope.component.interfaces.{iface.__name__}` for"
+    doc += " the defining interface.\n"
     func.__doc__ = doc
     return func
 
+
 def inherits_arch_docs(func):
     return _inherits_docs(func, IComponentArchitecture)
+
 
 def inherits_reg_docs(func):
     return _inherits_docs(func, IComponentRegistrationConvenience)

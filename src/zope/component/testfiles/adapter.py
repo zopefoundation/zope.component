@@ -20,16 +20,25 @@ from zope.interface import implementer
 from zope.component import adapter
 from zope.component.testfiles import components
 
+
 class I1(Interface):
     pass
+
 
 class I2(Interface):
     pass
 
+
 class I3(Interface):
-    def f1(): pass
-    def f2(): pass
-    def f3(): pass
+    def f1():
+        pass  # pragma: no cover
+
+    def f2():
+        pass  # pragma: no cover
+
+    def f3():
+        pass  # pragma: no cover
+
 
 class IS(Interface):
     pass
@@ -39,29 +48,37 @@ class Adapter(object):
     def __init__(self, *args):
         self.context = args
 
+
 @implementer(I1)
 class A1(Adapter):
     pass
 
+
 @implementer(I2)
 class A2(Adapter):
     pass
+
 
 @adapter(components.IContent, I1, I2)
 @implementer(I3)
 class A3(Adapter):
     pass
 
+
 class A4:
     pass
 
+
 a4 = A4()
+
 
 @implementer(I1, I2)
 class A5:
     pass
 
+
 a5 = A5()
+
 
 def Handler(content, *args):
     # uninteresting handler

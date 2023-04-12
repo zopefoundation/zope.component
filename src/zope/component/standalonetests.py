@@ -2,11 +2,13 @@
 See: https://bugs.launchpad.net/zope3/+bug/98401
 """
 
-import sys
 import pickle
+import sys
+
 
 def write(x):
     sys.stdout.write('%s\n' % x)
+
 
 if __name__ == "__main__":
     if sys.version_info[0] >= 3:
@@ -20,9 +22,10 @@ if __name__ == "__main__":
         write('- %s' % p)
     write('XXXXXXXXXX')
 
-    import zope
     from zope.interface import Interface
     from zope.interface import implementer
+
+    import zope
 
     class I1(Interface):
         pass

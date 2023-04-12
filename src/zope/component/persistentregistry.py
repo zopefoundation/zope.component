@@ -14,10 +14,11 @@
 """Persistent component managers.
 """
 from persistent import Persistent
-from persistent.mapping import PersistentMapping
 from persistent.list import PersistentList
+from persistent.mapping import PersistentMapping
 from zope.interface.adapter import VerifyingAdapterRegistry
 from zope.interface.registry import Components
+
 
 class PersistentAdapterRegistry(VerifyingAdapterRegistry, Persistent):
     """
@@ -63,14 +64,16 @@ class PersistentAdapterRegistry(VerifyingAdapterRegistry, Persistent):
             existing_leaf_sequence = self._leafSequenceType()
         elif isinstance(existing_leaf_sequence, tuple):
             # Converting from old state.
-            existing_leaf_sequence = self._leafSequenceType(existing_leaf_sequence)
+            existing_leaf_sequence = self._leafSequenceType(
+                existing_leaf_sequence)
         existing_leaf_sequence.append(new_item)
         return existing_leaf_sequence
 
     def _removeValueFromLeaf(self, existing_leaf_sequence, to_remove):
         if isinstance(existing_leaf_sequence, tuple):
             # Converting from old state
-            existing_leaf_sequence = self._leafSequenceType(existing_leaf_sequence)
+            existing_leaf_sequence = self._leafSequenceType(
+                existing_leaf_sequence)
 
         without_removed = VerifyingAdapterRegistry._removeValueFromLeaf(
             self,

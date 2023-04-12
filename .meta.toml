@@ -23,7 +23,7 @@ testenv-setenv = [
     ]
 
 [coverage]
-fail-under = 99
+fail-under = 99.5
 
 [coverage-run]
 additional-config = [

@@ -14,16 +14,20 @@
 
 import os
 
-from zope.configuration import xmlconfig, config
+from zope.configuration import config
+from zope.configuration import xmlconfig
+
+
 try:
     from zope.testing.cleanup import cleanUp
-except ImportError: # pragma: no cover
+except ImportError:  # pragma: no cover
     def cleanUp():
         pass
 
 from zope.component import provideHandler
+from zope.component.eventtesting import clearEvents
+from zope.component.eventtesting import events
 from zope.component.hooks import setHooks
-from zope.component.eventtesting import events, clearEvents
 
 
 class LayerBase(object):
@@ -75,9 +79,11 @@ class LayerBase(object):
     def testTearDown(self):
         pass
 
+
 class ZCMLLayerBase(LayerBase):
     """Base class to load up some ZCML.
     """
+
     def __init__(self, package, name=None, features=None):
         super(ZCMLLayerBase, self).__init__(package, name)
         self.features = features or []
@@ -100,6 +106,7 @@ class ZCMLLayerBase(LayerBase):
     def _load_zcml(self, context):
         raise NotImplementedError
 
+
 class ZCMLFileLayer(ZCMLLayerBase):
     """This layer can be used to run tests with a ZCML file loaded.
 
@@ -108,6 +115,7 @@ class ZCMLFileLayer(ZCMLLayerBase):
     based on another ZCMLLayer's ZCML, just use a ZCML include
     statement in your own ZCML to load it.
     """
+
     def __init__(self, package, zcml_file='ftesting.zcml',
                  name=None, features=None):
         super(ZCMLFileLayer, self).__init__(package, name, features)

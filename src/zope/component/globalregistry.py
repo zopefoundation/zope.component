@@ -23,6 +23,7 @@ from zope.component.interfaces import inherits_reg_docs
 def GAR(components, registryName):
     return getattr(components, registryName)
 
+
 class GlobalAdapterRegistry(AdapterRegistry):
     """A global adapter registry
 
@@ -48,17 +49,20 @@ class BaseGlobalComponents(Components):
         # Global site managers are pickled as global objects
         return self.__name__
 
+
 base = BaseGlobalComponents('base')
 
 try:
     from zope.testing.cleanup import addCleanUp
-except ImportError: #pragma NO COVER
+except ImportError:  # pragma NO COVER
     pass
 else:
     addCleanUp(lambda: base.__init__('base'))
     del addCleanUp
 
 globalSiteManager = base
+
+
 @inherits_arch_docs
 def getGlobalSiteManager():
     return globalSiteManager
@@ -67,17 +71,21 @@ def getGlobalSiteManager():
 # We eventually want to deprecate these in favor of using the global
 # component registry directly.
 
+
 @inherits_reg_docs
 def provideUtility(component, provides=None, name=u''):
     base.registerUtility(component, provides, name, event=False)
+
 
 @inherits_reg_docs
 def provideAdapter(factory, adapts=None, provides=None, name=u''):
     base.registerAdapter(factory, adapts, provides, name, event=False)
 
+
 @inherits_reg_docs
 def provideSubscriptionAdapter(factory, adapts=None, provides=None):
     base.registerSubscriptionAdapter(factory, adapts, provides, event=False)
+
 
 @inherits_reg_docs
 def provideHandler(factory, adapts=None):
