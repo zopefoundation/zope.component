@@ -40,7 +40,7 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
     def _makeCache(self, jar):
         # Borrowed from persistent.tests.test_pyPersistence.
 
-        class _Cache(object):
+        class _Cache:
             def __init__(self, jar):
                 self._jar = jar
                 self._mru = []
@@ -62,7 +62,7 @@ class PersistentAdapterRegistryTests(unittest.TestCase):
         from zope.interface import implementer
 
         @implementer(IPersistentDataManager)
-        class _Jar(object):
+        class _Jar:
             def __init__(self):
                 self._loaded = []
                 self._registered = []

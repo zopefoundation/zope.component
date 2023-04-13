@@ -33,7 +33,7 @@ class GlobalAdapterRegistry(AdapterRegistry):
     def __init__(self, parent, name):
         self.__parent__ = parent
         self.__name__ = name
-        super(GlobalAdapterRegistry, self).__init__()
+        super().__init__()
 
     def __reduce__(self):
         return GAR, (self.__parent__, self.__name__)
@@ -54,7 +54,7 @@ base = BaseGlobalComponents('base')
 
 try:
     from zope.testing.cleanup import addCleanUp
-except ImportError:  # pragma NO COVER
+except ImportError:  # pragma: no cover
     pass
 else:
     addCleanUp(lambda: base.__init__('base'))
@@ -73,12 +73,12 @@ def getGlobalSiteManager():
 
 
 @inherits_reg_docs
-def provideUtility(component, provides=None, name=u''):
+def provideUtility(component, provides=None, name=''):
     base.registerUtility(component, provides, name, event=False)
 
 
 @inherits_reg_docs
-def provideAdapter(factory, adapts=None, provides=None, name=u''):
+def provideAdapter(factory, adapts=None, provides=None, name=''):
     base.registerAdapter(factory, adapts, provides, name, event=False)
 
 

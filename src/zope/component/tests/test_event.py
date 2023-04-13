@@ -55,7 +55,7 @@ class Test_objectEventNotify(unittest.TestCase):
         del _adapted[:]  # clear handler reg
 
         @implementer(IObjectEvent)
-        class _ObjectEvent(object):
+        class _ObjectEvent:
             def __init__(self, object):
                 self.object = object
         context = object()

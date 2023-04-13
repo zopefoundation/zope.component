@@ -11,11 +11,8 @@ def write(x):
 
 
 if __name__ == "__main__":
-    if sys.version_info[0] >= 3:
-        # TextIO? Are you kidding me?
-        data = sys.stdin.buffer.read()
-    else:
-        data = sys.stdin.read()
+    # TextIO? Are you kidding me?
+    data = sys.stdin.buffer.read()
     sys.path = pickle.loads(data)
     write('XXXXXXXXXX')
     for p in sys.path:
@@ -34,14 +31,14 @@ if __name__ == "__main__":
         pass
 
     @implementer(I1)
-    class Ob(object):
+    class Ob:
         def __repr__(self):
             return '<instance Ob>'
 
     ob = Ob()
 
     @implementer(I2)
-    class Comp(object):
+    class Comp:
         def __init__(self, context):
             self.context = context
 

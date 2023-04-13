@@ -90,7 +90,7 @@ def queryAdapterInContext(object, interface, context, default=None):
 
 
 @inherits_docs
-def getAdapter(object, interface=Interface, name=u'', context=None):
+def getAdapter(object, interface=Interface, name='', context=None):
     adapter = queryAdapter(object, interface, name, None, context)
     if adapter is None:
         raise ComponentLookupError(object, interface, name)
@@ -98,7 +98,7 @@ def getAdapter(object, interface=Interface, name=u'', context=None):
 
 
 @inherits_docs
-def queryAdapter(object, interface=Interface, name=u'', default=None,
+def queryAdapter(object, interface=Interface, name='', default=None,
                  context=None):
     if context is None:
         return adapter_hook(interface, object, name, default)
@@ -107,7 +107,7 @@ def queryAdapter(object, interface=Interface, name=u'', default=None,
 
 
 @inherits_docs
-def getMultiAdapter(objects, interface=Interface, name=u'', context=None):
+def getMultiAdapter(objects, interface=Interface, name='', context=None):
     adapter = queryMultiAdapter(objects, interface, name, context=context)
     if adapter is None:
         raise ComponentLookupError(objects, interface, name)
@@ -115,7 +115,7 @@ def getMultiAdapter(objects, interface=Interface, name=u'', context=None):
 
 
 @inherits_docs
-def queryMultiAdapter(objects, interface=Interface, name=u'', default=None,
+def queryMultiAdapter(objects, interface=Interface, name='', default=None,
                       context=None):
     try:
         sitemanager = getSiteManager(context)
@@ -227,7 +227,7 @@ def getNextUtility(context, interface, name=''):
     util = queryNextUtility(context, interface, name, _marker)
     if util is _marker:
         raise ComponentLookupError(
-            "No more utilities for %s, '%s' have been found." % (
+            "No more utilities for {}, '{}' have been found.".format(
                 interface, name))
     return util
 

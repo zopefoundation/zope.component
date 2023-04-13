@@ -93,10 +93,10 @@ class PersistentAdapterRegistry(VerifyingAdapterRegistry, Persistent):
             # the changed() mechanism will still result in mutating this
             # object via ``_generation``.
             self._p_changed = True
-        super(PersistentAdapterRegistry, self).changed(originally_changed)
+        super().changed(originally_changed)
 
     def __getstate__(self):
-        state = super(PersistentAdapterRegistry, self).__getstate__().copy()
+        state = super().__getstate__().copy()
         for name in self._delegated:
             state.pop(name, 0)
         state.pop('ro', None)
@@ -104,7 +104,7 @@ class PersistentAdapterRegistry(VerifyingAdapterRegistry, Persistent):
 
     def __setstate__(self, state):
         bases = state.pop('__bases__', ())
-        super(PersistentAdapterRegistry, self).__setstate__(state)
+        super().__setstate__(state)
         self._createLookup()
         self.__bases__ = bases
         self._v_lookup.changed(self)

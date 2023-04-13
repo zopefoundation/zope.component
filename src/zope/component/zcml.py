@@ -344,14 +344,14 @@ def subscriber(_context, for_=None, factory=None, handler=None, provides=None,
             discriminator=None,
             callable=_handler,
             args=('registerHandler',
-                  handler, for_, u'', _context.info),
+                  handler, for_, '', _context.info),
         )
     else:
         _context.action(
             discriminator=None,
             callable=_handler,
             args=('registerSubscriptionAdapter',
-                  factory, for_, provides, u'', _context.info),
+                  factory, for_, provides, '', _context.info),
         )
 
     if provides is not None:
@@ -519,7 +519,7 @@ class IBasicResourceInformation(Interface):
         title=_("The name of the resource."),
         description=_("The name shows up in URLs/paths. For example 'foo'."),
         required=True,
-        default=u'',
+        default='',
     )
 
     provides = GlobalInterface(
@@ -565,7 +565,7 @@ def view(_context, factory, type, name, for_,
         checker = _checker(_context, permission,
                            allowed_interface, allowed_attributes)
 
-        class ProxyView(object):
+        class ProxyView:
             """Class to create simple proxy views."""
 
             def __init__(self, factory, checker):

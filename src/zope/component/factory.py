@@ -21,7 +21,7 @@ from zope.component.interfaces import IFactory
 
 
 @implementer(IFactory)
-class Factory(object):
+class Factory:
     """Generic factory implementation.
 
     The purpose of this implementation is to provide a quick way of creating
@@ -45,4 +45,4 @@ class Factory(object):
         return implementedBy(self._callable)
 
     def __repr__(self):  # pragma: no cover
-        return '<%s for %s>' % (self.__class__.__name__, repr(self._callable))
+        return '<{} for {}>'.format(self.__class__.__name__, repr(self._callable))

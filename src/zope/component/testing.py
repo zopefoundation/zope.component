@@ -19,7 +19,7 @@ import zope.component.event  # noqa: F401 imported but unused
 
 
 # we really don't need special setup now:
-class _PlacelessSetupFallback(object):
+class _PlacelessSetupFallback:
     def cleanUp(self):
         from zope.component.globalregistry import base
         base.__init__('base')

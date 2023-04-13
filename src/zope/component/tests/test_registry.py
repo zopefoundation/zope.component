@@ -30,7 +30,7 @@ class Test_dispatchUtilityRegistrationEvent(unittest.TestCase):
     def test_it(self):
         from zope.component import registry
 
-        class _Registration(object):
+        class _Registration:
             component = object()
         _EVENT = object()
         _handled = []
@@ -54,7 +54,7 @@ class Test_dispatchAdapterRegistrationEvent(unittest.TestCase):
     def test_it(self):
         from zope.component import registry
 
-        class _Registration(object):
+        class _Registration:
             factory = fails_if_called(self)
         _registration = _Registration()
         _EVENT = object()
@@ -80,7 +80,7 @@ class Test_dispatchSubscriptionAdapterRegistrationEvent(unittest.TestCase):
     def test_it(self):
         from zope.component import registry
 
-        class _Registration(object):
+        class _Registration:
             factory = fails_if_called(self)
         _registration = _Registration()
         _EVENT = object()
@@ -105,7 +105,7 @@ class Test_dispatchHandlerRegistrationEvent(unittest.TestCase):
     def test_it(self):
         from zope.component import registry
 
-        class _Registration(object):
+        class _Registration:
             handler = fails_if_called(self)
         _registration = _Registration()
         _EVENT = object()
@@ -118,7 +118,7 @@ class Test_dispatchHandlerRegistrationEvent(unittest.TestCase):
         self.assertEqual(_handled, [(_registration.handler, _EVENT)])
 
 
-class _Monkey(object):
+class _Monkey:
     # context-manager for replacing module names in the scope of a test.
     def __init__(self, module, **kw):
         self.module = module

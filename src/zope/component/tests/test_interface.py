@@ -52,7 +52,7 @@ class Test_provideInterface(unittest.TestCase):
         class IBar(IInterface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         self._callFUT('', Foo, IBar)
         self.assertFalse(IBar.providedBy(Foo))
@@ -411,7 +411,7 @@ class Test_getInterfaceAllDocs(unittest.TestCase):
         return getInterfaceAllDocs(*args, **kw)
 
     def test_w_class(self):
-        class Foo(object):
+        class Foo:
             """DOCSTRING"""
             bar = None
 

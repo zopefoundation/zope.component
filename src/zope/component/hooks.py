@@ -43,7 +43,7 @@ __all__ = [
 ]
 
 
-class read_property(object):
+class read_property:
     """Descriptor for property-like computed attributes.
 
     Unlike the standard 'property', this descriptor allows assigning a

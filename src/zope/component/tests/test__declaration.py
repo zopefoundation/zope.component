@@ -50,7 +50,7 @@ class Test_adapter(unittest.TestCase):
             pass
 
         @self._makeOne(IFoo, IBar)
-        class Baz(object):
+        class Baz:
             pass
         self.assertEqual(Baz.__component_adapts__, (IFoo, IBar))
 
@@ -64,7 +64,7 @@ class Test_adapter(unittest.TestCase):
             pass
 
         @self._makeOne(IFoo, IBar)
-        class Baz(object):
+        class Baz:
             pass
         baz = Baz()
         self.assertRaises(AttributeError,
@@ -79,7 +79,7 @@ class Test_adapter(unittest.TestCase):
         class IBar(Interface):
             pass
 
-        class Baz(object):
+        class Baz:
             pass
         deco = self._makeOne(IFoo, IBar)
         baz = deco(Baz())
@@ -99,7 +99,7 @@ class Test_adapts(unittest.TestCase):
     def test_instances_not_affected(self):
         from zope.component._declaration import adapts
 
-        class C(object):
+        class C:
             adapts()
 
         self.assertEqual(C.__component_adapts__, ())
@@ -192,7 +192,7 @@ class Test_adaptedBy(unittest.TestCase):
         class IBar(Interface):
             pass
 
-        class Baz(object):
+        class Baz:
             __component_adapts__ = (IFoo, IBar)
         self.assertEqual(self._callFUT(Baz), (IFoo, IBar))
 
@@ -207,7 +207,7 @@ class Test_adaptedBy(unittest.TestCase):
         class IBar(Interface):
             pass
 
-        class Baz(object):
+        class Baz:
             __component_adapts__ = _adapts_descr((IFoo, IBar))
         baz = Baz()
         self.assertEqual(self._callFUT(baz), None)
@@ -221,7 +221,7 @@ class Test_adaptedBy(unittest.TestCase):
         class IBar(Interface):
             pass
 
-        class Baz(object):
+        class Baz:
             pass
         baz = Baz()
         baz.__component_adapts__ = (IFoo, IBar)

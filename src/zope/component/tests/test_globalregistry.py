@@ -37,18 +37,18 @@ class Test_getGlobalSiteManager(unittest.TestCase):
         self.assertTrue(self._callFUT() is gsm)
 
     def test_gsm_pickling(self):
-        from zope.component._compat import _pickle
+        import pickle
         gsm = self._callFUT()
-        dumped = _pickle.dumps(gsm)
-        loaded = _pickle.loads(dumped)
+        dumped = pickle.dumps(gsm)
+        loaded = pickle.loads(dumped)
         self.assertTrue(loaded is gsm)
 
-        dumped_utilities = _pickle.dumps(gsm.utilities)
-        loaded_utilities = _pickle.loads(dumped_utilities)
+        dumped_utilities = pickle.dumps(gsm.utilities)
+        loaded_utilities = pickle.loads(dumped_utilities)
         self.assertTrue(loaded_utilities is gsm.utilities)
 
-        dumped_adapters = _pickle.dumps(gsm.adapters)
-        loaded_adapters = _pickle.loads(dumped_adapters)
+        dumped_adapters = pickle.dumps(gsm.adapters)
+        loaded_adapters = pickle.loads(dumped_adapters)
         self.assertTrue(loaded_adapters is gsm.adapters)
 
 
@@ -71,7 +71,7 @@ class Test_provideUtility(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
         foo = Foo()
         self._callFUT(foo)
@@ -91,7 +91,7 @@ class Test_provideUtility(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         foo = Foo()
         self._callFUT(foo, IFoo, 'named')
@@ -122,12 +122,12 @@ class Test_provideAdapter(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
 
         @adapter(IFoo)
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             def __init__(self, context):
                 self.context = context
         self._callFUT(Bar)
@@ -150,10 +150,10 @@ class Test_provideAdapter(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
 
-        class Bar(object):
+        class Bar:
             def __init__(self, context):
                 self.context = context
         self._callFUT(Bar, (IFoo,), IBar, 'test')
@@ -187,12 +187,12 @@ class Test_provideSubscriptionAdapter(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
 
         @adapter(IFoo)
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             def __init__(self, context):
                 self.context = context
         self._callFUT(Bar)
@@ -216,10 +216,10 @@ class Test_provideSubscriptionAdapter(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
 
-        class Bar(object):
+        class Bar:
             def __init__(self, context):
                 self.context = context
         self._callFUT(Bar, (IFoo,), IBar)
@@ -252,7 +252,7 @@ class Test_provideHandler(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
         _handler = adapter(IFoo)(fails_if_called(self))
 

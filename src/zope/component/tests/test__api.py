@@ -98,16 +98,16 @@ class Test_getAdapterInContext(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Global(object):
+        class Global:
             __init__ = fails_if_called(self)
 
         @implementer(IFoo)
-        class Local(object):
+        class Local:
             def __init__(self, context):
                 self.context = context
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         class Context(ConformsToIComponentLookup):
@@ -147,7 +147,7 @@ class Test_queryAdapterInContext(unittest.TestCase):
             pass
         _adapted = object()
 
-        class Foo(object):
+        class Foo:
             def __conform__(self, iface, default=None, _test=self):
                 _test.assertIs(iface, IFoo)
                 return _adapted
@@ -161,7 +161,7 @@ class Test_queryAdapterInContext(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             __conform__ = fails_if_called(self, arguments=False)
         # call via class, triggering TypeError
         self.assertEqual(self._callFUT(Foo, IFoo, context=None), None)
@@ -172,7 +172,7 @@ class Test_queryAdapterInContext(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             def __conform__(self, iface, default=None):
                 raise TypeError
         self.assertRaises(TypeError,
@@ -186,7 +186,7 @@ class Test_queryAdapterInContext(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
         foo = Foo()
         self.assertIs(
@@ -233,11 +233,11 @@ class Test_getAdapter(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IFoo)
-        class Baz(object):
+        class Baz:
             def __init__(self, context):
                 self.context = context
         getGlobalSiteManager().registerAdapter(Baz, (IBar,), IFoo, '')
@@ -256,7 +256,7 @@ class Test_getAdapter(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Baz(object):
+        class Baz:
             def __init__(self, context):
                 self.context = context
         getGlobalSiteManager().registerAdapter(Baz, (None,), IFoo, '')
@@ -278,11 +278,11 @@ class Test_getAdapter(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IFoo)
-        class Baz(object):
+        class Baz:
             def __init__(self, context):
                 self.context = context
         getGlobalSiteManager().registerAdapter(Baz, (IBar,), IFoo, 'named')
@@ -329,11 +329,11 @@ class Test_queryAdapter(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IFoo)
-        class Baz(object):
+        class Baz:
             def __init__(self, context):
                 self.context = context
         getGlobalSiteManager().registerAdapter(Baz, (IBar,), IFoo, '')
@@ -355,11 +355,11 @@ class Test_queryAdapter(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IFoo)
-        class Baz(object):
+        class Baz:
             def __init__(self, context):
                 self.context = context
         getGlobalSiteManager().registerAdapter(Baz, (IBar,), IFoo, 'named')
@@ -383,16 +383,16 @@ class Test_queryAdapter(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Global(object):
+        class Global:
             __init__ = fails_if_called(self)
 
         @implementer(IFoo)
-        class Local(object):
+        class Local:
             def __init__(self, context):
                 self.context = context
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         class Context(ConformsToIComponentLookup):
@@ -451,15 +451,15 @@ class Test_getMultiAdapter(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IBaz)
-        class Baz(object):
+        class Baz:
             pass
 
         @implementer(IFoo)
-        class FooAdapter(object):
+        class FooAdapter:
             def __init__(self, first, second):
                 self.first, self.second = first, second
         getGlobalSiteManager().registerAdapter(
@@ -487,11 +487,11 @@ class Test_getMultiAdapter(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IFoo)
-        class FooAdapter(object):
+        class FooAdapter:
             def __init__(self, first, second):
                 self.first, self.second = first, second
         getGlobalSiteManager().registerAdapter(
@@ -519,15 +519,15 @@ class Test_getMultiAdapter(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IBaz)
-        class Baz(object):
+        class Baz:
             pass
 
         @implementer(IFoo)
-        class FooAdapter(object):
+        class FooAdapter:
             def __init__(self, first, second):
                 self.first, self.second = first, second
         getGlobalSiteManager().registerAdapter(
@@ -582,15 +582,15 @@ class Test_queryMultiAdapter(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IBaz)
-        class Baz(object):
+        class Baz:
             pass
 
         @implementer(IFoo)
-        class FooAdapter(object):
+        class FooAdapter:
             def __init__(self, first, second):
                 self.first, self.second = first, second
         getGlobalSiteManager().registerAdapter(
@@ -618,15 +618,15 @@ class Test_queryMultiAdapter(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IBaz)
-        class Baz(object):
+        class Baz:
             pass
 
         @implementer(IFoo)
-        class FooAdapter(object):
+        class FooAdapter:
             def __init__(self, first, second):
                 self.first, self.second = first, second
         getGlobalSiteManager().registerAdapter(
@@ -656,19 +656,19 @@ class Test_queryMultiAdapter(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IBaz)
-        class Baz(object):
+        class Baz:
             pass
 
         @implementer(IFoo)
-        class Global(object):
+        class Global:
             __init__ = fails_if_called(self)
 
         @implementer(IFoo)
-        class Local(object):
+        class Local:
             def __init__(self, first, second):
                 self.first, self.second = first, second
 
@@ -701,14 +701,14 @@ class Test_queryMultiAdapter(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IBaz)
-        class Baz(object):
+        class Baz:
             pass
 
-        class Context(object):
+        class Context:
             def __conform__(self, iface):
                 raise ComponentLookupError
         bar = Bar()
@@ -741,11 +741,11 @@ class Test_getAdapters(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class BarAdapter(object):
+        class BarAdapter:
             def __init__(self, context):
                 self.context = context
 
-        class BazAdapter(object):
+        class BazAdapter:
             def __init__(self, context):
                 self.context = context
         gsm = getGlobalSiteManager()
@@ -772,14 +772,14 @@ class Test_getAdapters(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IBaz)
-        class Baz(object):
+        class Baz:
             pass
 
-        class Context(object):
+        class Context:
             def __conform__(self, iface):
                 raise ComponentLookupError
         bar = Bar()
@@ -813,11 +813,11 @@ class Test_subscribers(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class BarAdapter(object):
+        class BarAdapter:
             def __init__(self, context):
                 self.context = context
 
-        class BazAdapter(object):
+        class BazAdapter:
             def __init__(self, context):
                 self.context = context
         gsm = getGlobalSiteManager()
@@ -836,7 +836,7 @@ class Test_subscribers(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Context(object):
+        class Context:
             def __conform__(self, iface):
                 raise ComponentLookupError
         subscribers = self._callFUT((object,), IFoo, context=Context())
@@ -869,7 +869,7 @@ class Test_handle(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
         _called = []
 
@@ -941,7 +941,7 @@ class Test_getUtility(unittest.TestCase):
         from zope.component import getGlobalSiteManager
         from zope.component.tests.examples import ConformsToIComponentLookup
 
-        class SM(object):
+        class SM:
             def __init__(self, obj):
                 self._obj = obj
 
@@ -1025,7 +1025,7 @@ class Test_queryUtility(unittest.TestCase):
         from zope.component import getGlobalSiteManager
         from zope.component.tests.examples import ConformsToIComponentLookup
 
-        class SM(object):
+        class SM:
             def __init__(self, obj):
                 self._obj = obj
 
@@ -1197,7 +1197,7 @@ class Test_queryNextUtility(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Context(object):
+        class Context:
             def __conform__(self, iface):
                 raise ComponentLookupError
         self.assertEqual(self._callFUT(Context(), IFoo, 'myutil'), None)
@@ -1225,7 +1225,7 @@ class Test_createObject(unittest.TestCase):
             _factory_called.append((args, kw))
             return _object
 
-        class Context(object):
+        class Context:
             def __conform__(self, iface):
                 return self
 
@@ -1260,11 +1260,11 @@ class Test_getFactoryInterfaces(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class _Factory(object):
+        class _Factory:
             def getInterfaces(self):
                 return [IFoo]
 
-        class Context(object):
+        class Context:
             def __conform__(self, iface):
                 return self
 
@@ -1307,12 +1307,12 @@ class Test_getFactoriesFor(unittest.TestCase):
             pass
 
         @implementer(IFoo, IBar)
-        class _Factory(object):
+        class _Factory:
             def getInterfaces(self):
                 return providedBy(self)
         _factory = _Factory()
 
-        class Context(object):
+        class Context:
             def __conform__(self, iface):
                 return self
 
@@ -1335,12 +1335,12 @@ class Test_getFactoriesFor(unittest.TestCase):
         class IBar(Interface):
             pass
 
-        class _Factory(object):
+        class _Factory:
             def getInterfaces(self):
                 return [IFoo, IBar]
         _factory = _Factory()
 
-        class Context(object):
+        class Context:
             def __conform__(self, iface):
                 return self
 

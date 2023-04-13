@@ -39,7 +39,7 @@ class PermissionProxyTests(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
         foo = Foo()
         proxy = self._makeOne(foo)
@@ -92,7 +92,7 @@ class Test_proxify(unittest.TestCase):
         return proxify(*args, **kw)
 
     def _makeContext(self):
-        class _Context(object):
+        class _Context:
             bar = fails_if_called(self)
         return _Context()
 
@@ -161,7 +161,7 @@ class Test_protectedFactory(unittest.TestCase):
         class IFoo(Interface):
             def bar(self):
                 "bar"
-        class _Factory(object):
+        class _Factory:
             bar = fails_if_called(self)
         protected = self._callFUT(_Factory, IFoo, 'zope.Public')
         self.assertTrue(protected.factory is _Factory)
@@ -176,7 +176,7 @@ class Test_protectedFactory(unittest.TestCase):
         class IFoo(Interface):
             def bar(self):
                 "bar"
-        class _Factory(object):
+        class _Factory:
             __slots__ = ('one',)
             bar = fails_if_called(self)
         protected = self._callFUT(_Factory, IFoo, 'testing')
@@ -193,13 +193,13 @@ class Test_securityAdapterFactory(unittest.TestCase):
         return securityAdapterFactory(*args, **kw)
 
     def test_no_permission_untrusted_no_location(self):
-        class _Factory(object):
+        class _Factory:
             pass
         self.assertTrue(self._callFUT(_Factory, None, False, False)
                         is _Factory)
 
     def test_public_untrusted_no_location(self):
-        class _Factory(object):
+        class _Factory:
             pass
         self.assertTrue(self._callFUT(_Factory, 'zope.Public', False, False)
                         is _Factory)
@@ -207,7 +207,7 @@ class Test_securityAdapterFactory(unittest.TestCase):
     def test_CheckerPublic_untrusted_no_location(self):
         from zope.security.checker import CheckerPublic
 
-        class _Factory(object):
+        class _Factory:
             pass
         self.assertTrue(self._callFUT(_Factory, CheckerPublic, False, False)
                         is _Factory)
@@ -215,7 +215,7 @@ class Test_securityAdapterFactory(unittest.TestCase):
     def test_protected_untrusted_no_location(self):
         from zope.security.adapter import LocatingUntrustedAdapterFactory
 
-        class _Factory(object):
+        class _Factory:
             pass
         proxy = self._callFUT(_Factory, 'testing', False, False)
         self.assertTrue(isinstance(proxy, LocatingUntrustedAdapterFactory))
@@ -223,7 +223,7 @@ class Test_securityAdapterFactory(unittest.TestCase):
     def test_no_permission_trusted_no_location(self):
         from zope.security.adapter import LocatingTrustedAdapterFactory
 
-        class _Factory(object):
+        class _Factory:
             pass
         proxy = self._callFUT(_Factory, None, False, True)
         self.assertTrue(isinstance(proxy, LocatingTrustedAdapterFactory))
@@ -231,7 +231,7 @@ class Test_securityAdapterFactory(unittest.TestCase):
     def test_public_trusted_no_location(self):
         from zope.security.adapter import LocatingTrustedAdapterFactory
 
-        class _Factory(object):
+        class _Factory:
             pass
         proxy = self._callFUT(_Factory, 'zope.Public', False, True)
         self.assertTrue(isinstance(proxy, LocatingTrustedAdapterFactory))
@@ -240,7 +240,7 @@ class Test_securityAdapterFactory(unittest.TestCase):
         from zope.security.adapter import LocatingTrustedAdapterFactory
         from zope.security.checker import CheckerPublic
 
-        class _Factory(object):
+        class _Factory:
             pass
         proxy = self._callFUT(_Factory, CheckerPublic, False, True)
         self.assertTrue(isinstance(proxy, LocatingTrustedAdapterFactory))
@@ -248,7 +248,7 @@ class Test_securityAdapterFactory(unittest.TestCase):
     def test_protected_trusted_no_location(self):
         from zope.security.adapter import LocatingTrustedAdapterFactory
 
-        class _Factory(object):
+        class _Factory:
             pass
         proxy = self._callFUT(_Factory, 'testing', False, True)
         self.assertTrue(isinstance(proxy, LocatingTrustedAdapterFactory))
@@ -256,7 +256,7 @@ class Test_securityAdapterFactory(unittest.TestCase):
     def test_protected_trusted_w_location(self):
         from zope.security.adapter import LocatingTrustedAdapterFactory
 
-        class _Factory(object):
+        class _Factory:
             pass
         proxy = self._callFUT(_Factory, 'testing', True, True)
         self.assertTrue(isinstance(proxy, LocatingTrustedAdapterFactory))

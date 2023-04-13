@@ -45,13 +45,13 @@ class IContent(Interface):
 
 
 @implementer(IContent)
-class Content(object):
+class Content:
     pass
 
 
 @adapter(IContent)
 @implementer(IApp)
-class Comp(object):
+class Comp:
 
     def __init__(self, *args):
         # Ignore arguments passed to constructor
@@ -63,7 +63,7 @@ class Comp(object):
         pass  # pragma: no cover
 
 
-class Comp2(object):
+class Comp2:
     def __init__(self, context):
         self.context = context
 
@@ -71,7 +71,7 @@ class Comp2(object):
 @adapter(IContent)
 @implementer(IApp)
 @named('app')
-class Comp4(object):
+class Comp4:
     def __init__(self, context=None):
         self.context = context
 

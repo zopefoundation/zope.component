@@ -64,13 +64,13 @@ class ISII(Interface):
     pass
 
 
-class U(object):
+class U:
 
     def __init__(self, name):
         self.__name__ = name
 
     def __repr__(self):
-        return "%s(%s)" % (self.__class__.__name__, self.__name__)
+        return "{}({})".format(self.__class__.__name__, self.__name__)
 
 
 @implementer(I1)
@@ -115,7 +115,7 @@ def clear_base():
 
 
 @implementer(I1)
-class Ob(object):
+class Ob:
     def __repr__(self):
         return '<instance Ob>'
 
@@ -124,18 +124,18 @@ ob = Ob()
 
 
 @implementer(I2)
-class Ob2(object):
+class Ob2:
     def __repr__(self):
         return '<instance Ob2>'
 
 
 @implementer(IC)
-class Ob3(object):
+class Ob3:
     pass
 
 
 @implementer(I2)
-class Comp(object):
+class Comp:
     def __init__(self, context):
         self.context = context
 
@@ -143,7 +143,7 @@ class Comp(object):
 comp = Comp(1)
 
 
-class ConformsToIComponentLookup(object):
+class ConformsToIComponentLookup:
     """Allow a dummy sitemanager to conform/adapt to `IComponentLookup`."""
 
     def __init__(self, sitemanager):

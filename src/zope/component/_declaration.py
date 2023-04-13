@@ -15,10 +15,8 @@
 """
 import sys
 
-from zope.component._compat import CLASS_TYPES
 
-
-class adapter(object):
+class adapter:
     """
     Decorator that declares that the decorated object adapts the given
     *interfaces*.
@@ -31,7 +29,7 @@ class adapter(object):
         self.interfaces = interfaces
 
     def __call__(self, ob):
-        if isinstance(ob, CLASS_TYPES):
+        if isinstance(ob, type):
             ob.__component_adapts__ = _adapts_descr(self.interfaces)
         else:
             ob.__component_adapts__ = self.interfaces
@@ -62,10 +60,10 @@ def adaptedBy(ob):
 
 
 def getName(ob):
-    return getattr(ob, '__component_name__', u'')
+    return getattr(ob, '__component_name__', '')
 
 
-class _adapts_descr(object):
+class _adapts_descr:
     def __init__(self, interfaces):
         self.interfaces = interfaces
 

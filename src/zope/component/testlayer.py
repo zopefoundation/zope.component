@@ -30,7 +30,7 @@ from zope.component.eventtesting import events
 from zope.component.hooks import setHooks
 
 
-class LayerBase(object):
+class LayerBase:
     """Sane layer base class.
 
     zope.testing implements an advanced mechanism so that layer setUp,
@@ -85,7 +85,7 @@ class ZCMLLayerBase(LayerBase):
     """
 
     def __init__(self, package, name=None, features=None):
-        super(ZCMLLayerBase, self).__init__(package, name)
+        super().__init__(package, name)
         self.features = features or []
 
     def setUp(self):
@@ -118,7 +118,7 @@ class ZCMLFileLayer(ZCMLLayerBase):
 
     def __init__(self, package, zcml_file='ftesting.zcml',
                  name=None, features=None):
-        super(ZCMLFileLayer, self).__init__(package, name, features)
+        super().__init__(package, name, features)
         self.zcml_file = os.path.join(os.path.dirname(package.__file__),
                                       zcml_file)
 

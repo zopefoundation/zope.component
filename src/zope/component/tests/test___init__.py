@@ -65,11 +65,11 @@ class Test_Interface_call(unittest.TestCase):
             pass
 
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             pass
 
         @implementer(IFoo)
-        class Baz(object):
+        class Baz:
             def __init__(self, context):
                 self.context = context
         getGlobalSiteManager().registerAdapter(Baz, (IBar,), IFoo, '')
@@ -88,7 +88,7 @@ class Test_Interface_call(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Baz(object):
+        class Baz:
             def __init__(self, context):
                 self.context = context
         getGlobalSiteManager().registerAdapter(Baz, (None,), IFoo, '')

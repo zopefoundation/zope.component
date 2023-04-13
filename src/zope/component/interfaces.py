@@ -99,7 +99,7 @@ class IComponentArchitecture(Interface):
     # Adapter API
 
     def getAdapter(object,
-                   interface=Interface, name=u'',
+                   interface=Interface, name='',
                    context=None):
         """Get a named adapter to an interface for an object
 
@@ -143,7 +143,7 @@ class IComponentArchitecture(Interface):
         named adapter methods with an empty string for a name.
         """
 
-    def queryAdapter(object, interface=Interface, name=u'',
+    def queryAdapter(object, interface=Interface, name='',
                      default=None, context=None):
         """Look for a named adapter to an interface for an object
 
@@ -174,7 +174,7 @@ class IComponentArchitecture(Interface):
         """
 
     def queryMultiAdapter(objects,
-                          interface=Interface, name=u'',
+                          interface=Interface, name='',
                           default=None,
                           context=None):
         """Look for a multi-adapter to an interface for objects
@@ -270,7 +270,7 @@ class IComponentRegistrationConvenience(Interface):
         activity.
     """
 
-    def provideUtility(component, provides=None, name=u''):
+    def provideUtility(component, provides=None, name=''):
         """Register a utility globally
 
         A utility is registered to provide an interface with a
@@ -280,7 +280,7 @@ class IComponentRegistrationConvenience(Interface):
         provided to provide a less specific interface.)
         """
 
-    def provideAdapter(factory, adapts=None, provides=None, name=u''):
+    def provideAdapter(factory, adapts=None, provides=None, name=''):
         """Register an adapter globally
 
         An adapter is registered to provide an interface with a name

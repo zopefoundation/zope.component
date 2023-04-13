@@ -44,7 +44,7 @@ class IS(Interface):
     pass
 
 
-class Adapter(object):
+class Adapter:
     def __init__(self, *args):
         self.context = args
 

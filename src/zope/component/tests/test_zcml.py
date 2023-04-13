@@ -39,7 +39,7 @@ class Test_handler(unittest.TestCase):
         getSiteManager.sethook(dummy)
 
         try:
-            self._callFUT('registerUtility', comp, IApp, u'')
+            self._callFUT('registerUtility', comp, IApp, '')
             self.assertTrue(registry.getUtility(IApp) is comp)
         finally:
             getSiteManager.reset()
@@ -108,10 +108,10 @@ class Test_adapter(unittest.TestCase):
         class IBar(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
 
-        class Bar(object):
+        class Bar:
             pass
         _cfg_ctx = _makeConfigContext()
         self.assertRaises(ComponentConfigurationError,
@@ -120,7 +120,7 @@ class Test_adapter(unittest.TestCase):
 
     def test_no_for__factory_not_adapts(self):
         # @adapter(IFoo)
-        class _Factory(object):
+        class _Factory:
             __init__ = fails_if_called(self)
         _cfg_ctx = _makeConfigContext()
         self.assertRaises(TypeError, self._callFUT, _cfg_ctx, [_Factory])
@@ -141,7 +141,7 @@ class Test_adapter(unittest.TestCase):
         @adapter(IFoo)
         @implementer(IBar)
         @named('bar')
-        class _Factory(object):
+        class _Factory:
             __init__ = fails_if_called(self)
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, [_Factory])
@@ -155,7 +155,7 @@ class Test_adapter(unittest.TestCase):
         from zope.component._declaration import adapter
 
         @adapter(Interface)
-        class _Factory(object):
+        class _Factory:
             __init__ = fails_if_called(self)
         _cfg_ctx = _makeConfigContext()
         self.assertRaises(TypeError, self._callFUT, _cfg_ctx, [_Factory])
@@ -169,10 +169,10 @@ class Test_adapter(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
 
-        class Bar(object):
+        class Bar:
             pass
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, [Foo, Bar], IFoo, [Interface], name='test')
@@ -212,7 +212,7 @@ class Test_adapter(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, [Foo], IFoo, [Interface], permission='testing')
@@ -245,7 +245,7 @@ class Test_adapter(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, [Foo], IFoo, [Interface], locate=True)
@@ -277,7 +277,7 @@ class Test_adapter(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, [Foo], IFoo, [Interface], trusted=True)
@@ -310,7 +310,7 @@ class Test_adapter(unittest.TestCase):
 
         @adapter(Interface)
         @implementer(IFoo)
-        class _Factory(object):
+        class _Factory:
             __init__ = fails_if_called(self)
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, [_Factory])
@@ -427,7 +427,7 @@ class Test_subscriber(unittest.TestCase):
     def test_w_factory_w_handler(self):
         from zope.interface import Interface
 
-        class Foo(object):
+        class Foo:
             pass
         _handler = fails_if_called(self)
         _cfg_ctx = _makeConfigContext()
@@ -438,7 +438,7 @@ class Test_subscriber(unittest.TestCase):
     def test_w_factory_no_provides(self):
         from zope.interface import Interface
 
-        class Foo(object):
+        class Foo:
             pass
         _cfg_ctx = _makeConfigContext()
         self.assertRaises(TypeError,
@@ -450,7 +450,7 @@ class Test_subscriber(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         _cfg_ctx = _makeConfigContext()
         self.assertRaises(TypeError,
@@ -492,7 +492,7 @@ class Test_subscriber(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         fails_if_called(self)
         _cfg_ctx = _makeConfigContext()
@@ -533,7 +533,7 @@ class Test_subscriber(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, (Interface,), Foo,
@@ -579,7 +579,7 @@ class Test_subscriber(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, (Interface,), Foo, provides=IFoo, locate=True)
@@ -624,7 +624,7 @@ class Test_subscriber(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, (Interface,), Foo, provides=IFoo, trusted=True)
@@ -670,7 +670,7 @@ class Test_subscriber(unittest.TestCase):
 
         @adapter(Interface)
         @implementer(IFoo)
-        class _Factory(object):
+        class _Factory:
             def __init__(self, context):
                 self.context = context  # pragma: no cover
         _cfg_ctx = _makeConfigContext()
@@ -699,7 +699,7 @@ class Test_utility(unittest.TestCase):
         return utility(*args, **kw)
 
     def test_w_factory_w_component(self):
-        class _Factory(object):
+        class _Factory:
             pass
         _COMPONENT = object
         _cfg_ctx = _makeConfigContext()
@@ -708,7 +708,7 @@ class Test_utility(unittest.TestCase):
                           component=_COMPONENT)
 
     def test_w_factory_wo_provides_factory_no_implements(self):
-        class _Factory(object):
+        class _Factory:
             pass
         _cfg_ctx = _makeConfigContext()
         self.assertRaises(TypeError,
@@ -729,7 +729,7 @@ class Test_utility(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, factory=Foo, provides=IFoo)
@@ -763,7 +763,7 @@ class Test_utility(unittest.TestCase):
             pass
 
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, factory=Foo)
@@ -826,7 +826,7 @@ class Test_utility(unittest.TestCase):
 
         @implementer(IFoo)
         @named('foo')
-        class Foo(object):
+        class Foo:
             pass
         foo = Foo()
         _cfg_ctx = _makeConfigContext()
@@ -846,7 +846,7 @@ class Test_utility(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         _COMPONENT = Foo()
         directlyProvides(_COMPONENT, IFoo)
@@ -882,7 +882,7 @@ class Test_utility(unittest.TestCase):
         class IFoo(Interface):
             def bar(self):
                 "bar"
-        class Foo(object):
+        class Foo:
             bar = fails_if_called(self)
         _COMPONENT = Foo()
         _cfg_ctx = _makeConfigContext()
@@ -920,7 +920,7 @@ class Test_utility(unittest.TestCase):
         class IFoo(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, factory=Foo,
@@ -1011,7 +1011,7 @@ class Test_view(unittest.TestCase):
                 "foo"
             def bar():
                 "bar"
-        class _View(object):
+        class _View:
             __init__ = fails_if_called(self)
             foo = fails_if_called(self)
             bar = fails_if_called(self)
@@ -1029,7 +1029,7 @@ class Test_view(unittest.TestCase):
         class IViewType(Interface):
             pass
 
-        class _View(object):
+        class _View:
             __init__ = fails_if_called(self)
             foo = fails_if_called(self)
             bar = fails_if_called(self)
@@ -1059,10 +1059,10 @@ class Test_view(unittest.TestCase):
         class IViewType(Interface):
             pass
 
-        class Foo(object):
+        class Foo:
             pass
 
-        class Bar(object):
+        class Bar:
             pass
         _cfg_ctx = _makeConfigContext()
         self.assertRaises(ComponentConfigurationError,
@@ -1077,7 +1077,7 @@ class Test_view(unittest.TestCase):
         class IViewType(Interface):
             pass
 
-        class _View(object):
+        class _View:
             __init__ = fails_if_called(self)
         _cfg_ctx = _makeConfigContext()
         self.assertRaises(ComponentConfigurationError,
@@ -1093,7 +1093,7 @@ class Test_view(unittest.TestCase):
         class IViewType(Interface):
             pass
 
-        class _View(object):
+        class _View:
             __init__ = fails_if_called(self)
         _cfg_ctx = _makeConfigContext()
         self._callFUT(_cfg_ctx, (_View,), IViewType, 'test', for_=(Interface,))
@@ -1136,11 +1136,11 @@ class Test_view(unittest.TestCase):
         class IViewType(Interface):
             pass
 
-        class _View(object):
+        class _View:
             def __init__(self, context):
                 self.context = context
 
-        class _View2(object):
+        class _View2:
             def __init__(self, context, request):
                 self.context = context
                 self.request = request
@@ -1177,7 +1177,7 @@ class Test_view(unittest.TestCase):
         class IViewType(Interface):
             pass
 
-        class _View(object):
+        class _View:
             def __init__(self, context, request):
                 self.context = context
                 self.request = request
@@ -1212,7 +1212,7 @@ class Test_view(unittest.TestCase):
         class IViewType(Interface):
             pass
 
-        class _View(object):
+        class _View:
             __init__ = fails_if_called(self)
             bar = fails_if_called(self)
         _cfg_ctx = _makeConfigContext()
@@ -1238,7 +1238,7 @@ class Test_view(unittest.TestCase):
         class IViewType(Interface):
             def bar(self):
                 "bar"
-        class _View(object):
+        class _View:
             __init__ = fails_if_called(self)
             bar = fails_if_called(self)
         _cfg_ctx = _makeConfigContext()
@@ -1275,7 +1275,7 @@ class Test_resource(unittest.TestCase):
                 "foo"
             def bar():
                 "bar"
-        class _Resource(object):
+        class _Resource:
             __init__ = fails_if_called(self)
             foo = fails_if_called(self)
             bar = fails_if_called(self)
@@ -1293,7 +1293,7 @@ class Test_resource(unittest.TestCase):
         class IResourceType(Interface):
             pass
 
-        class _Resource(object):
+        class _Resource:
             __init__ = fails_if_called(self)
             foo = fails_if_called(self)
             bar = fails_if_called(self)
@@ -1312,7 +1312,7 @@ class Test_resource(unittest.TestCase):
         class IResourceType(Interface):
             pass
 
-        class _Resource(object):
+        class _Resource:
             __init__ = fails_if_called(self)
             foo = fails_if_called(self)
             bar = fails_if_called(self)
@@ -1353,7 +1353,7 @@ class Test_resource(unittest.TestCase):
         class IResourceType(Interface):
             pass
 
-        class _Resource(object):
+        class _Resource:
             def __init__(self, context):
                 self.context = context
             foo = fails_if_called(self)
@@ -1383,7 +1383,7 @@ class Test_resource(unittest.TestCase):
 
 
 def _makeConfigContext():
-    class _Context(object):
+    class _Context:
         info = 'TESTING'
 
         def __init__(self):

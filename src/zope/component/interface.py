@@ -19,7 +19,6 @@ from zope.interface.interfaces import IInterface
 
 from zope.component._api import getSiteManager
 from zope.component._api import queryUtility
-from zope.component._compat import CLASS_TYPES
 
 
 def provideInterface(id, interface, iface_type=None, info=''):
@@ -31,10 +30,10 @@ def provideInterface(id, interface, iface_type=None, info=''):
        Previously it was always registered in the global site manager.
     """
     if not id:
-        id = "%s.%s" % (interface.__module__, interface.__name__)
+        id = "{}.{}".format(interface.__module__, interface.__name__)
 
     if not IInterface.providedBy(interface):
-        if not isinstance(interface, CLASS_TYPES):
+        if not isinstance(interface, type):
             raise TypeError(id, "is not an interface or class")
         return
 
@@ -96,7 +95,7 @@ def searchInterfaceUtilities(context, search_string=None, base=None):
 
 
 def getInterfaceAllDocs(interface):
-    iface_id = '%s.%s' % (interface.__module__, interface.__name__)
+    iface_id = '{}.{}'.format(interface.__module__, interface.__name__)
     docs = [str(iface_id).lower(),
             str(interface.__doc__).lower()]
 
@@ -118,4 +117,4 @@ def nameToInterface(context, id):
 def interfaceToName(context, interface):
     if interface is None:
         return 'None'
-    return '%s.%s' % (interface.__module__, interface.__name__)
+    return '{}.{}'.format(interface.__module__, interface.__name__)
