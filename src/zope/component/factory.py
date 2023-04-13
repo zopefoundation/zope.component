@@ -45,4 +45,4 @@ class Factory:
         return implementedBy(self._callable)
 
     def __repr__(self):  # pragma: no cover
-        return '<{} for {}>'.format(self.__class__.__name__, repr(self._callable))
+        return f'<{self.__class__.__name__} for {self._callable!r}>'
