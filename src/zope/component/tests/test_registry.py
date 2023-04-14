@@ -17,9 +17,11 @@ import unittest
 
 from zope.component.tests import fails_if_called
 
+
 class Test_dispatchUtilityRegistrationEvent(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.registry import dispatchUtilityRegistrationEvent
@@ -27,10 +29,12 @@ class Test_dispatchUtilityRegistrationEvent(unittest.TestCase):
 
     def test_it(self):
         from zope.component import registry
-        class _Registration(object):
+
+        class _Registration:
             component = object()
         _EVENT = object()
         _handled = []
+
         def _handle(*args):
             _handled.append(args)
         with _Monkey(registry, handle=_handle):
@@ -40,7 +44,8 @@ class Test_dispatchUtilityRegistrationEvent(unittest.TestCase):
 
 class Test_dispatchAdapterRegistrationEvent(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.registry import dispatchAdapterRegistrationEvent
@@ -48,11 +53,13 @@ class Test_dispatchAdapterRegistrationEvent(unittest.TestCase):
 
     def test_it(self):
         from zope.component import registry
-        class _Registration(object):
+
+        class _Registration:
             factory = fails_if_called(self)
         _registration = _Registration()
         _EVENT = object()
         _handled = []
+
         def _handle(*args):
             _handled.append(args)
         with _Monkey(registry, handle=_handle):
@@ -62,20 +69,23 @@ class Test_dispatchAdapterRegistrationEvent(unittest.TestCase):
 
 class Test_dispatchSubscriptionAdapterRegistrationEvent(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
-        from zope.component.registry \
-            import dispatchSubscriptionAdapterRegistrationEvent
+        from zope.component.registry import \
+            dispatchSubscriptionAdapterRegistrationEvent
         return dispatchSubscriptionAdapterRegistrationEvent(*args, **kw)
 
     def test_it(self):
         from zope.component import registry
-        class _Registration(object):
+
+        class _Registration:
             factory = fails_if_called(self)
         _registration = _Registration()
         _EVENT = object()
         _handled = []
+
         def _handle(*args):
             _handled.append(args)
         with _Monkey(registry, handle=_handle):
@@ -85,7 +95,8 @@ class Test_dispatchSubscriptionAdapterRegistrationEvent(unittest.TestCase):
 
 class Test_dispatchHandlerRegistrationEvent(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.registry import dispatchHandlerRegistrationEvent
@@ -93,11 +104,13 @@ class Test_dispatchHandlerRegistrationEvent(unittest.TestCase):
 
     def test_it(self):
         from zope.component import registry
-        class _Registration(object):
+
+        class _Registration:
             handler = fails_if_called(self)
         _registration = _Registration()
         _EVENT = object()
         _handled = []
+
         def _handle(*args):
             _handled.append(args)
         with _Monkey(registry, handle=_handle):
@@ -105,7 +118,7 @@ class Test_dispatchHandlerRegistrationEvent(unittest.TestCase):
         self.assertEqual(_handled, [(_registration.handler, _EVENT)])
 
 
-class _Monkey(object):
+class _Monkey:
     # context-manager for replacing module names in the scope of a test.
     def __init__(self, module, **kw):
         self.module = module

@@ -15,40 +15,47 @@
 """
 import unittest
 
+
 class Test_dispatch(unittest.TestCase):
 
     def test_it(self):
         from zope.interface import Interface
-        from zope.component.globalregistry import getGlobalSiteManager
+
         from zope.component.event import dispatch
+        from zope.component.globalregistry import getGlobalSiteManager
         _adapted = []
+
         def _adapter(context):
             _adapted.append(context)
             return object()
         gsm = getGlobalSiteManager()
         gsm.registerHandler(_adapter, (Interface,))
-        del _adapted[:] # clear handler reg
+        del _adapted[:]  # clear handler reg
         event = object()
         dispatch(event)
         self.assertEqual(_adapted, [event])
+
 
 class Test_objectEventNotify(unittest.TestCase):
 
     def test_it(self):
         from zope.interface import Interface
         from zope.interface import implementer
-        from zope.component.globalregistry import getGlobalSiteManager
         from zope.interface.interfaces import IObjectEvent
+
         from zope.component.event import objectEventNotify
+        from zope.component.globalregistry import getGlobalSiteManager
         _adapted = []
+
         def _adapter(context, event):
             _adapted.append((context, event))
             return object()
         gsm = getGlobalSiteManager()
         gsm.registerHandler(_adapter, (Interface, IObjectEvent))
-        del _adapted[:] # clear handler reg
+        del _adapted[:]  # clear handler reg
+
         @implementer(IObjectEvent)
-        class _ObjectEvent(object):
+        class _ObjectEvent:
             def __init__(self, object):
                 self.object = object
         context = object()

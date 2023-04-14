@@ -20,15 +20,18 @@ import threading
 
 from zope.component._compat import ZOPE_SECURITY_NOT_AVAILABLE_EX
 
+
 try:
     from zope.security.proxy import removeSecurityProxy
-except ZOPE_SECURITY_NOT_AVAILABLE_EX: # pragma: no cover
+except ZOPE_SECURITY_NOT_AVAILABLE_EX:  # pragma: no cover
     def removeSecurityProxy(x):
         return x
 
-from zope.component.globalregistry import getGlobalSiteManager
 from zope.interface.interfaces import ComponentLookupError
 from zope.interface.interfaces import IComponentLookup
+
+from zope.component.globalregistry import getGlobalSiteManager
+
 
 __all__ = [
     'setSite',
@@ -39,12 +42,14 @@ __all__ = [
     'resetHooks',
 ]
 
-class read_property(object):
+
+class read_property:
     """Descriptor for property-like computed attributes.
 
     Unlike the standard 'property', this descriptor allows assigning a
     value to the instance, shadowing the property getter function.
     """
+
     def __init__(self, func):
         self.func = func
 
@@ -53,6 +58,7 @@ class read_property(object):
             return self
 
         return self.func(inst)
+
 
 class SiteInfo(threading.local):
     site = None
@@ -64,7 +70,9 @@ class SiteInfo(threading.local):
         self.adapter_hook = adapter_hook
         return adapter_hook
 
+
 siteinfo = SiteInfo()
+
 
 def setSite(site=None):
     if site is None:
@@ -88,6 +96,7 @@ def setSite(site=None):
         del siteinfo.adapter_hook
     except AttributeError:
         pass
+
 
 def getSite():
     return siteinfo.site
@@ -152,6 +161,7 @@ def setHooks():
     _api.adapter_hook.sethook(adapter_hook)
     _api.getSiteManager.sethook(getSiteManager)
 
+
 def resetHooks():
     """
     Reset `zope.component.getSiteManager` and interface adaptation to
@@ -175,11 +185,12 @@ def resetHooks():
     except AttributeError:
         pass
 
+
 # Clear the site thread global
 clearSite = setSite
 try:
     from zope.testing.cleanup import addCleanUp
-except ImportError: #pragma NO COVER
+except ImportError:  # pragma: no cover
     pass
 else:
     addCleanUp(resetHooks)

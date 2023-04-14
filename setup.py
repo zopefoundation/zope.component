@@ -20,7 +20,10 @@
 """
 
 import os
-from setuptools import setup, find_packages
+
+from setuptools import find_packages
+from setuptools import setup
+
 
 HOOK_REQUIRES = [
 ]
@@ -60,9 +63,10 @@ def read(*rnames):
     with open(os.path.join(os.path.dirname(__file__), *rnames)) as f:
         return f.read()
 
+
 setup(
     name='zope.component',
-    version='5.1.1.dev0',
+    version='6.0.dev0',
     url='https://github.com/zopefoundation/zope.component',
     project_urls={
         'Documentation': 'https://zopecomponent.readthedocs.io/',
@@ -73,7 +77,7 @@ setup(
     license='ZPL 2.1',
     description='Zope Component Architecture',
     author='Zope Foundation and Contributors',
-    author_email='zope-dev@zope.org',
+    author_email='zope-dev@zope.dev',
     long_description=(
         read('README.rst')
         + '\n' +
@@ -89,11 +93,7 @@ setup(
         "License :: OSI Approved :: Zope Public License",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
@@ -102,16 +102,16 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Framework :: Zope :: 3",
+        "Framework :: Zope :: 5",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    namespace_packages=['zope',],
-    python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*',
-    tests_require=TESTS_REQUIRE,
+    namespace_packages=['zope', ],
+    python_requires='>=3.7',
     install_requires=[
         'setuptools',
         'zope.event',
         'zope.hookable >= 4.2.0',
-        'zope.interface >= 5.3.0a1',
+        'zope.interface >= 5.3',
     ],
     include_package_data=True,
     zip_safe=False,

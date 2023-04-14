@@ -23,7 +23,7 @@ class Test_read_property(unittest.TestCase):
         return read_property
 
     def test_via_instance(self):
-        class Foo(object):
+        class Foo:
             @self._getTargetClass()
             def bar(self):
                 return 'BAR'
@@ -35,7 +35,7 @@ class Test_read_property(unittest.TestCase):
         self.assertEqual(foo.bar, 'BAR')
 
     def test_via_class(self):
-        class Foo(object):
+        class Foo:
             @self._getTargetClass()
             def bar(self):
                 return 'BAR'
@@ -62,9 +62,11 @@ class SiteInfoTests(unittest.TestCase):
 
     def test_adapter_hook(self):
         _hook = object()
-        class _Registry(object):
+
+        class _Registry:
             adapter_hook = _hook
-        class _SiteManager(object):
+
+        class _SiteManager:
             adapters = _Registry()
         si = self._makeOne()
         si.sm = _SiteManager()
@@ -101,7 +103,8 @@ class Test_setSite(unittest.TestCase):
     def test_w_site(self):
         from zope.component import hooks
         _SM2 = object()
-        class _Site(object):
+
+        class _Site:
             def getSiteManager(self):
                 return _SM2
         siteinfo = _DummySiteInfo()
@@ -121,16 +124,12 @@ class Test_getSite(unittest.TestCase):
 
     def test_w_None(self):
         from zope.component import hooks
-        from zope.component.globalregistry import getGlobalSiteManager
-        gsm = getGlobalSiteManager()
         siteinfo = _DummySiteInfo()
         with _Monkey(hooks, siteinfo=siteinfo):
             self.assertTrue(self._callFUT() is None)
 
     def test_w_site(self):
         from zope.component import hooks
-        from zope.component.globalregistry import getGlobalSiteManager
-        gsm = getGlobalSiteManager()
         _SM2 = object()
         _SITE = object()
         siteinfo = _DummySiteInfo()
@@ -151,7 +150,8 @@ class Test_site(unittest.TestCase):
         from zope.component.globalregistry import getGlobalSiteManager
         gsm = getGlobalSiteManager()
         _SM2 = object()
-        class _Site(object):
+
+        class _Site:
             def getSiteManager(self):
                 return _SM2
         _site = _Site()
@@ -174,8 +174,6 @@ class Test_getSiteManager(unittest.TestCase):
 
     def test_default(self):
         from zope.component import hooks
-        from zope.component.globalregistry import getGlobalSiteManager
-        gsm = getGlobalSiteManager()
         _SM2 = object()
         siteinfo = _DummySiteInfo()
         siteinfo.sm = _SM2
@@ -194,10 +192,12 @@ class Test_getSiteManager(unittest.TestCase):
 
     def test_w_explicit_context_w_IComponentLookup(self):
         from zope.interface import Interface
+        from zope.interface.interfaces import IComponentLookup
+
         from zope.component import hooks
         from zope.component.globalregistry import getGlobalSiteManager
-        from zope.interface.interfaces import IComponentLookup
-        class _Lookup(object):
+
+        class _Lookup:
             def __init__(self, context):
                 self.context = context
         gsm = getGlobalSiteManager()
@@ -220,15 +220,16 @@ class Test_adapter_hook(unittest.TestCase):
 
     def test_success(self):
         from zope.interface import Interface
+
         from zope.component import hooks
-        from zope.component.globalregistry import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
-        gsm = getGlobalSiteManager()
         _ADAPTER = object()
         _DEFAULT = object()
         _CONTEXT = object()
         _called = []
+
         def _adapter_hook(interface, object, name, default):
             _called.append((interface, object, name, default))
             return _ADAPTER
@@ -241,15 +242,16 @@ class Test_adapter_hook(unittest.TestCase):
 
     def test_hook_raises(self):
         from zope.interface import Interface
-        from zope.component import hooks
-        from zope.component.globalregistry import getGlobalSiteManager
         from zope.interface.interfaces import ComponentLookupError
+
+        from zope.component import hooks
+
         class IFoo(Interface):
             pass
-        gsm = getGlobalSiteManager()
         _DEFAULT = object()
         _CONTEXT = object()
         _called = []
+
         def _adapter_hook(interface, object, name, default):
             _called.append((interface, object, name, default))
             raise ComponentLookupError('testing')
@@ -270,9 +272,11 @@ class Test_setHooks(unittest.TestCase):
     def test_it(self):
         import zope.component._api
         from zope.component import hooks
-        class _Hook(object):
+
+        class _Hook:
             def __init__(self):
                 self._hooked = None
+
             def sethook(self, value):
                 self._hooked = value
         adapter_hook = _Hook()
@@ -294,9 +298,11 @@ class Test_resetHooks(unittest.TestCase):
     def test_it(self):
         import zope.component._api
         from zope.component import hooks
-        class _Hook(object):
+
+        class _Hook:
             def __init__(self):
                 self._reset = False
+
             def reset(self):
                 self._reset = True
         adapter_hook = _Hook()
@@ -318,15 +324,18 @@ class Test_resetHooks(unittest.TestCase):
 
 
 _SM = object()
-class _DummySiteInfo(object):
+
+
+class _DummySiteInfo:
     sm = _SM
     site = None
 
-class _Monkey(object):
+
+class _Monkey:
     # context-manager for replacing module names in the scope of a test.
     def __init__(self, module, **kw):
         self.module = module
-        self.to_restore = dict([(key, getattr(module, key)) for key in kw])
+        self.to_restore = {key: getattr(module, key) for key in kw}
         for key, value in kw.items():
             setattr(module, key, value)
 

@@ -17,6 +17,7 @@ Tests for zope.component.interfaces
 
 import unittest
 
+
 class TestInterfaces(unittest.TestCase):
 
     def test_nothing(self):

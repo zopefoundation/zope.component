@@ -17,6 +17,7 @@ import unittest
 
 from zope.component.tests import fails_if_called
 
+
 class Test_getGlobalSiteManager(unittest.TestCase):
 
     def _callFUT(self):
@@ -24,8 +25,9 @@ class Test_getGlobalSiteManager(unittest.TestCase):
         return getGlobalSiteManager()
 
     def test_gsm_is_IComponentLookup(self):
-        from zope.component.globalregistry import base
         from zope.interface.interfaces import IComponentLookup
+
+        from zope.component.globalregistry import base
         gsm = self._callFUT()
         self.assertTrue(gsm is base)
         self.assertTrue(IComponentLookup.providedBy(gsm))
@@ -35,24 +37,25 @@ class Test_getGlobalSiteManager(unittest.TestCase):
         self.assertTrue(self._callFUT() is gsm)
 
     def test_gsm_pickling(self):
-        from zope.component._compat import _pickle
+        import pickle
         gsm = self._callFUT()
-        dumped = _pickle.dumps(gsm)
-        loaded = _pickle.loads(dumped)
+        dumped = pickle.dumps(gsm)
+        loaded = pickle.loads(dumped)
         self.assertTrue(loaded is gsm)
 
-        dumped_utilities = _pickle.dumps(gsm.utilities)
-        loaded_utilities = _pickle.loads(dumped_utilities)
+        dumped_utilities = pickle.dumps(gsm.utilities)
+        loaded_utilities = pickle.loads(dumped_utilities)
         self.assertTrue(loaded_utilities is gsm.utilities)
 
-        dumped_adapters = _pickle.dumps(gsm.adapters)
-        loaded_adapters = _pickle.loads(dumped_adapters)
+        dumped_adapters = pickle.dumps(gsm.adapters)
+        loaded_adapters = pickle.loads(dumped_adapters)
         self.assertTrue(loaded_adapters is gsm.adapters)
 
 
 class Test_provideUtility(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.globalregistry import provideUtility
@@ -61,11 +64,14 @@ class Test_provideUtility(unittest.TestCase):
     def test_anonymous_no_provides(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component.globalregistry import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
         foo = Foo()
         self._callFUT(foo)
@@ -79,10 +85,13 @@ class Test_provideUtility(unittest.TestCase):
 
     def test_named_w_provides(self):
         from zope.interface import Interface
+
         from zope.component.globalregistry import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
-        class Foo(object):
+
+        class Foo:
             pass
         foo = Foo()
         self._callFUT(foo, IFoo, 'named')
@@ -92,7 +101,8 @@ class Test_provideUtility(unittest.TestCase):
 
 class Test_provideAdapter(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.globalregistry import provideAdapter
@@ -101,18 +111,23 @@ class Test_provideAdapter(unittest.TestCase):
     def test_anonymous_no_provides_no_adapts(self):
         from zope.interface import Interface
         from zope.interface import implementer
-        from zope.component.globalregistry import getGlobalSiteManager
+
         from zope.component._declaration import adapter
+        from zope.component.globalregistry import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
+
         @adapter(IFoo)
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             def __init__(self, context):
                 self.context = context
         self._callFUT(Bar)
@@ -125,15 +140,20 @@ class Test_provideAdapter(unittest.TestCase):
     def test_named_w_provides_w_adapts(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component.globalregistry import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
-        class Bar(object):
+
+        class Bar:
             def __init__(self, context):
                 self.context = context
         self._callFUT(Bar, (IFoo,), IBar, 'test')
@@ -146,7 +166,8 @@ class Test_provideAdapter(unittest.TestCase):
 
 class Test_provideSubscriptionAdapter(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.globalregistry import provideSubscriptionAdapter
@@ -155,18 +176,23 @@ class Test_provideSubscriptionAdapter(unittest.TestCase):
     def test_no_provides_no_adapts(self):
         from zope.interface import Interface
         from zope.interface import implementer
-        from zope.component.globalregistry import getGlobalSiteManager
+
         from zope.component._declaration import adapter
+        from zope.component.globalregistry import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
+
         @adapter(IFoo)
         @implementer(IBar)
-        class Bar(object):
+        class Bar:
             def __init__(self, context):
                 self.context = context
         self._callFUT(Bar)
@@ -180,15 +206,20 @@ class Test_provideSubscriptionAdapter(unittest.TestCase):
     def test_w_provides_w_adapts(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         from zope.component.globalregistry import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
-        class Bar(object):
+
+        class Bar:
             def __init__(self, context):
                 self.context = context
         self._callFUT(Bar, (IFoo,), IBar)
@@ -202,7 +233,8 @@ class Test_provideSubscriptionAdapter(unittest.TestCase):
 
 class Test_provideHandler(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _callFUT(self, *args, **kw):
         from zope.component.globalregistry import provideHandler
@@ -212,12 +244,15 @@ class Test_provideHandler(unittest.TestCase):
         from zope.interface import Interface
         from zope.interface import implementer
         from zope.interface import providedBy
-        from zope.component.globalregistry import getGlobalSiteManager
+
         from zope.component._declaration import adapter
+        from zope.component.globalregistry import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
+
         @implementer(IFoo)
-        class Foo(object):
+        class Foo:
             pass
         _handler = adapter(IFoo)(fails_if_called(self))
 
@@ -232,7 +267,9 @@ class Test_provideHandler(unittest.TestCase):
 
     def test_w_adapts(self):
         from zope.interface import Interface
+
         from zope.component.globalregistry import getGlobalSiteManager
+
         class IFoo(Interface):
             pass
         _handler = fails_if_called(self)
@@ -248,7 +285,8 @@ class Test_provideHandler(unittest.TestCase):
 
 class TestBaseGlobalComponents(unittest.TestCase):
 
-    from zope.component.testing import setUp, tearDown
+    from zope.component.testing import setUp
+    from zope.component.testing import tearDown
 
     def _getTargetClass(self):
         from zope.component.globalregistry import BaseGlobalComponents
@@ -256,8 +294,8 @@ class TestBaseGlobalComponents(unittest.TestCase):
 
     def _getTargetInterfaces(self):
         from zope.interface.interfaces import IComponentLookup
-        from zope.interface.interfaces import IComponents
         from zope.interface.interfaces import IComponentRegistry
+        from zope.interface.interfaces import IComponents
         return [IComponents, IComponentLookup, IComponentRegistry]
 
     def _makeOne(self):

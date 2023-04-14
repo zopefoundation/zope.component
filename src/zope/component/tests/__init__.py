@@ -1,13 +1,15 @@
 import unittest
 
+
 def skipIfNoSecurity(testfunc):
     from zope.component._compat import ZOPE_SECURITY_NOT_AVAILABLE_EX
 
     try:
-        import zope.security
-    except ZOPE_SECURITY_NOT_AVAILABLE_EX: # pragma: no cover
+        import zope.security  # noqa: F401 imported but unused
+    except ZOPE_SECURITY_NOT_AVAILABLE_EX:  # pragma: no cover
         return unittest.skip("zope.security not installed")(testfunc)
     return testfunc
+
 
 def fails_if_called(test, msg="This function must not be called.",
                     arguments=True):

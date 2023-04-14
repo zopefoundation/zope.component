@@ -17,14 +17,15 @@ Based on subscription adapters / handlers.
 """
 
 from zope.event import subscribers as event_subscribers
-
 from zope.interface.interfaces import IObjectEvent
+
 from zope.component._api import subscribers as component_subscribers
 from zope.component._declaration import adapter
 
 
 def dispatch(*event):
     component_subscribers(event, None)
+
 
 event_subscribers.append(dispatch)
 

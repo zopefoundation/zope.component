@@ -13,14 +13,15 @@
 ##############################################################################
 """Factory object
 """
-from zope.interface import implementer
 from zope.interface import implementedBy
+from zope.interface import implementer
 from zope.interface.declarations import Implements
+
 from zope.component.interfaces import IFactory
 
 
 @implementer(IFactory)
-class Factory(object):
+class Factory:
     """Generic factory implementation.
 
     The purpose of this implementation is to provide a quick way of creating
@@ -43,5 +44,5 @@ class Factory(object):
             return spec
         return implementedBy(self._callable)
 
-    def __repr__(self): #pragma NO COVER
-        return '<%s for %s>' % (self.__class__.__name__, repr(self._callable))
+    def __repr__(self):  # pragma: no cover
+        return f'<{self.__class__.__name__} for {self._callable!r}>'

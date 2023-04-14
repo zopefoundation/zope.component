@@ -16,5 +16,6 @@
 
 from zope.interface import Interface
 
+
 class IC(Interface):
     pass

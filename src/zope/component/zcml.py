@@ -27,12 +27,14 @@ from zope.schema import TextLine
 
 from zope.component._api import getSiteManager
 from zope.component._compat import ZOPE_SECURITY_NOT_AVAILABLE_EX
-from zope.component._declaration import adaptedBy, getName
+from zope.component._declaration import adaptedBy
+from zope.component._declaration import getName
 from zope.component.interface import provideInterface
+
 
 try:
     from zope.security.zcml import Permission
-except ZOPE_SECURITY_NOT_AVAILABLE_EX: # pragma: no cover
+except ZOPE_SECURITY_NOT_AVAILABLE_EX:  # pragma: no cover
     def _no_security(*args, **kw):
         raise ConfigurationError(
             "security proxied components are not "
@@ -41,18 +43,21 @@ except ZOPE_SECURITY_NOT_AVAILABLE_EX: # pragma: no cover
     Permission = TextLine
 else:
     from zope.component.security import _checker
-    from zope.component.security import proxify
     from zope.component.security import protectedFactory
+    from zope.component.security import proxify
     from zope.component.security import securityAdapterFactory
 
 _ = MessageFactory('zope')
 
+
 class ComponentConfigurationError(ValueError, ConfigurationError):
     pass
+
 
 def handler(methodName, *args, **kwargs):
     method = getattr(getSiteManager(), methodName)
     method(*args, **kwargs)
+
 
 class IBasicComponentInformation(Interface):
 
@@ -63,13 +68,13 @@ class IBasicComponentInformation(Interface):
                       " full dotted name.  If specified, the"
                       " ``factory`` field must be left blank."),
         required=False,
-        )
+    )
 
     permission = Permission(
         title=_("Permission"),
         description=_("Permission required to use this component."),
         required=False,
-        )
+    )
 
     factory = GlobalObject(
         title=_("Factory"),
@@ -79,7 +84,8 @@ class IBasicComponentInformation(Interface):
                       " If specified, the ``component`` field must"
                       " be left blank."),
         required=False,
-        )
+    )
+
 
 class IAdapterDirective(Interface):
     """
@@ -92,14 +98,14 @@ class IAdapterDirective(Interface):
                       " the adapter instance."),
         required=True,
         value_type=GlobalObject()
-        )
+    )
 
     provides = GlobalInterface(
         title=_("Interface the component provides"),
         description=_("This attribute specifies the interface the adapter"
                       " instance must provide."),
         required=False,
-        )
+    )
 
     for_ = Tokens(
         title=_("Specifications to be adapted"),
@@ -115,7 +121,7 @@ class IAdapterDirective(Interface):
         description=_("This adapter is only available, if the principal"
                       " has this permission."),
         required=False,
-        )
+    )
 
     name = TextLine(
         title=_("Name"),
@@ -123,7 +129,7 @@ class IAdapterDirective(Interface):
                       "This attribute allows you to specify the name for"
                       " this adapter."),
         required=False,
-        )
+    )
 
     trusted = Bool(
         title=_("Trusted"),
@@ -137,7 +143,7 @@ class IAdapterDirective(Interface):
         """),
         required=False,
         default=False,
-        )
+    )
 
     locate = Bool(
         title=_("Locate"),
@@ -148,7 +154,8 @@ class IAdapterDirective(Interface):
         """),
         required=False,
         default=False,
-        )
+    )
+
 
 def _rolledUpFactory(factories):
     # This has to be named 'factory', aparently, so as not to confuse
@@ -160,6 +167,7 @@ def _rolledUpFactory(factories):
     # Store the original factory for documentation
     factory.factory = factories[0]
     return factory
+
 
 def adapter(_context, factory, provides=None, for_=None, permission=None,
             name='', trusted=False, locate=False):
@@ -207,24 +215,25 @@ def adapter(_context, factory, provides=None, for_=None, permission=None,
         factory = securityAdapterFactory(factory, permission, locate, trusted)
 
     _context.action(
-        discriminator = ('adapter', for_, provides, name),
-        callable = handler,
-        args = ('registerAdapter',
-                factory, for_, provides, name, _context.info),
-        )
+        discriminator=('adapter', for_, provides, name),
+        callable=handler,
+        args=('registerAdapter',
+              factory, for_, provides, name, _context.info),
+    )
     _context.action(
-        discriminator = None,
-        callable = provideInterface,
-        args = ('', provides)
-               )
+        discriminator=None,
+        callable=provideInterface,
+        args=('', provides)
+    )
     if for_:
         for iface in for_:
             if iface is not None:
                 _context.action(
-                    discriminator = None,
-                    callable = provideInterface,
-                    args = ('', iface)
-                    )
+                    discriminator=None,
+                    callable=provideInterface,
+                    args=('', iface)
+                )
+
 
 class ISubscriberDirective(Interface):
     """
@@ -235,36 +244,36 @@ class ISubscriberDirective(Interface):
         title=_("Subscriber factory"),
         description=_("A factory used to create the subscriber instance."),
         required=False,
-        )
+    )
 
     handler = GlobalObject(
         title=_("Handler"),
         description=_("A callable object that handles events."),
         required=False,
-        )
+    )
 
     provides = GlobalInterface(
         title=_("Interface the component provides"),
         description=_("This attribute specifies the interface the adapter"
                       " instance must provide."),
         required=False,
-        )
+    )
 
     for_ = Tokens(
         title=_("Interfaces or classes that this subscriber depends on"),
         description=_("This should be a list of interfaces or classes"),
         required=False,
         value_type=GlobalObject(
-          missing_value = object(),
-          ),
-        )
+            missing_value=object(),
+        ),
+    )
 
     permission = Permission(
         title=_("Permission"),
         description=_("This subscriber is only available, if the"
                       " principal has this permission."),
         required=False,
-        )
+    )
 
     trusted = Bool(
         title=_("Trusted"),
@@ -278,7 +287,7 @@ class ISubscriberDirective(Interface):
         """),
         required=False,
         default=False,
-        )
+    )
 
     locate = Bool(
         title=_("Locate"),
@@ -289,9 +298,12 @@ class ISubscriberDirective(Interface):
         """),
         required=False,
         default=False,
-        )
+    )
+
 
 _handler = handler
+
+
 def subscriber(_context, for_=None, factory=None, handler=None, provides=None,
                permission=None, trusted=False, locate=False):
     if factory is None:
@@ -329,34 +341,35 @@ def subscriber(_context, for_=None, factory=None, handler=None, provides=None,
 
     if handler is not None:
         _context.action(
-            discriminator = None,
-            callable = _handler,
-            args = ('registerHandler',
-                    handler, for_, u'', _context.info),
-            )
+            discriminator=None,
+            callable=_handler,
+            args=('registerHandler',
+                  handler, for_, '', _context.info),
+        )
     else:
         _context.action(
-            discriminator = None,
-            callable = _handler,
-            args = ('registerSubscriptionAdapter',
-                    factory, for_, provides, u'', _context.info),
-            )
+            discriminator=None,
+            callable=_handler,
+            args=('registerSubscriptionAdapter',
+                  factory, for_, provides, '', _context.info),
+        )
 
     if provides is not None:
         _context.action(
-            discriminator = None,
-            callable = provideInterface,
-            args = ('', provides)
-            )
+            discriminator=None,
+            callable=provideInterface,
+            args=('', provides)
+        )
 
     # For each interface, state that the adapter provides that interface.
     for iface in for_:
         if iface is not None:
             _context.action(
-                discriminator = None,
-                callable = provideInterface,
-                args = ('', iface)
-                )
+                discriminator=None,
+                callable=provideInterface,
+                args=('', iface)
+            )
+
 
 class IUtilityDirective(IBasicComponentInformation):
     """Register a utility."""
@@ -365,14 +378,15 @@ class IUtilityDirective(IBasicComponentInformation):
         title=_("Provided interface"),
         description=_("Interface provided by the utility."),
         required=False,
-        )
+    )
 
     name = TextLine(
         title=_("Name"),
         description=_("Name of the registration.  This is used by"
                       " application code when locating a utility."),
         required=False,
-        )
+    )
+
 
 def utility(_context, provides=None, component=None, factory=None,
             permission=None, name=''):
@@ -403,16 +417,17 @@ def utility(_context, provides=None, component=None, factory=None,
             factory = protectedFactory(factory, provides, permission)
 
     _context.action(
-        discriminator = ('utility', provides, name),
-        callable = handler,
-        args = ('registerUtility', component, provides, name, _context.info),
-        kw = dict(factory=factory),
-        )
+        discriminator=('utility', provides, name),
+        callable=handler,
+        args=('registerUtility', component, provides, name, _context.info),
+        kw=dict(factory=factory),
+    )
     _context.action(
-        discriminator = None,
-        callable = provideInterface,
-        args = ('', provides),
-        )
+        discriminator=None,
+        callable=provideInterface,
+        args=('', provides),
+    )
+
 
 class IInterfaceDirective(Interface):
     """
@@ -422,24 +437,26 @@ class IInterfaceDirective(Interface):
     interface = GlobalInterface(
         title=_("Interface"),
         required=True,
-        )
+    )
 
     type = GlobalInterface(
         title=_("Interface type"),
         required=False,
-        )
+    )
 
     name = TextLine(
         title=_("Name"),
         required=False,
-        )
+    )
+
 
 def interface(_context, interface, type=None, name=''):
     _context.action(
-        discriminator = None,
-        callable = provideInterface,
-        args = (name, interface, type)
-        )
+        discriminator=None,
+        callable=provideInterface,
+        args=(name, interface, type)
+    )
+
 
 class IBasicViewInformation(Interface):
     """This is the basic information for all views."""
@@ -450,21 +467,21 @@ class IBasicViewInformation(Interface):
         """),
         required=True,
         value_type=GlobalObject(
-          missing_value=object(),
-          ),
-        )
+            missing_value=object(),
+        ),
+    )
 
     permission = Permission(
         title=_("Permission"),
         description=_("The permission needed to use the view."),
         required=False,
-        )
+    )
 
     class_ = GlobalObject(
         title=_("Class"),
         description=_("A class that provides attributes used by the view."),
         required=False,
-        )
+    )
 
     allowed_interface = Tokens(
         title=_("Interface that is also allowed if user has permission."),
@@ -478,7 +495,7 @@ class IBasicViewInformation(Interface):
         whitespace."""),
         required=False,
         value_type=GlobalInterface(),
-        )
+    )
 
     allowed_attributes = Tokens(
         title=_("View attributes that are also allowed if the user"
@@ -490,7 +507,8 @@ class IBasicViewInformation(Interface):
         on the view object."""),
         required=False,
         value_type=PythonIdentifier(),
-        )
+    )
+
 
 class IBasicResourceInformation(Interface):
     """
@@ -501,8 +519,8 @@ class IBasicResourceInformation(Interface):
         title=_("The name of the resource."),
         description=_("The name shows up in URLs/paths. For example 'foo'."),
         required=True,
-        default=u'',
-        )
+        default='',
+    )
 
     provides = GlobalInterface(
         title=_("The interface this component provides."),
@@ -511,12 +529,12 @@ class IBasicResourceInformation(Interface):
         views that support other views."""),
         required=False,
         default=Interface,
-        )
+    )
 
     type = GlobalInterface(
         title=_("Request type"),
         required=True
-        )
+    )
 
 
 class IViewDirective(IBasicViewInformation, IBasicResourceInformation):
@@ -526,17 +544,18 @@ class IViewDirective(IBasicViewInformation, IBasicResourceInformation):
         title=_("Factory"),
         required=False,
         value_type=GlobalObject(),
-        )
+    )
+
 
 def view(_context, factory, type, name, for_,
          permission=None,
          allowed_interface=None,
          allowed_attributes=None,
          provides=Interface,
-        ):
+         ):
 
     if ((allowed_attributes or allowed_interface)
-        and (not permission)):
+            and (not permission)):
         raise ComponentConfigurationError(
             "'permission' required with 'allowed_interface' or "
             "'allowed_attributes'")
@@ -546,7 +565,7 @@ def view(_context, factory, type, name, for_,
         checker = _checker(_context, permission,
                            allowed_interface, allowed_attributes)
 
-        class ProxyView(object):
+        class ProxyView:
             """Class to create simple proxy views."""
 
             def __init__(self, factory, checker):
@@ -558,9 +577,8 @@ def view(_context, factory, type, name, for_,
 
         factory[-1] = ProxyView(factory[-1], checker)
 
-
     if not for_:
-        raise ComponentConfigurationError("No for interfaces specified");
+        raise ComponentConfigurationError("No for interfaces specified")
     for_ = tuple(for_)
 
     # Generate a single factory from multiple factories:
@@ -582,26 +600,26 @@ def view(_context, factory, type, name, for_,
     for_ = for_ + (type,)
 
     _context.action(
-        discriminator = ('view', for_, name, provides),
-        callable = handler,
-        args = ('registerAdapter',
-                factory, for_, provides, name, _context.info),
-        )
+        discriminator=('view', for_, name, provides),
+        callable=handler,
+        args=('registerAdapter',
+              factory, for_, provides, name, _context.info),
+    )
 
     _context.action(
-        discriminator = None,
-        callable = provideInterface,
-        args = ('', provides)
-        )
+        discriminator=None,
+        callable=provideInterface,
+        args=('', provides)
+    )
 
     if for_ is not None:
         for iface in for_:
             if iface is not None:
                 _context.action(
-                    discriminator = None,
-                    callable = provideInterface,
-                    args = ('', iface)
-                    )
+                    discriminator=None,
+                    callable=provideInterface,
+                    args=('', iface)
+                )
 
 
 class IResourceDirective(IBasicComponentInformation,
@@ -612,14 +630,15 @@ class IResourceDirective(IBasicComponentInformation,
         title=_("Interface that is also allowed if user has permission."),
         required=False,
         value_type=GlobalInterface(),
-        )
+    )
 
     allowed_attributes = Tokens(
         title=_("View attributes that are also allowed if user"
                 " has permission."),
         required=False,
         value_type=PythonIdentifier(),
-        )
+    )
+
 
 def resource(_context, factory, type, name,
              permission=None,
@@ -627,11 +646,11 @@ def resource(_context, factory, type, name,
              provides=Interface):
 
     if ((allowed_attributes or allowed_interface)
-        and (not permission)):
+            and (not permission)):
         raise ComponentConfigurationError(
             "Must use name attribute with allowed_interface or "
             "allowed_attributes"
-            )
+        )
 
     if permission is not None:
 
@@ -645,15 +664,15 @@ def resource(_context, factory, type, name,
         factory = proxyResource
 
     _context.action(
-        discriminator = ('resource', name, type, provides),
-        callable = handler,
-        args = ('registerAdapter',
-                factory, (type,), provides, name, _context.info))
+        discriminator=('resource', name, type, provides),
+        callable=handler,
+        args=('registerAdapter',
+              factory, (type,), provides, name, _context.info))
     _context.action(
-        discriminator = None,
-        callable = provideInterface,
-        args = ('', type))
+        discriminator=None,
+        callable=provideInterface,
+        args=('', type))
     _context.action(
-        discriminator = None,
-        callable = provideInterface,
-        args = ('', provides))
+        discriminator=None,
+        callable=provideInterface,
+        args=('', provides))

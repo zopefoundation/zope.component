@@ -16,11 +16,13 @@
 
 from zope.component import provideHandler
 from zope.component.event import objectEventNotify
-from zope.component.registry import dispatchUtilityRegistrationEvent
 from zope.component.registry import dispatchAdapterRegistrationEvent
-from zope.component.registry import (
-    dispatchSubscriptionAdapterRegistrationEvent)
 from zope.component.registry import dispatchHandlerRegistrationEvent
+from zope.component.registry import \
+    dispatchSubscriptionAdapterRegistrationEvent
+from zope.component.registry import dispatchUtilityRegistrationEvent
+
+
 try:
     from zope.testing.cleanup import addCleanUp
 except ImportError:
@@ -28,6 +30,8 @@ except ImportError:
         pass
 
 events = []
+
+
 def getEvents(event_type=None, filter=None):
     r = []
     for event in events:
@@ -39,9 +43,13 @@ def getEvents(event_type=None, filter=None):
 
     return r
 
+
 def clearEvents():
     del events[:]
+
+
 addCleanUp(clearEvents)
+
 
 class PlacelessSetup:
 
@@ -52,6 +60,7 @@ class PlacelessSetup:
         provideHandler(dispatchSubscriptionAdapterRegistrationEvent)
         provideHandler(dispatchHandlerRegistrationEvent)
         provideHandler(events.append, (None,))
+
 
 def setUp(test=None):
     PlacelessSetup().setUp()

@@ -17,6 +17,7 @@ import unittest
 
 from zope.component.tests import fails_if_called
 
+
 class FactoryTests(unittest.TestCase):
 
     def _getTargetClass(self):
@@ -30,11 +31,13 @@ class FactoryTests(unittest.TestCase):
 
     def test_class_conforms_to_IFactory(self):
         from zope.interface.verify import verifyClass
+
         from zope.component.interfaces import IFactory
         verifyClass(IFactory, self._getTargetClass())
 
     def test_instance_conforms_to_IFactory(self):
         from zope.interface.verify import verifyObject
+
         from zope.component.interfaces import IFactory
         verifyObject(IFactory, self._makeOne())
 
@@ -53,6 +56,7 @@ class FactoryTests(unittest.TestCase):
 
     def test___call___no_args(self):
         _called = []
+
         def _callable(*args, **kw):
             _called.append((args, kw))
         factory = self._makeOne(_callable)
@@ -61,6 +65,7 @@ class FactoryTests(unittest.TestCase):
 
     def test___call___positional_args(self):
         _called = []
+
         def _callable(*args, **kw):
             _called.append((args, kw))
         factory = self._makeOne(_callable)
@@ -69,6 +74,7 @@ class FactoryTests(unittest.TestCase):
 
     def test___call___keyword_args(self):
         _called = []
+
         def _callable(*args, **kw):
             _called.append((args, kw))
         factory = self._makeOne(_callable)
@@ -78,10 +84,13 @@ class FactoryTests(unittest.TestCase):
     def test_getInterfaces_explicit(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         class IFoo(Interface):
             pass
+
         class IBar(Interface):
             pass
+
         class IBaz(Interface):
             pass
         _callable = fails_if_called(self)
@@ -95,6 +104,7 @@ class FactoryTests(unittest.TestCase):
     def test_getInterfaces_implicit(self):
         from zope.interface import Interface
         from zope.interface import implementer
+
         class IBaz(Interface):
             pass
         _callable = implementer(IBaz)(fails_if_called(self))

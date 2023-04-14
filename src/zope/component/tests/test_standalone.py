@@ -17,33 +17,34 @@ import unittest
 
 from zope.component.tests import skipIfNoSecurity
 
+
 @skipIfNoSecurity
 class StandaloneTests(unittest.TestCase):
     def testStandalone(self):
         # See: https://bugs.launchpad.net/zope3/+bug/98401
-        import subprocess
-        import sys
         import os
         import pickle
+        import subprocess
+        import sys
 
         executable = os.path.abspath(sys.executable)
         where = os.path.dirname(os.path.dirname(__file__))
         program = os.path.join(where, 'standalonetests.py')
         process = subprocess.Popen([executable, program],
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT,
-                                stdin=subprocess.PIPE)
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.STDOUT,
+                                   stdin=subprocess.PIPE)
         try:
             pickle.dump(sys.path, process.stdin)
             process.stdin.close()
 
             try:
                 rc = process.wait()
-            except OSError as e: # pragma: no cover
+            except OSError as e:  # pragma: no cover
                 # MacIntel raises apparently unimportant EINTR?
                 if e.errno != 4:
-                    raise # TODO verify sanity of a pass on EINTR :-/
-            if rc != 0: # pragma: no cover
+                    raise  # TODO verify sanity of a pass on EINTR :-/
+            if rc != 0:  # pragma: no cover
                 output = process.stdout.read()
                 if isinstance(output, bytes):
                     output = output.decode()

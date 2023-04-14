@@ -14,26 +14,30 @@
 """Basic components support
 """
 
-from zope.component._api import handle
-from zope.component._declaration import adapter
-
 from zope.interface.interfaces import IAdapterRegistration
 from zope.interface.interfaces import IHandlerRegistration
 from zope.interface.interfaces import IRegistrationEvent
 from zope.interface.interfaces import ISubscriptionAdapterRegistration
 from zope.interface.interfaces import IUtilityRegistration
 
+from zope.component._api import handle
+from zope.component._declaration import adapter
+
+
 @adapter(IUtilityRegistration, IRegistrationEvent)
 def dispatchUtilityRegistrationEvent(registration, event):
     handle(registration.component, event)
+
 
 @adapter(IAdapterRegistration, IRegistrationEvent)
 def dispatchAdapterRegistrationEvent(registration, event):
     handle(registration.factory, event)
 
+
 @adapter(ISubscriptionAdapterRegistration, IRegistrationEvent)
 def dispatchSubscriptionAdapterRegistrationEvent(registration, event):
     handle(registration.factory, event)
+
 
 @adapter(IHandlerRegistration, IRegistrationEvent)
 def dispatchHandlerRegistrationEvent(registration, event):
