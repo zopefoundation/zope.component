@@ -30,7 +30,7 @@ def provideInterface(id, interface, iface_type=None, info=''):
        Previously it was always registered in the global site manager.
     """
     if not id:
-        id = "{}.{}".format(interface.__module__, interface.__name__)
+        id = f"{interface.__module__}.{interface.__name__}"
 
     if not IInterface.providedBy(interface):
         if not isinstance(interface, type):
@@ -95,7 +95,7 @@ def searchInterfaceUtilities(context, search_string=None, base=None):
 
 
 def getInterfaceAllDocs(interface):
-    iface_id = '{}.{}'.format(interface.__module__, interface.__name__)
+    iface_id = f'{interface.__module__}.{interface.__name__}'
     docs = [str(iface_id).lower(),
             str(interface.__doc__).lower()]
 
@@ -117,4 +117,4 @@ def nameToInterface(context, id):
 def interfaceToName(context, interface):
     if interface is None:
         return 'None'
-    return '{}.{}'.format(interface.__module__, interface.__name__)
+    return f'{interface.__module__}.{interface.__name__}'

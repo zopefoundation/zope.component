@@ -24,8 +24,10 @@ from zope.component._compat import ZOPE_SECURITY_NOT_AVAILABLE_EX
 try:
     from zope.security.proxy import removeSecurityProxy
 except ZOPE_SECURITY_NOT_AVAILABLE_EX:  # pragma: no cover
+
     def removeSecurityProxy(x):
         return x
+
 
 from zope.interface.interfaces import ComponentLookupError
 from zope.interface.interfaces import IComponentLookup
@@ -133,8 +135,7 @@ def getSiteManager(context=None):
     # We should really look look at this again though, especially
     # once site managers do less.  There's probably no good reason why
     # they can't be proxied.  Well, except maybe for performance.
-    sm = IComponentLookup(
-        context, getGlobalSiteManager())
+    sm = IComponentLookup(context, getGlobalSiteManager())
     sm = removeSecurityProxy(sm)
     return sm
 
@@ -190,7 +191,7 @@ def resetHooks():
 clearSite = setSite
 try:
     from zope.testing.cleanup import addCleanUp
-except ImportError:  # pragma: no cover
+except ModuleNotFoundError:  # pragma: no cover
     pass
 else:
     addCleanUp(resetHooks)

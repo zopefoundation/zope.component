@@ -70,7 +70,7 @@ class U:
         self.__name__ = name
 
     def __repr__(self):
-        return "{}({})".format(self.__class__.__name__, self.__name__)
+        return f"{self.__class__.__name__}({self.__name__})"
 
 
 @implementer(I1)
