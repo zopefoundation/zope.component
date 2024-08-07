@@ -5,6 +5,8 @@
 6.1 (unreleased)
 ================
 
+- Drop support for Python 3.7.
+
 - Drop support for Python 3.10-optimized.
 
 
