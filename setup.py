@@ -24,6 +24,7 @@ import os
 from setuptools import find_packages
 from setuptools import setup
 
+
 HOOK_REQUIRES = []
 
 PERSISTENTREGISTRY_REQUIRES = [
