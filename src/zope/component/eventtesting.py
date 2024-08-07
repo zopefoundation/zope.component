@@ -25,9 +25,11 @@ from zope.component.registry import dispatchUtilityRegistrationEvent
 
 try:
     from zope.testing.cleanup import addCleanUp
-except ImportError:
+except ModuleNotFoundError:
+
     def addCleanUp(x):
         pass
+
 
 events = []
 
@@ -59,7 +61,7 @@ class PlacelessSetup:
         provideHandler(dispatchAdapterRegistrationEvent)
         provideHandler(dispatchSubscriptionAdapterRegistrationEvent)
         provideHandler(dispatchHandlerRegistrationEvent)
-        provideHandler(events.append, (None,))
+        provideHandler(events.append, (None, ))
 
 
 def setUp(test=None):

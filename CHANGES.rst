@@ -9,13 +9,9 @@
 
 - Drop support for Python 3.7.
 
-- Drop support for Python 3.10-optimized.
-
 
 6.0 (2023-04-14)
 ================
-
-
 
 - Drop support for Python 2.7, 3.5, 3.6.
 

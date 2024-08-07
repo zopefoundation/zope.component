@@ -54,7 +54,7 @@ base = BaseGlobalComponents('base')
 
 try:
     from zope.testing.cleanup import addCleanUp
-except ImportError:  # pragma: no cover
+except ModuleNotFoundError:  # pragma: no cover
     pass
 else:
     addCleanUp(lambda: base.__init__('base'))
@@ -66,6 +66,7 @@ globalSiteManager = base
 @inherits_arch_docs
 def getGlobalSiteManager():
     return globalSiteManager
+
 
 # The following APIs provide global registration support for Python code.
 # We eventually want to deprecate these in favor of using the global

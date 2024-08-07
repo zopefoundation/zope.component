@@ -13,13 +13,7 @@
 
 import sys, os
 # We get better doc strings and signatures from the Python components.
-# XXX: Except CPython 2.7 produces some warnings from CFFI with persistent 4.6.3:
-# From callback for ffi.gc <cdata 'struct CPersistentRingCFFI_struct *' owning 24 bytes>:
-#  Traceback (most recent call last):
-#    File "//.tox/docs/lib/python2.7/site-packages/persistent/picklecache.py", line 105, in cleanup_hook
-#     oid = self._addr_to_oid.pop(cdata.pobj_id, None)
-#  AttributeError: '_WeakValueDictionary' object has no attribute '_addr_to_oid'
-#os.environ['PURE_PYTHON'] = "1"
+os.environ['PURE_PYTHON'] = "1"
 
 # Prior to https://github.com/zopefoundation/zope.security/issues/71,
 # zope.security cannot be imported in zope.interface's strict IRO mode.
@@ -31,6 +25,7 @@ os.environ['ZOPE_INTERFACE_STRICT_IRO'] = "0"
 #sys.path.insert(0, os.path.abspath('.'))
 sys.path.append(os.path.abspath('../src'))
 import pkg_resources
+
 rqmt = pkg_resources.require('zope.component')[0]
 
 # -- General configuration -----------------------------------------------------
@@ -47,7 +42,6 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.extlinks',
     'sphinx.ext.intersphinx',
-
     'repoze.sphinx.autointerface',
 ]
 
@@ -109,7 +103,6 @@ pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
-
 
 # -- Options for HTML output ---------------------------------------------------
 
@@ -190,25 +183,24 @@ html_static_path = ['_static']
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'zopecomponentdoc'
 
-
 # -- Options for LaTeX output --------------------------------------------------
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+    # The paper size ('letterpaper' or 'a4paper').
+    #'papersize': 'letterpaper',
 
-# The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    #'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+    #'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'zopecomponent.tex', u'zope.component Documentation',
-   u'Zope Foundation Contributors', 'manual'),
+    ('index', 'zopecomponent.tex', u'zope.component Documentation',
+     u'Zope Foundation Contributors', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -231,19 +223,15 @@ latex_documents = [
 # If false, no module index is generated.
 #latex_domain_indices = True
 
-
 # -- Options for manual page output --------------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    ('index', 'zopecomponent', u'zope.component Documentation',
-     [u'Zope Foundation Contributors'], 1)
-]
+man_pages = [('index', 'zopecomponent', u'zope.component Documentation',
+              ['Zope Foundation Contributors'], 1)]
 
 # If true, show URL addresses after external links.
 #man_show_urls = False
-
 
 # -- Options for Texinfo output ------------------------------------------------
 
@@ -251,9 +239,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'zopecomponent', u'zope.component Documentation',
-   u'Zope Foundation Contributors', 'zopecomponent', 'One line description of project.',
-   'Miscellaneous'),
+    ('index', 'zopecomponent', u'zope.component Documentation',
+     'Zope Foundation Contributors', 'zopecomponent',
+     'One line description of project.', 'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.
@@ -275,9 +263,9 @@ autoclass_content = 'both'
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
 intersphinx_mapping = {
-    'https://docs.python.org/3/': None,
-    'https://zopeinterface.readthedocs.io/en/latest/': None,
-    'https://zopesecurity.readthedocs.io/en/latest/': None,
-    'https://zopeevent.readthedocs.io/en/latest/': None,
-    'https://persistent.readthedocs.io/en/latest/': None,
+    'python': ('https://docs.python.org/3/', None),
+    'zopeinterface': ('https://zopeinterface.readthedocs.io/en/latest/', None),
+    'zopesecurity': ('https://zopesecurity.readthedocs.io/en/latest/', None),
+    'zopeevent': ('https://zopeevent.readthedocs.io/en/latest/', None),
+    'persistent': ('https://persistent.readthedocs.io/en/latest/', None),
 }

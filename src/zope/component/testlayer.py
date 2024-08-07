@@ -20,9 +20,11 @@ from zope.configuration import xmlconfig
 
 try:
     from zope.testing.cleanup import cleanUp
-except ImportError:  # pragma: no cover
+except ModuleNotFoundError:  # pragma: no cover
+
     def cleanUp():
         pass
+
 
 from zope.component import provideHandler
 from zope.component.eventtesting import clearEvents
@@ -95,7 +97,7 @@ class ZCMLLayerBase(LayerBase):
         for feature in self.features:
             context.provideFeature(feature)
         self.context = self._load_zcml(context)
-        provideHandler(events.append, (None,))
+        provideHandler(events.append, (None, ))
 
     def testTearDown(self):
         clearEvents()
@@ -116,8 +118,11 @@ class ZCMLFileLayer(ZCMLLayerBase):
     statement in your own ZCML to load it.
     """
 
-    def __init__(self, package, zcml_file='ftesting.zcml',
-                 name=None, features=None):
+    def __init__(self,
+                 package,
+                 zcml_file='ftesting.zcml',
+                 name=None,
+                 features=None):
         super().__init__(package, name, features)
         self.zcml_file = os.path.join(os.path.dirname(package.__file__),
                                       zcml_file)
@@ -125,4 +130,5 @@ class ZCMLFileLayer(ZCMLLayerBase):
     def _load_zcml(self, context):
         return xmlconfig.file(self.zcml_file,
                               package=self.package,
-                              context=context, execute=True)
+                              context=context,
+                              execute=True)
