@@ -5,7 +5,7 @@
 6.1 (unreleased)
 ================
 
-- Nothing changed yet.
+- Drop support for Python 3.10-optimized.
 
 
 6.0 (2023-04-14)
