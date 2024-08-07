@@ -24,9 +24,7 @@ import os
 from setuptools import find_packages
 from setuptools import setup
 
-
-HOOK_REQUIRES = [
-]
+HOOK_REQUIRES = []
 
 PERSISTENTREGISTRY_REQUIRES = [
     'persistent',
@@ -43,20 +41,13 @@ ZCML_REQUIRES = [
     'zope.i18nmessageid',
 ]
 
-MIN_TESTS_REQUIRE = (
-    HOOK_REQUIRES
-    + ZCML_REQUIRES
-    + [
-        'zope.testing',
-        'zope.testrunner',
-    ]
-)
+MIN_TESTS_REQUIRE = (HOOK_REQUIRES + ZCML_REQUIRES + [
+    'zope.testing',
+    'zope.testrunner',
+])
 
-TESTS_REQUIRE = (
-    MIN_TESTS_REQUIRE
-    + PERSISTENTREGISTRY_REQUIRES
-    + SECURITY_REQUIRES
-)
+TESTS_REQUIRE = (MIN_TESTS_REQUIRE + PERSISTENTREGISTRY_REQUIRES +
+                 SECURITY_REQUIRES)
 
 
 def read(*rnames):
@@ -70,19 +61,15 @@ setup(
     url='https://github.com/zopefoundation/zope.component',
     project_urls={
         'Documentation': 'https://zopecomponent.readthedocs.io/',
-        'Issue Tracker': ('https://github.com/zopefoundation/'
-                          'zope.component/issues'),
+        'Issue Tracker':
+        'https://github.com/zopefoundation/zope.component/issues',
         'Sources': 'https://github.com/zopefoundation/zope.component',
     },
     license='ZPL 2.1',
     description='Zope Component Architecture',
     author='Zope Foundation and Contributors',
     author_email='zope-dev@zope.dev',
-    long_description=(
-        read('README.rst')
-        + '\n' +
-        read('CHANGES.rst')
-    ),
+    long_description=(read('README.rst') + '\n' + read('CHANGES.rst')),
     keywords="interface component coupling loose utility adapter",
     packages=find_packages('src'),
     package_dir={'': 'src'},
@@ -94,19 +81,21 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Framework :: Zope :: 3",
         "Framework :: Zope :: 5",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    namespace_packages=['zope', ],
-    python_requires='>=3.7',
+    namespace_packages=[
+        'zope',
+    ],
+    python_requires='>=3.8',
     install_requires=[
         'setuptools',
         'zope.event',
