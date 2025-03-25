@@ -29,27 +29,27 @@ class Test_getGlobalSiteManager(unittest.TestCase):
 
         from zope.component.globalregistry import base
         gsm = self._callFUT()
-        self.assertTrue(gsm is base)
+        self.assertIs(gsm, base)
         self.assertTrue(IComponentLookup.providedBy(gsm))
 
     def test_gsm_is_singleton(self):
         gsm = self._callFUT()
-        self.assertTrue(self._callFUT() is gsm)
+        self.assertIs(self._callFUT(), gsm)
 
     def test_gsm_pickling(self):
         import pickle
         gsm = self._callFUT()
         dumped = pickle.dumps(gsm)
         loaded = pickle.loads(dumped)
-        self.assertTrue(loaded is gsm)
+        self.assertIs(loaded, gsm)
 
         dumped_utilities = pickle.dumps(gsm.utilities)
         loaded_utilities = pickle.loads(dumped_utilities)
-        self.assertTrue(loaded_utilities is gsm.utilities)
+        self.assertIs(loaded_utilities, gsm.utilities)
 
         dumped_adapters = pickle.dumps(gsm.adapters)
         loaded_adapters = pickle.loads(dumped_adapters)
-        self.assertTrue(loaded_adapters is gsm.adapters)
+        self.assertIs(loaded_adapters, gsm.adapters)
 
 
 class Test_provideUtility(unittest.TestCase):
@@ -96,7 +96,7 @@ class Test_provideUtility(unittest.TestCase):
         foo = Foo()
         self._callFUT(foo, IFoo, 'named')
         gsm = getGlobalSiteManager()
-        self.assertTrue(gsm.getUtility(IFoo, 'named') is foo)
+        self.assertIs(gsm.getUtility(IFoo, 'named'), foo)
 
 
 class Test_provideAdapter(unittest.TestCase):
@@ -134,8 +134,8 @@ class Test_provideAdapter(unittest.TestCase):
         gsm = getGlobalSiteManager()
         foo = Foo()
         adapted = gsm.getAdapter(foo, IBar)
-        self.assertTrue(isinstance(adapted, Bar))
-        self.assertTrue(adapted.context is foo)
+        self.assertIsInstance(adapted, Bar)
+        self.assertIs(adapted.context, foo)
 
     def test_named_w_provides_w_adapts(self):
         from zope.interface import Interface
@@ -160,8 +160,8 @@ class Test_provideAdapter(unittest.TestCase):
         gsm = getGlobalSiteManager()
         foo = Foo()
         adapted = gsm.getAdapter(foo, IBar, name='test')
-        self.assertTrue(isinstance(adapted, Bar))
-        self.assertTrue(adapted.context is foo)
+        self.assertIsInstance(adapted, Bar)
+        self.assertIs(adapted.context, foo)
 
 
 class Test_provideSubscriptionAdapter(unittest.TestCase):
@@ -200,8 +200,8 @@ class Test_provideSubscriptionAdapter(unittest.TestCase):
         foo = Foo()
         adapted = gsm.subscribers((foo,), IBar)
         self.assertEqual(len(adapted), 1)
-        self.assertTrue(isinstance(adapted[0], Bar))
-        self.assertTrue(adapted[0].context is foo)
+        self.assertIsInstance(adapted[0], Bar)
+        self.assertIs(adapted[0].context, foo)
 
     def test_w_provides_w_adapts(self):
         from zope.interface import Interface
@@ -227,8 +227,8 @@ class Test_provideSubscriptionAdapter(unittest.TestCase):
         foo = Foo()
         adapted = gsm.subscribers((foo,), IBar)
         self.assertEqual(len(adapted), 1)
-        self.assertTrue(isinstance(adapted[0], Bar))
-        self.assertTrue(adapted[0].context is foo)
+        self.assertIsInstance(adapted[0], Bar)
+        self.assertIs(adapted[0].context, foo)
 
 
 class Test_provideHandler(unittest.TestCase):
@@ -263,7 +263,7 @@ class Test_provideHandler(unittest.TestCase):
         hr = regs[0]
         self.assertEqual(list(hr.required), list(providedBy(Foo())))
         self.assertEqual(hr.name, '')
-        self.assertTrue(hr.factory is _handler)
+        self.assertIs(hr.factory, _handler)
 
     def test_w_adapts(self):
         from zope.interface import Interface
@@ -280,7 +280,7 @@ class Test_provideHandler(unittest.TestCase):
         hr = regs[0]
         self.assertEqual(list(hr.required), [IFoo])
         self.assertEqual(hr.name, '')
-        self.assertTrue(hr.factory is _handler)
+        self.assertIs(hr.factory, _handler)
 
 
 class TestBaseGlobalComponents(unittest.TestCase):

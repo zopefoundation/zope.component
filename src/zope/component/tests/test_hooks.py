@@ -40,7 +40,7 @@ class Test_read_property(unittest.TestCase):
             def bar(self):
                 return 'BAR'
         bar = Foo.bar
-        self.assertTrue(isinstance(bar, self._getTargetClass()))
+        self.assertIsInstance(bar, self._getTargetClass())
         self.assertEqual(bar.func(object()), 'BAR')
 
 
@@ -58,7 +58,7 @@ class SiteInfoTests(unittest.TestCase):
         gsm = getGlobalSiteManager()
         si = self._makeOne()
         self.assertEqual(si.site, None)
-        self.assertTrue(si.sm is gsm)
+        self.assertIs(si.sm, gsm)
 
     def test_adapter_hook(self):
         _hook = object()
@@ -70,11 +70,11 @@ class SiteInfoTests(unittest.TestCase):
             adapters = _Registry()
         si = self._makeOne()
         si.sm = _SiteManager()
-        self.assertFalse('adapter_hook' in si.__dict__)
-        self.assertTrue(si.adapter_hook is _hook)
-        self.assertTrue('adapter_hook' in si.__dict__)
+        self.assertNotIn('adapter_hook', si.__dict__)
+        self.assertIs(si.adapter_hook, _hook)
+        self.assertIn('adapter_hook', si.__dict__)
         del si.adapter_hook
-        self.assertFalse('adapter_hook' in si.__dict__)
+        self.assertNotIn('adapter_hook', si.__dict__)
 
 
 class Test_setSite(unittest.TestCase):
@@ -96,9 +96,9 @@ class Test_setSite(unittest.TestCase):
         siteinfo.adapterhook = _HOOK
         with _Monkey(hooks, siteinfo=siteinfo):
             self._callFUT(None)
-        self.assertTrue(siteinfo.sm is gsm)
-        self.assertTrue(siteinfo.site is None)
-        self.assertFalse('adapter_hook' in siteinfo.__dict__)
+        self.assertIs(siteinfo.sm, gsm)
+        self.assertIsNone(siteinfo.site)
+        self.assertNotIn('adapter_hook', siteinfo.__dict__)
 
     def test_w_site(self):
         from zope.component import hooks
@@ -111,9 +111,9 @@ class Test_setSite(unittest.TestCase):
         _site = _Site()
         with _Monkey(hooks, siteinfo=siteinfo):
             self._callFUT(_site)
-        self.assertTrue(siteinfo.sm is _SM2)
-        self.assertTrue(siteinfo.site is _site)
-        self.assertFalse('adapter_hook' in siteinfo.__dict__)
+        self.assertIs(siteinfo.sm, _SM2)
+        self.assertIs(siteinfo.site, _site)
+        self.assertNotIn('adapter_hook', siteinfo.__dict__)
 
 
 class Test_getSite(unittest.TestCase):
@@ -126,7 +126,7 @@ class Test_getSite(unittest.TestCase):
         from zope.component import hooks
         siteinfo = _DummySiteInfo()
         with _Monkey(hooks, siteinfo=siteinfo):
-            self.assertTrue(self._callFUT() is None)
+            self.assertIsNone(self._callFUT())
 
     def test_w_site(self):
         from zope.component import hooks
@@ -136,7 +136,7 @@ class Test_getSite(unittest.TestCase):
         siteinfo.sm = _SM2
         siteinfo.site = _SITE
         with _Monkey(hooks, siteinfo=siteinfo):
-            self.assertTrue(self._callFUT() is _SITE)
+            self.assertIs(self._callFUT(), _SITE)
 
 
 class Test_site(unittest.TestCase):
@@ -156,14 +156,14 @@ class Test_site(unittest.TestCase):
                 return _SM2
         _site = _Site()
         siteinfo = _DummySiteInfo()
-        self.assertTrue(siteinfo.site is None)
-        self.assertTrue(siteinfo.sm is _SM)
+        self.assertIsNone(siteinfo.site)
+        self.assertIs(siteinfo.sm, _SM)
         with _Monkey(hooks, siteinfo=siteinfo):
             with self._callFUT(_site):
-                self.assertTrue(siteinfo.site is _site)
-                self.assertTrue(siteinfo.sm is _SM2)
-            self.assertTrue(siteinfo.site is None)
-            self.assertTrue(siteinfo.sm is gsm)
+                self.assertIs(siteinfo.site, _site)
+                self.assertIs(siteinfo.sm, _SM2)
+            self.assertIsNone(siteinfo.site)
+            self.assertIs(siteinfo.sm, gsm)
 
 
 class Test_getSiteManager(unittest.TestCase):
@@ -178,7 +178,7 @@ class Test_getSiteManager(unittest.TestCase):
         siteinfo = _DummySiteInfo()
         siteinfo.sm = _SM2
         with _Monkey(hooks, siteinfo=siteinfo):
-            self.assertTrue(self._callFUT() is _SM2)
+            self.assertIs(self._callFUT(), _SM2)
 
     def test_w_explicit_context_no_IComponentLookup(self):
         from zope.component import hooks
@@ -188,7 +188,7 @@ class Test_getSiteManager(unittest.TestCase):
         siteinfo = _DummySiteInfo()
         siteinfo.sm = _SM2
         with _Monkey(hooks, siteinfo=siteinfo):
-            self.assertTrue(self._callFUT(object()) is gsm)
+            self.assertIs(self._callFUT(object()), gsm)
 
     def test_w_explicit_context_w_IComponentLookup(self):
         from zope.interface import Interface
@@ -208,8 +208,8 @@ class Test_getSiteManager(unittest.TestCase):
         context = object()
         with _Monkey(hooks, siteinfo=siteinfo):
             sm = self._callFUT(context)
-        self.assertTrue(isinstance(sm, _Lookup))
-        self.assertTrue(sm.context is context)
+        self.assertIsInstance(sm, _Lookup)
+        self.assertIs(sm.context, context)
 
 
 class Test_adapter_hook(unittest.TestCase):
@@ -237,7 +237,7 @@ class Test_adapter_hook(unittest.TestCase):
         siteinfo.adapter_hook = _adapter_hook
         with _Monkey(hooks, siteinfo=siteinfo):
             adapter = self._callFUT(IFoo, _CONTEXT, 'bar', _DEFAULT)
-        self.assertTrue(adapter is _ADAPTER)
+        self.assertIs(adapter, _ADAPTER)
         self.assertEqual(_called, [(IFoo, _CONTEXT, 'bar', _DEFAULT)])
 
     def test_hook_raises(self):
@@ -259,7 +259,7 @@ class Test_adapter_hook(unittest.TestCase):
         siteinfo.adapter_hook = _adapter_hook
         with _Monkey(hooks, siteinfo=siteinfo):
             adapter = self._callFUT(IFoo, _CONTEXT, 'bar', _DEFAULT)
-        self.assertTrue(adapter is _DEFAULT)
+        self.assertIs(adapter, _DEFAULT)
         self.assertEqual(_called, [(IFoo, _CONTEXT, 'bar', _DEFAULT)])
 
 
@@ -313,14 +313,14 @@ class Test_resetHooks(unittest.TestCase):
             # Access the adapter_hook of the site info to be
             # sure it caches
             getattr(hooks.siteinfo, 'adapter_hook')
-            self.assertTrue('adapter_hook' in hooks.siteinfo.__dict__)
+            self.assertIn('adapter_hook', hooks.siteinfo.__dict__)
 
             self._callFUT()
 
         self.assertTrue(adapter_hook._reset)
         self.assertTrue(getSiteManager._reset)
         # adapter_hook cache also reset
-        self.assertFalse('adapter_hook' in hooks.siteinfo.__dict__)
+        self.assertNotIn('adapter_hook', hooks.siteinfo.__dict__)
 
 
 _SM = object()

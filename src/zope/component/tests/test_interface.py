@@ -73,7 +73,7 @@ class Test_provideInterface(unittest.TestCase):
         self._callFUT('', IFoo, IBar)
         self.assertTrue(IBar.providedBy(IFoo))
         nm = 'zope.component.tests.test_interface.IFoo'
-        self.assertTrue(gsm.getUtility(IBar, nm) is IFoo)
+        self.assertIs(gsm.getUtility(IBar, nm), IFoo)
 
     def test_w_name_wo_ifact_type(self):
         from zope.interface import Interface
@@ -140,7 +140,7 @@ class Test_getInterface(unittest.TestCase):
         class IFoo(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
-        self.assertTrue(self._callFUT(object(), 'foo') is IFoo)
+        self.assertIs(self._callFUT(object(), 'foo'), IFoo)
 
 
 class Test_queryInterface(unittest.TestCase):
@@ -154,8 +154,10 @@ class Test_queryInterface(unittest.TestCase):
 
     def test_miss(self):
         _DEFAULT = object()
-        self.assertTrue(
-            self._callFUT('nonesuch', default=_DEFAULT) is _DEFAULT)
+        self.assertIs(
+            self._callFUT('nonesuch', default=_DEFAULT),
+            _DEFAULT
+        )
 
     def test_hit(self):
         from zope.interface import Interface
@@ -167,7 +169,7 @@ class Test_queryInterface(unittest.TestCase):
         class IFoo(Interface):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
-        self.assertTrue(self._callFUT('foo') is IFoo)
+        self.assertIs(self._callFUT('foo'), IFoo)
 
 
 class Test_searchInterface(unittest.TestCase):
@@ -457,7 +459,7 @@ class Test_nameToInterface(unittest.TestCase):
         return nameToInterface(*args, **kw)
 
     def test_w_None(self):
-        self.assertTrue(self._callFUT(object(), 'None') is None)
+        self.assertIsNone(self._callFUT(object(), 'None'))
 
     def test_miss(self):
         from zope.interface.interfaces import ComponentLookupError
@@ -475,7 +477,7 @@ class Test_nameToInterface(unittest.TestCase):
             pass
         gsm.registerUtility(IFoo, IInterface, 'foo')
         found = self._callFUT(object(), 'foo')
-        self.assertTrue(found is IFoo)
+        self.assertIs(found, IFoo)
 
 
 class Test_interfaceToName(unittest.TestCase):

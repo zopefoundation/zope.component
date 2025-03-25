@@ -40,7 +40,7 @@ class Test_handler(unittest.TestCase):
 
         try:
             self._callFUT('registerUtility', comp, IApp, '')
-            self.assertTrue(registry.getUtility(IApp) is comp)
+            self.assertIs(registry.getUtility(IApp), comp)
         finally:
             getSiteManager.reset()
 
@@ -58,8 +58,8 @@ class Test__rolledUpFactory(unittest.TestCase):
         def _factory(obj):
             return _CREATED
         rolled = self._callFUT([_factory])
-        self.assertTrue(rolled.factory is _factory)
-        self.assertTrue(rolled(_OBJ) is _CREATED)
+        self.assertIs(rolled.factory, _factory)
+        self.assertIs(rolled(_OBJ), _CREATED)
 
     def test_with_multiple(self):
         _OBJ = object()
@@ -76,8 +76,8 @@ class Test__rolledUpFactory(unittest.TestCase):
         def _factory3(obj):
             return _CREATED3
         rolled = self._callFUT([_factory1, _factory2, _factory3])
-        self.assertTrue(rolled.factory is _factory1)
-        self.assertTrue(rolled(_OBJ) is _CREATED3)
+        self.assertIs(rolled.factory, _factory1)
+        self.assertIs(rolled(_OBJ), _CREATED3)
 
 
 class Test_adapter(unittest.TestCase):
@@ -227,9 +227,11 @@ class Test_adapter(unittest.TestCase):
         factory_proxy = action['args'][1]
         # Foo wraped by 'protected_factory' plus
         # 'LocatingUntrustedAdapterFactory'
-        self.assertTrue(isinstance(factory_proxy,
-                        LocatingUntrustedAdapterFactory))
-        self.assertTrue(factory_proxy.factory.factory is Foo)
+        self.assertIsInstance(
+            factory_proxy,
+            LocatingUntrustedAdapterFactory
+        )
+        self.assertIs(factory_proxy.factory.factory, Foo)
         self.assertEqual(action['args'][2], (Interface,))
         self.assertEqual(action['args'][3], IFoo)
         self.assertEqual(action['args'][4], '')
@@ -259,9 +261,11 @@ class Test_adapter(unittest.TestCase):
         self.assertEqual(action['args'][0], 'registerAdapter')
         factory_proxy = action['args'][1]
         # Foo wraped by 'LocatingUntrustedAdapterFactory'
-        self.assertTrue(isinstance(factory_proxy,
-                        LocatingUntrustedAdapterFactory))
-        self.assertTrue(factory_proxy.factory is Foo)
+        self.assertIsInstance(
+            factory_proxy,
+            LocatingUntrustedAdapterFactory
+        )
+        self.assertIs(factory_proxy.factory, Foo)
         self.assertEqual(action['args'][2], (Interface,))
         self.assertEqual(action['args'][3], IFoo)
         self.assertEqual(action['args'][4], '')
@@ -291,8 +295,8 @@ class Test_adapter(unittest.TestCase):
         self.assertEqual(action['args'][0], 'registerAdapter')
         factory_proxy = action['args'][1]
         # Foo wraped by 'LocatingUntrustedAdapterFactory'
-        self.assertTrue(isinstance(factory_proxy, TrustedAdapterFactory))
-        self.assertTrue(factory_proxy.factory is Foo)
+        self.assertIsInstance(factory_proxy, TrustedAdapterFactory)
+        self.assertIs(factory_proxy.factory, Foo)
         self.assertEqual(action['args'][2], (Interface,))
         self.assertEqual(action['args'][3], IFoo)
         self.assertEqual(action['args'][4], '')
@@ -370,7 +374,7 @@ class Test_zcml_functional(unittest.TestCase):
 
         self.assertTrue(isProxy(a))
 
-        self.assertTrue(isinstance(removeSecurityProxy(a), A1))
+        self.assertIsInstance(removeSecurityProxy(a), A1)
 
     @skipIfNoSecurity
     def test_located_proxy_factory(self):
@@ -398,7 +402,7 @@ class Test_zcml_functional(unittest.TestCase):
 
         self.assertTrue(isProxy(a))
 
-        self.assertTrue(isinstance(removeSecurityProxy(a), LocationProxy))
+        self.assertIsInstance(removeSecurityProxy(a), LocationProxy)
 
 
 class Test_subscriber(unittest.TestCase):
@@ -548,9 +552,11 @@ class Test_subscriber(unittest.TestCase):
         factory_proxy = action['args'][1]
         # Foo wraped by 'protected_factory' plus
         # 'LocatingUntrustedAdapterFactory'
-        self.assertTrue(isinstance(factory_proxy,
-                        LocatingUntrustedAdapterFactory))
-        self.assertTrue(factory_proxy.factory.factory is Foo)
+        self.assertIsInstance(
+            factory_proxy,
+            LocatingUntrustedAdapterFactory
+        )
+        self.assertIs(factory_proxy.factory.factory, Foo)
         self.assertEqual(action['args'][2], (Interface,))
         self.assertEqual(action['args'][3], IFoo)
         self.assertEqual(action['args'][4], '')
@@ -593,9 +599,11 @@ class Test_subscriber(unittest.TestCase):
         factory_proxy = action['args'][1]
         # Foo wraped by 'protected_factory' plus
         # 'LocatingUntrustedAdapterFactory'
-        self.assertTrue(isinstance(factory_proxy,
-                        LocatingUntrustedAdapterFactory))
-        self.assertTrue(factory_proxy.factory is Foo)
+        self.assertIsInstance(
+            factory_proxy,
+            LocatingUntrustedAdapterFactory
+        )
+        self.assertIs(factory_proxy.factory, Foo)
         self.assertEqual(action['args'][2], (Interface,))
         self.assertEqual(action['args'][3], IFoo)
         self.assertEqual(action['args'][4], '')
@@ -638,9 +646,11 @@ class Test_subscriber(unittest.TestCase):
         factory_proxy = action['args'][1]
         # Foo wraped by 'protected_factory' plus
         # 'TrustedAdapterFactory'
-        self.assertTrue(isinstance(factory_proxy,
-                        TrustedAdapterFactory))
-        self.assertTrue(factory_proxy.factory is Foo)
+        self.assertIsInstance(
+            factory_proxy,
+            TrustedAdapterFactory
+        )
+        self.assertIs(factory_proxy.factory, Foo)
         self.assertEqual(action['args'][2], (Interface,))
         self.assertEqual(action['args'][3], IFoo)
         self.assertEqual(action['args'][4], '')
@@ -896,8 +906,8 @@ class Test_utility(unittest.TestCase):
         self.assertEqual(action['discriminator'], ('utility', IFoo, ''))
         self.assertEqual(action['args'][0], 'registerUtility')
         component_proxy = action['args'][1]
-        self.assertTrue(isinstance(component_proxy, PermissionProxy))
-        self.assertTrue(removeAllProxies(component_proxy) is _COMPONENT)
+        self.assertIsInstance(component_proxy, PermissionProxy)
+        self.assertIs(removeAllProxies(component_proxy), _COMPONENT)
         self.assertEqual(component_proxy.__Security_checker__.get_permissions,
                          {'bar': 'testing'})
         self.assertEqual(action['args'][2], IFoo)
@@ -1155,14 +1165,14 @@ class Test_view(unittest.TestCase):
                          ('view', (Interface, IViewType), '', Interface))
         self.assertEqual(action['args'][0], 'registerAdapter')
         factory = action['args'][1]
-        self.assertTrue(factory.factory is _View)
+        self.assertIs(factory.factory, _View)
         context = object()
         request = object()
         view = factory(context, request)
-        self.assertTrue(isinstance(view, _View2))
-        self.assertTrue(view.request is request)
-        self.assertTrue(isinstance(view.context, _View))
-        self.assertTrue(view.context.context is context)
+        self.assertIsInstance(view, _View2)
+        self.assertIs(view.request, request)
+        self.assertIsInstance(view.context, _View)
+        self.assertIs(view.context.context, context)
         self.assertEqual(action['args'][2], (Interface, IViewType))
         self.assertEqual(action['args'][3], Interface)
         self.assertEqual(action['args'][4], '')
@@ -1195,9 +1205,9 @@ class Test_view(unittest.TestCase):
         context = object()
         request = object()
         view = factory(context, request)
-        self.assertTrue(view.context is context)
-        self.assertTrue(view.request is request)
-        self.assertTrue(factory.factory is _View)
+        self.assertIs(view.context, context)
+        self.assertIs(view.request, request)
+        self.assertIs(factory.factory, _View)
         self.assertEqual(action['args'][2], (Interface, IViewType))
         self.assertEqual(action['args'][3], Interface)
         self.assertEqual(action['args'][4], '')
@@ -1370,12 +1380,12 @@ class Test_resource(unittest.TestCase):
                          ('resource', 'test', IResourceType, Interface))
         self.assertEqual(action['args'][0], 'registerAdapter')
         factory = action['args'][1]
-        self.assertTrue(factory.factory is _Resource)
+        self.assertIs(factory.factory, _Resource)
         context = object()
         resource = factory(context)
         checker = resource.__Security_checker__
         self.assertEqual(checker.get_permissions, {'foo': 'testing'})
-        self.assertTrue(resource.context is context)
+        self.assertIs(resource.context, context)
         self.assertEqual(action['args'][2], (IResourceType,))
         self.assertEqual(action['args'][3], Interface)
         self.assertEqual(action['args'][4], 'test')
