@@ -63,7 +63,7 @@ Now we run some tests with this layer:
    ...    def testFoo(self):
    ...        print("testFoo")
    >>> suite = unittest.TestSuite()
-   >>> suite.addTest(unittest.makeSuite(TestCase))
+   >>> suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestCase))
    >>> from zope.testrunner.runner import Runner
    >>> runner = Runner(args=[], found_suites=[suite])
    >>> succeeded = runner.run()
@@ -118,7 +118,7 @@ Since the ZCML sets up an adapter, we expect the tests to pass:
 .. doctest::
 
    >>> suite = unittest.TestSuite()
-   >>> suite.addTest(unittest.makeSuite(TestCase))
+   >>> suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(TestCase))
    >>> runner = Runner(args=[], found_suites=[suite])
    >>> succeeded = runner.run()
    Running zope.component.testfiles.ZCMLFileLayer tests:
