@@ -7,6 +7,8 @@
 
 - Add support for Python 3.13.
 
+- Add preliminary support for Python 3.14.
+
 - Drop support for Python 3.8.
 
 - Add support for Python 3.12.
