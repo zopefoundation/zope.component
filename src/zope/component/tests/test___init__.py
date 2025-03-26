@@ -50,7 +50,7 @@ class Test_Interface_call(unittest.TestCase):
         class IFoo(Interface):
             pass
         marker = object()
-        self.assertTrue(IFoo(object(), marker) is marker)
+        self.assertIs(IFoo(object(), marker), marker)
 
     def test_hit(self):
         from zope.interface import Interface
@@ -75,8 +75,8 @@ class Test_Interface_call(unittest.TestCase):
         getGlobalSiteManager().registerAdapter(Baz, (IBar,), IFoo, '')
         bar = Bar()
         adapted = IFoo(bar)
-        self.assertTrue(adapted.__class__ is Baz)
-        self.assertTrue(adapted.context is bar)
+        self.assertIs(adapted.__class__, Baz)
+        self.assertIs(adapted.context, bar)
 
     def test_hit_registered_for_None(self):
         from zope.interface import Interface
@@ -94,5 +94,5 @@ class Test_Interface_call(unittest.TestCase):
         getGlobalSiteManager().registerAdapter(Baz, (None,), IFoo, '')
         ctx = object()
         adapted = IFoo(ctx)
-        self.assertTrue(adapted.__class__ is Baz)
-        self.assertTrue(adapted.context is ctx)
+        self.assertIs(adapted.__class__, Baz)
+        self.assertIs(adapted.context, ctx)

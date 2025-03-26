@@ -35,17 +35,17 @@ class Test_getSiteManager(unittest.TestCase):
     def test_sm_is_singleton(self):
         from zope.component.globalregistry import base
         sm = self._callFUT()
-        self.assertTrue(sm is base)
-        self.assertTrue(self._callFUT() is sm)
+        self.assertIs(sm, base)
+        self.assertIs(self._callFUT(), sm)
 
     def test_w_None(self):
-        self.assertTrue(self._callFUT(None) is self._callFUT())
+        self.assertIs(self._callFUT(None), self._callFUT())
 
     def test_getSiteManager_w_conforming_context(self):
         from zope.component.tests.examples import ConformsToIComponentLookup
         sitemanager = object()
         context = ConformsToIComponentLookup(sitemanager)
-        self.assertTrue(self._callFUT(context) is sitemanager)
+        self.assertIs(self._callFUT(context), sitemanager)
 
     def test_getSiteManager_w_invalid_context_no_adapter(self):
         from zope.interface.interfaces import ComponentLookupError
@@ -62,7 +62,7 @@ class Test_getSiteManager(unittest.TestCase):
         def _adapt(x):
             return sm
         gsm.registerAdapter(_adapt, (Interface,), IComponentLookup, '')
-        self.assertTrue(self._callFUT(object()) is sm)
+        self.assertIs(self._callFUT(object()), sm)
 
 
 class Test_getAdapterInContext(unittest.TestCase):
@@ -119,8 +119,8 @@ class Test_getAdapterInContext(unittest.TestCase):
         sm1.registerAdapter(Local, (IBar,), IFoo, '')
         bar = Bar()
         adapted = self._callFUT(bar, IFoo, context=Context(sm1))
-        self.assertTrue(adapted.__class__ is Local)
-        self.assertTrue(adapted.context is bar)
+        self.assertIs(adapted.__class__, Local)
+        self.assertIs(adapted.context, bar)
 
 
 class Test_queryAdapterInContext(unittest.TestCase):
@@ -152,8 +152,10 @@ class Test_queryAdapterInContext(unittest.TestCase):
                 _test.assertIs(iface, IFoo)
                 return _adapted
 
-        self.assertTrue(
-            self._callFUT(Foo(), IFoo, context=None) is _adapted)
+        self.assertIs(
+            self._callFUT(Foo(), IFoo, context=None),
+            _adapted
+        )
 
     def test___conform___raises_TypeError_via_class(self):
         from zope.interface import Interface
@@ -243,8 +245,8 @@ class Test_getAdapter(unittest.TestCase):
         getGlobalSiteManager().registerAdapter(Baz, (IBar,), IFoo, '')
         bar = Bar()
         adapted = self._callFUT(bar, IFoo, '')
-        self.assertTrue(adapted.__class__ is Baz)
-        self.assertTrue(adapted.context is bar)
+        self.assertIs(adapted.__class__, Baz)
+        self.assertIs(adapted.context, bar)
 
     def test_anonymous_hit_registered_for_None(self):
         from zope.interface import Interface
@@ -262,8 +264,8 @@ class Test_getAdapter(unittest.TestCase):
         getGlobalSiteManager().registerAdapter(Baz, (None,), IFoo, '')
         ctx = object()
         adapted = self._callFUT(ctx, IFoo, '')
-        self.assertTrue(adapted.__class__ is Baz)
-        self.assertTrue(adapted.context is ctx)
+        self.assertIs(adapted.__class__, Baz)
+        self.assertIs(adapted.context, ctx)
 
     def test_named_hit(self):
         from zope.interface import Interface
@@ -288,8 +290,8 @@ class Test_getAdapter(unittest.TestCase):
         getGlobalSiteManager().registerAdapter(Baz, (IBar,), IFoo, 'named')
         bar = Bar()
         adapted = self._callFUT(bar, IFoo, 'named')
-        self.assertTrue(adapted.__class__ is Baz)
-        self.assertTrue(adapted.context is bar)
+        self.assertIs(adapted.__class__, Baz)
+        self.assertIs(adapted.context, bar)
 
 
 class Test_queryAdapter(unittest.TestCase):
@@ -339,8 +341,8 @@ class Test_queryAdapter(unittest.TestCase):
         getGlobalSiteManager().registerAdapter(Baz, (IBar,), IFoo, '')
         bar = Bar()
         adapted = self._callFUT(bar, IFoo, '')
-        self.assertTrue(adapted.__class__ is Baz)
-        self.assertTrue(adapted.context is bar)
+        self.assertIs(adapted.__class__, Baz)
+        self.assertIs(adapted.context, bar)
 
     def test_named_hit(self):
         from zope.interface import Interface
@@ -365,8 +367,8 @@ class Test_queryAdapter(unittest.TestCase):
         getGlobalSiteManager().registerAdapter(Baz, (IBar,), IFoo, 'named')
         bar = Bar()
         adapted = self._callFUT(bar, IFoo, 'named')
-        self.assertTrue(adapted.__class__ is Baz)
-        self.assertTrue(adapted.context is bar)
+        self.assertIs(adapted.__class__, Baz)
+        self.assertIs(adapted.context, bar)
 
     def test_nested(self):
         from zope.interface import Interface
@@ -404,8 +406,8 @@ class Test_queryAdapter(unittest.TestCase):
         sm1.registerAdapter(Local, (IBar,), IFoo, '')
         bar = Bar()
         adapted = self._callFUT(bar, IFoo, '', context=Context(sm1))
-        self.assertTrue(adapted.__class__ is Local)
-        self.assertTrue(adapted.context is bar)
+        self.assertIs(adapted.__class__, Local)
+        self.assertIs(adapted.context, bar)
 
 
 class Test_getMultiAdapter(unittest.TestCase):
@@ -467,9 +469,9 @@ class Test_getMultiAdapter(unittest.TestCase):
         bar = Bar()
         baz = Baz()
         adapted = self._callFUT((bar, baz), IFoo, '')
-        self.assertTrue(adapted.__class__ is FooAdapter)
-        self.assertTrue(adapted.first is bar)
-        self.assertTrue(adapted.second is baz)
+        self.assertIs(adapted.__class__, FooAdapter)
+        self.assertIs(adapted.first, bar)
+        self.assertIs(adapted.second, baz)
 
     def test_anonymous_hit_registered_for_None(self):
         from zope.interface import Interface
@@ -499,9 +501,9 @@ class Test_getMultiAdapter(unittest.TestCase):
         bar = Bar()
         baz = object()
         adapted = self._callFUT((bar, baz), IFoo, '')
-        self.assertTrue(adapted.__class__ is FooAdapter)
-        self.assertTrue(adapted.first is bar)
-        self.assertTrue(adapted.second is baz)
+        self.assertIs(adapted.__class__, FooAdapter)
+        self.assertIs(adapted.first, bar)
+        self.assertIs(adapted.second, baz)
 
     def test_named_hit(self):
         from zope.interface import Interface
@@ -535,9 +537,9 @@ class Test_getMultiAdapter(unittest.TestCase):
         bar = Bar()
         baz = Baz()
         adapted = self._callFUT((bar, baz), IFoo, 'named')
-        self.assertTrue(adapted.__class__ is FooAdapter)
-        self.assertTrue(adapted.first is bar)
-        self.assertTrue(adapted.second is baz)
+        self.assertIs(adapted.__class__, FooAdapter)
+        self.assertIs(adapted.first, bar)
+        self.assertIs(adapted.second, baz)
 
 
 class Test_queryMultiAdapter(unittest.TestCase):
@@ -598,9 +600,9 @@ class Test_queryMultiAdapter(unittest.TestCase):
         bar = Bar()
         baz = Baz()
         adapted = self._callFUT((bar, baz), IFoo, '')
-        self.assertTrue(adapted.__class__ is FooAdapter)
-        self.assertTrue(adapted.first is bar)
-        self.assertTrue(adapted.second is baz)
+        self.assertIs(adapted.__class__, FooAdapter)
+        self.assertIs(adapted.first, bar)
+        self.assertIs(adapted.second, baz)
 
     def test_named_hit(self):
         from zope.interface import Interface
@@ -634,9 +636,9 @@ class Test_queryMultiAdapter(unittest.TestCase):
         bar = Bar()
         baz = Baz()
         adapted = self._callFUT((bar, baz), IFoo, 'named')
-        self.assertTrue(adapted.__class__ is FooAdapter)
-        self.assertTrue(adapted.first is bar)
-        self.assertTrue(adapted.second is baz)
+        self.assertIs(adapted.__class__, FooAdapter)
+        self.assertIs(adapted.first, bar)
+        self.assertIs(adapted.second, baz)
 
     def test_nested(self):
         from zope.interface import Interface
@@ -682,9 +684,9 @@ class Test_queryMultiAdapter(unittest.TestCase):
         bar = Bar()
         baz = Baz()
         adapted = self._callFUT((bar, baz), IFoo, '', context=Context(sm1))
-        self.assertTrue(adapted.__class__ is Local)
-        self.assertTrue(adapted.first is bar)
-        self.assertTrue(adapted.second is baz)
+        self.assertIs(adapted.__class__, Local)
+        self.assertIs(adapted.first, bar)
+        self.assertIs(adapted.second, baz)
 
     def test_wo_sitemanager(self):
         from zope.interface import Interface
@@ -714,7 +716,7 @@ class Test_queryMultiAdapter(unittest.TestCase):
         bar = Bar()
         baz = Baz()
         adapted = self._callFUT((bar, baz), IFoo, '', context=Context())
-        self.assertTrue(adapted is None)
+        self.assertIsNone(adapted)
 
 
 class Test_getAdapters(unittest.TestCase):
@@ -754,8 +756,8 @@ class Test_getAdapters(unittest.TestCase):
         tuples = list(self._callFUT((object(),), IFoo))
         self.assertEqual(len(tuples), 2)
         names = [(x, y.__class__.__name__) for x, y in tuples]
-        self.assertTrue(('', 'BarAdapter') in names)
-        self.assertTrue(('bar', 'BazAdapter') in names)
+        self.assertIn(('', 'BarAdapter'), names)
+        self.assertIn(('bar', 'BazAdapter'), names)
 
     def test_wo_sitemanager(self):
         from zope.interface import Interface
@@ -826,8 +828,8 @@ class Test_subscribers(unittest.TestCase):
         subscribers = self._callFUT((object(),), IFoo)
         self.assertEqual(len(subscribers), 2)
         names = [(x.__class__.__name__) for x in subscribers]
-        self.assertTrue('BarAdapter' in names)
-        self.assertTrue('BazAdapter' in names)
+        self.assertIn('BarAdapter', names)
+        self.assertIn('BazAdapter', names)
 
     def test_wo_sitemanager(self):
         from zope.interface import Interface
@@ -883,8 +885,8 @@ class Test_handle(unittest.TestCase):
         gsm.registerHandler(_baz, (IFoo,))
         self._callFUT(Foo())
         self.assertEqual(len(_called), 2, _called)
-        self.assertTrue('_bar' in _called)
-        self.assertTrue('_baz' in _called)
+        self.assertIn('_bar', _called)
+        self.assertIn('_baz', _called)
 
 
 class Test_getUtility(unittest.TestCase):
@@ -922,7 +924,7 @@ class Test_getUtility(unittest.TestCase):
             pass
         obj = object()
         getGlobalSiteManager().registerUtility(obj, IFoo)
-        self.assertTrue(self._callFUT(IFoo) is obj)
+        self.assertIs(self._callFUT(IFoo), obj)
 
     def test_named_hit(self):
         from zope.interface import Interface
@@ -933,7 +935,7 @@ class Test_getUtility(unittest.TestCase):
             pass
         obj = object()
         getGlobalSiteManager().registerUtility(obj, IFoo, name='bar')
-        self.assertTrue(self._callFUT(IFoo, name='bar') is obj)
+        self.assertIs(self._callFUT(IFoo, name='bar'), obj)
 
     def test_w_conforming_context(self):
         from zope.interface import Interface
@@ -955,7 +957,7 @@ class Test_getUtility(unittest.TestCase):
         sm = SM(obj2)
         context = ConformsToIComponentLookup(sm)
         getGlobalSiteManager().registerUtility(obj1, IFoo)
-        self.assertTrue(self._callFUT(IFoo, context=context) is obj2)
+        self.assertIs(self._callFUT(IFoo, context=context), obj2)
 
 
 class Test_queryUtility(unittest.TestCase):
@@ -980,7 +982,7 @@ class Test_queryUtility(unittest.TestCase):
         class IFoo(Interface):
             pass
         obj = object()
-        self.assertTrue(self._callFUT(IFoo, default=obj) is obj)
+        self.assertIs(self._callFUT(IFoo, default=obj), obj)
 
     def test_named_nonesuch(self):
         from zope.interface import Interface
@@ -995,7 +997,7 @@ class Test_queryUtility(unittest.TestCase):
         class IFoo(Interface):
             pass
         obj = object()
-        self.assertTrue(self._callFUT(IFoo, name='bar', default=obj) is obj)
+        self.assertIs(self._callFUT(IFoo, name='bar', default=obj), obj)
 
     def test_anonymous_hit(self):
         from zope.interface import Interface
@@ -1006,7 +1008,7 @@ class Test_queryUtility(unittest.TestCase):
             pass
         obj = object()
         getGlobalSiteManager().registerUtility(obj, IFoo)
-        self.assertTrue(self._callFUT(IFoo) is obj)
+        self.assertIs(self._callFUT(IFoo), obj)
 
     def test_named_hit(self):
         from zope.interface import Interface
@@ -1017,7 +1019,7 @@ class Test_queryUtility(unittest.TestCase):
             pass
         obj = object()
         getGlobalSiteManager().registerUtility(obj, IFoo, name='bar')
-        self.assertTrue(self._callFUT(IFoo, name='bar') is obj)
+        self.assertIs(self._callFUT(IFoo, name='bar'), obj)
 
     def test_w_conforming_context(self):
         from zope.interface import Interface
@@ -1039,7 +1041,7 @@ class Test_queryUtility(unittest.TestCase):
         sm = SM(obj2)
         context = ConformsToIComponentLookup(sm)
         getGlobalSiteManager().registerUtility(obj1, IFoo)
-        self.assertTrue(self._callFUT(IFoo, context=context) is obj2)
+        self.assertIs(self._callFUT(IFoo, context=context), obj2)
 
 
 class Test_getUtilitiesFor(unittest.TestCase):
@@ -1071,8 +1073,8 @@ class Test_getUtilitiesFor(unittest.TestCase):
         getGlobalSiteManager().registerUtility(obj1, IFoo, name='bar')
         tuples = list(self._callFUT(IFoo))
         self.assertEqual(len(tuples), 2)
-        self.assertTrue(('', obj) in tuples)
-        self.assertTrue(('bar', obj1) in tuples)
+        self.assertIn(('', obj), tuples)
+        self.assertIn(('bar', obj1), tuples)
 
 
 class Test_getAllUtilitiesRegisteredFor(unittest.TestCase):
@@ -1109,9 +1111,9 @@ class Test_getAllUtilitiesRegisteredFor(unittest.TestCase):
         getGlobalSiteManager().registerUtility(obj2, IBar)
         uts = list(self._callFUT(IFoo))
         self.assertEqual(len(uts), 3)
-        self.assertTrue(obj in uts)
-        self.assertTrue(obj1 in uts)
-        self.assertTrue(obj2 in uts)
+        self.assertIn(obj, uts)
+        self.assertIn(obj1, uts)
+        self.assertIn(obj2, uts)
 
 
 class Test_getNextUtility(unittest.TestCase):
@@ -1144,12 +1146,12 @@ class Test_getNextUtility(unittest.TestCase):
         sm1_1 = Components('sm1_1', bases=(sm1, ))
         util1 = _makeMyUtility('one', sm1)
         sm1.registerUtility(util1, IMyUtility, 'myutil')
-        self.assertTrue(IComponentLookup(util1) is sm1)
-        self.assertTrue(self._callFUT(util1, IMyUtility, 'myutil') is gutil)
+        self.assertIs(IComponentLookup(util1), sm1)
+        self.assertIs(self._callFUT(util1, IMyUtility, 'myutil'), gutil)
         util1_1 = _makeMyUtility('one-one', sm1_1)
         sm1_1.registerUtility(util1_1, IMyUtility, 'myutil')
-        self.assertTrue(IComponentLookup(util1_1) is sm1_1)
-        self.assertTrue(self._callFUT(util1_1, IMyUtility, 'myutil') is util1)
+        self.assertIs(IComponentLookup(util1_1), sm1_1)
+        self.assertIs(self._callFUT(util1_1, IMyUtility, 'myutil'), util1)
 
 
 class Test_queryNextUtility(unittest.TestCase):
@@ -1186,9 +1188,11 @@ class Test_queryNextUtility(unittest.TestCase):
         myregistry.registerUtility(custom_util, IMyUtility, 'my_custom_util')
         sm1.__bases__ = (myregistry,) + sm1.__bases__
         # Both the ``myregistry`` and global utilities should be available:
-        self.assertTrue(self._callFUT(sm1, IMyUtility, 'my_custom_util')
-                        is custom_util)
-        self.assertTrue(self._callFUT(sm1, IMyUtility, 'myutil') is gutil)
+        self.assertIs(
+            self._callFUT(sm1, IMyUtility, 'my_custom_util'),
+            custom_util
+        )
+        self.assertIs(self._callFUT(sm1, IMyUtility, 'myutil'), gutil)
 
     def test_wo_sitemanager(self):
         from zope.interface import Interface
@@ -1235,7 +1239,7 @@ class Test_createObject(unittest.TestCase):
                 return _factory
 
         context = Context()
-        self.assertTrue(self._callFUT('test', context=context) is _object)
+        self.assertIs(self._callFUT('test', context=context), _object)
         self.assertEqual(_factory_called, [((), {})])
 
 
