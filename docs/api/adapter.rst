@@ -317,7 +317,7 @@ while the :func:`~zope.component.queryMultiAdapter` API returns the default:
 Note that ``name`` is not a required attribute here.
 
 To test multi-adapters, we also have to create an adapter class that
-handles to context objects:
+handles two context objects:
 
 .. doctest::
 
