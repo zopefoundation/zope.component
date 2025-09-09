@@ -29,7 +29,7 @@ jobs:
         - ["3.11", "py311"]
         - ["3.12", "py312"]
         - ["3.13", "py313"]
-        - ["pypy-3.10", "pypy3"]
+        - ["pypy-3.11", "pypy3"]
         - ["3.11", "docs"]
         - ["3.11", "coverage"]
         - ["3.10",   "py310-optimized"]
@@ -38,11 +38,11 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
     name: ${{ matrix.config[1] }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         persist-credentials: false
     - name: Install uv + caching
-      uses: astral-sh/setup-uv@v5
+      uses: astral-sh/setup-uv@v6
       with:
         enable-cache: true
         cache-dependency-glob: |
