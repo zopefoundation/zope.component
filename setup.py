@@ -92,7 +92,6 @@ setup(
     ],
     python_requires='>=3.9',
     install_requires=[
-        'setuptools',
         'zope.event',
         'zope.hookable >= 4.2.0',
         'zope.interface >= 5.3',
