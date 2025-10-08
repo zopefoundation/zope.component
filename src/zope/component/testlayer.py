@@ -124,7 +124,7 @@ class ZCMLFileLayer(ZCMLLayerBase):
                  name=None,
                  features=None):
         super().__init__(package, name, features)
-        self.zcml_file = os.path.join(os.path.dirname(package.__file__),
+        self.zcml_file = os.path.join(next(iter(package.__path__)),
                                       zcml_file)
 
     def _load_zcml(self, context):
