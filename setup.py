@@ -21,7 +21,6 @@
 
 import os
 
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -44,7 +43,7 @@ ZCML_REQUIRES = [
 
 MIN_TESTS_REQUIRE = (HOOK_REQUIRES + ZCML_REQUIRES + [
     'zope.testing',
-    'zope.testrunner',
+    'zope.testrunner >= 6.4',
 ])
 
 TESTS_REQUIRE = (MIN_TESTS_REQUIRE + PERSISTENTREGISTRY_REQUIRES +
@@ -58,7 +57,7 @@ def read(*rnames):
 
 setup(
     name='zope.component',
-    version='6.1.dev0',
+    version='7.1.dev0',
     url='https://github.com/zopefoundation/zope.component',
     project_urls={
         'Documentation': 'https://zopecomponent.readthedocs.io/',
@@ -72,8 +71,6 @@ setup(
     author_email='zope-dev@zope.dev',
     long_description=(read('README.rst') + '\n' + read('CHANGES.rst')),
     keywords="interface component coupling loose utility adapter",
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -93,15 +90,12 @@ setup(
         "Framework :: Zope :: 5",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    namespace_packages=[
-        'zope',
-    ],
     python_requires='>=3.9',
     install_requires=[
-        'setuptools',
         'zope.event',
         'zope.hookable >= 4.2.0',
         'zope.interface >= 5.3',
+        'importlib_resources ; python_version < "3.10"',
     ],
     include_package_data=True,
     zip_safe=False,

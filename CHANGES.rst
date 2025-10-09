@@ -2,16 +2,28 @@
  Changes
 =========
 
-6.1 (unreleased)
+7.1 (unreleased)
+================
+
+- Add preliminary support for Python 3.14.
+
+- Remove run-time dependency on ``setuptools``.
+
+- Make ``.testlayer.ZCMLFileLayer`` compatible with PEP-420 namespace packages.
+
+
+7.0 (2025-09-12)
+================
+
+- Replace ``pkg_resources`` namespace with PEP 420 native namespace.
+
+
+6.1 (2025-09-09)
 ================
 
 - Add support for Python 3.12, 3.13.
 
-- Add preliminary support for Python 3.14.
-
-- Drop support for Python 3.8.
-
-- Drop support for Python 3.7.
+- Drop support for Python 3.7, 3.8.
 
 
 6.0 (2023-04-14)
