@@ -7,6 +7,8 @@
 
 - Remove run-time dependency on ``setuptools``.
 
+- Make ``.testlayer.ZCMLFileLayer`` compatible with PEP-420 namespace packages.
+
 
 7.0 (2025-09-12)
 ================

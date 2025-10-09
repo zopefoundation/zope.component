@@ -95,6 +95,7 @@ setup(
         'zope.event',
         'zope.hookable >= 4.2.0',
         'zope.interface >= 5.3',
+        'importlib_resources ; python_version < "3.10"',
     ],
     include_package_data=True,
     zip_safe=False,
