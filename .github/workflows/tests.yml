@@ -53,13 +53,13 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Test
       if: ${{ !startsWith(runner.os, 'Mac') }}
-      run:
-        python3.14 -V
+      run: |
+        python -V
         uvx --with tox-uv tox -e ${{ matrix.config[1] }}
     - name: Test (macOS)
       if: ${{ startsWith(runner.os, 'Mac') }}
-      run:
-        python3.14 -V
+      run: |
+        python -V
         uvx --with tox-uv tox -e ${{ matrix.config[1] }}-universal2
     - name: Coverage
       if: matrix.config[1] == 'coverage'
