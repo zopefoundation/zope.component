@@ -5,7 +5,7 @@
 7.1 (unreleased)
 ================
 
-- Add preliminary support for Python 3.14.
+- Add support for Python 3.14.
 
 - Remove run-time dependency on ``setuptools``.
 
