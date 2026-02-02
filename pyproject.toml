@@ -1,14 +1,96 @@
 # Generated with zope.meta (https://zopemeta.readthedocs.io/) from:
 # https://github.com/zopefoundation/meta/tree/master/src/zope/meta/pure-python
-# Generated from:
-# https://github.com/zopefoundation/meta/tree/master/config/pure-python
-
 [build-system]
 requires = [
     "setuptools >= 78.1.1,< 81",
     "wheel",
 ]
 build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "zope.component"
+version = "7.1.dev0"
+description = "Zope Component Architecture"
+license = "ZPL-2.1"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Framework :: Zope :: 3",
+    "Framework :: Zope :: 5",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dynamic = ["readme"]
+requires-python = ">=3.10"
+authors = [
+    {name = "Zope Foundation and contributors",email = "zope-dev@zope.dev"},
+]
+maintainers = [
+    {name = "Plone Foundation and contributors",email = "zope-dev@zope.dev"},
+]
+dependencies = [
+    "zope.event",
+    "zope.hookable >= 4.2.0",
+    "zope.interface >= 5.3",
+]
+keywords = [
+    "interface",
+    "component",
+    "coupling",
+    "loose",
+    "utility",
+    "adapter",
+]
+
+[project.optional-dependencies]
+hook = []
+persistentregistry = ["persistent"]
+security = [
+    "zope.location",
+    "zope.proxy",
+    "zope.security",
+]
+zcml = [
+    "zope.configuration",
+    "zope.i18nmessageid",
+]
+mintests = [
+    "zope.configuration",
+    "zope.i18nmessageid",
+    "zope.testing",
+    "zope.testrunner >= 6.4",
+]
+test = [
+    "zope.configuration",
+    "zope.i18nmessageid",
+    "zope.testing",
+    "zope.testrunner >= 6.4",
+    "persistent",
+    "zope.location",
+    "zope.proxy",
+    "zope.security",
+]
+docs = [
+    "Sphinx",
+    "repoze.sphinx.autointerface",
+    "ZODB",
+]
+
+[project.urls]
+Documentation = "https://zopecomponent.readthedocs.io/"
+Source = "https://github.com/zopefoundation/zope.component"
+Issues = "https://github.com/zopefoundation/zope.component/issues"
+Changelog = "https://raw.githubusercontent.com/zopefoundation/zope.component/master/CHANGES.rst"
 
 [tool.coverage.run]
 branch = true
@@ -33,3 +115,7 @@ exclude_lines = [
 
 [tool.coverage.html]
 directory = "parts/htmlcov"
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.rst", "CHANGES.rst"]}
+
