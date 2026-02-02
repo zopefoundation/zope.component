@@ -13,8 +13,8 @@
 
 import os
 import sys
-
-import pkg_resources
+from datetime import datetime
+from importlib import metadata
 
 
 # We get better doc strings and signatures from the Python components.
@@ -31,7 +31,7 @@ os.environ['ZOPE_INTERFACE_STRICT_IRO'] = "0"
 sys.path.append(os.path.abspath('../src'))
 
 
-rqmt = pkg_resources.require('zope.component')[0]
+rqmt = metadata.distribution('zope.component')
 
 # -- General configuration -----------------------------------------------
 
@@ -64,7 +64,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'zope.component'
-copyright = '2012, Zope Foundation Contributors'
+copyright = f'2012-{datetime.now().year}, Zope Foundation Contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
