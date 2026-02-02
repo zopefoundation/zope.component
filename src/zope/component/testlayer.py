@@ -12,12 +12,7 @@
 #
 ##############################################################################
 
-try:  # PY39
-    import importlib_resources
-    IS_PY39 = True
-except ModuleNotFoundError:  # pragma: no cover
-    import importlib.resources
-    IS_PY39 = False
+import importlib.resources
 
 from zope.configuration import config
 from zope.configuration import xmlconfig
@@ -129,12 +124,8 @@ class ZCMLFileLayer(ZCMLLayerBase):
                  name=None,
                  features=None):
         super().__init__(package, name, features)
-        if IS_PY39:
-            self.zcml_file = str(
-                importlib_resources.files(package) / zcml_file)
-        else:
-            self.zcml_file = str(
-                importlib.resources.files(package) / zcml_file)
+        self.zcml_file = str(
+            importlib.resources.files(package) / zcml_file)
 
     def _load_zcml(self, context):
         return xmlconfig.file(self.zcml_file,
