@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zope.component"
-version = "7.1"
+version = "7.2.dev0"
 description = "Zope Component Architecture"
 license = "ZPL-2.1"
 classifiers = [
