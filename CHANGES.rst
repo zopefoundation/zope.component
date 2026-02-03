@@ -11,8 +11,6 @@
 
 - Drop support for Python 3.9.
 
-- Add support for Python 3.14.
-
 - Remove run-time dependency on ``setuptools``.
 
 - Make ``.testlayer.ZCMLFileLayer`` compatible with PEP-420 namespace packages.
